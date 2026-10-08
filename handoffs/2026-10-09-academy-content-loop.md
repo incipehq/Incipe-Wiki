@@ -8,12 +8,12 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 ## Queue
 
 ### M1 AI Literacy → `content/m1-ai-literacy/`
-- [x] Session 2 — AI-powered firmware development · deck: https://claude.ai/artifact/BHG96UPKkgByGiPcGzgerR · **.pptx export pending** (see Pending)
-- [x] Session 3 — Terminal commands & environment setup · deck: https://claude.ai/artifact/WeMxkZxi3rjcN29Tf7uNAV · **.pptx export pending**
-- [ ] Session 4 — Command line for embedded development
+- [x] Session 2 — AI-powered firmware development · deck: https://claude.ai/artifact/BHG96UPKkgByGiPcGzgerR · **.pptx and .pdf pending** (see Pending)
+- [x] Session 3 — Terminal commands & environment setup · deck: https://claude.ai/artifact/WeMxkZxi3rjcN29Tf7uNAV · .pptx ingested · **.pdf pending**
+- [-] Session 4 — Command line for embedded development · **skipped for now** (owner, 2026-10-09): no public command-line compile/upload path to teach
 
 ### Fundamentals of Programming (curriculum "M3") → `content/m2-fundamentals-of-programming/`
-- [ ] Session 7 — Introduction to C++ for embedded systems
+- [-] Session 7 — Introduction to C++ for embedded systems · **already covered** by the existing M2 Lessons 1–5 decks (owner, 2026-10-09); their content is the standard. A draft page was set aside, not committed.
 - [ ] Session 8 — Control structures & functions
 - [ ] Session 9 — Arrays, pointers & bitwise operations
 - [ ] Session 10 — Structs & state machines (FSM)
@@ -84,13 +84,32 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - Verified: build clean; page in light theme and 375px; all three walkthroughs stepped to
   the end; no console errors. Privacy grep clean.
 
+### Iteration 3 — PDF viewing, Session 7 set aside
+
+- Owner asked for every deck to be readable on the site without downloading. Pages now
+  take `pdf:` beside `source:`; the ingest copies it to `public/files/…view.pdf` and the
+  page opens it in place behind a "View slides" button (commit `4f45c9b`). Checked with
+  a throwaway PDF, then reverted. `.claude/academy-loop.md` now asks for a .pptx **and**
+  a .pdf export of every deck.
+- Session 3's .pptx (exported by the owner) is the page's download now.
+- Session 7: owner says the existing M2 decks already are Session 7 and are the standard.
+  The draft page written this iteration was moved out of the repo; its Session 7 deck
+  artifact (https://claude.ai/artifact/V3UBH8Hr1jtLUUeS3r43qi) was created but left empty.
+
 ## Pending
 
-- **.pptx exports.** The browser pane here is not signed in to claude.ai, so decks cannot
-  be exported from this session. For each deck: open it, Share › Export › PowerPoint, save
-  into `raw/LMS/<module>/`, then add `source:` to the page and run `npm run ingest`.
-  - Session 2 → `raw/LMS/M1 AI Literacy/Session 2 AI-Powered Firmware Development.pptx`
-  - Session 3 → `raw/LMS/M1 AI Literacy/Session 3 Terminal Commands & Environment Setup.pptx`
+- **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
+  decks cannot be exported from this session. For each deck: open it, Share › Export ›
+  PowerPoint and › PDF, save both into `raw/LMS/<module>/`; the loop then sets `source:`
+  and `pdf:` and runs `npm run ingest`.
+  - Session 2 → .pptx and .pdf
+  - Session 3 → .pdf (the .pptx is in)
+- **Stray files in `raw/`** (owner to keep or delete — `raw/` is owner-owned):
+  - `raw/LMS/M2 Fundamentals of Programming/m2-fundamentals-of-programming--04-arrays-for-loop.view.pdf`
+    is a **throwaway test PDF** (one picture of the Lesson 4 cover) from checking the new
+    viewer; opening its URL in the browser pane raised a save dialog. Not a real deck.
+  - `raw/LMS/M1 AI Literacy/m2-fundamentals-of-programming--02-data-types-if-else.pptx` is
+    the same file as M2 Lesson 2's deck (same size), saved into the M1 folder.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
   build on 2026-10-09). Still missing: a Verify result, the code editor with the AI
   draft, and the Console showing output. What the dev build showed when they were tried:
@@ -116,6 +135,12 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 4. The dev build shows a "Test mode" banner with a staging URL on new projects; it was
    dismissed before capturing and is not in any screenshot.
 
+6. **Actuator functions have no published arguments.** `wiki/led-strip.md`, `buzzer.md`,
+   `motor.md`, `servo.md`, `pump.md`, `ir-sender.md`, `ir-receiver.md` and `sd-card.md` have
+   a summary naming functions but no body: no argument meanings, ranges or units
+   (e.g. what `incipe.setLEDcolour(...)` takes, the range of `setMotorSpeed(speed)`, valid
+   `writeMicroseconds` values). Sessions 8, 10 and 13–19 need them for their practice
+   tasks; until they are published those lessons can only describe the hardware step.
 5. **Session 4 needs the build path.** The curriculum says "use the terminal to compile and
    upload firmware" and "automate the process using INCIPE Board". The public Wiki says
    compilation happens on Incipe's build service, and the dev build's local compile fails
