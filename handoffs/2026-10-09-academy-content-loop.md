@@ -72,9 +72,16 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   be exported from this session. For each deck: open it, Share › Export › PowerPoint, save
   into `raw/LMS/<module>/`, then add `source:` to the page and run `npm run ingest`.
   - Session 2 → `raw/LMS/M1 AI Literacy/Session 2 AI-Powered Firmware Development.pptx`
-- **More Workspace screenshots for Session 2:** a Verify result, the code editor with the
-  AI draft, and the Console showing the output. The session stopped driving the app when
-  a screenshot was declined; tell the loop whether it may keep capturing from the dev build.
+- **More Workspace screenshots for Session 2** (owner approved capturing from the dev
+  build on 2026-10-09). Still missing: a Verify result, the code editor with the AI
+  draft, and the Console showing output. What the dev build showed when they were tried:
+  - The AI answered the lesson prompt and wrote the project, but the dev build's Verify
+    compiled it with the local toolchain and failed on the missing runtime header. The
+    Console then prints full local file paths, so that screen cannot be published.
+  - The board was offline, so there was no Serial output to capture.
+  - The dev build then quit (not relaunched from here — it lives in `../Incipe-Workspace`).
+  To finish: run the dev build with a board connected and the Incipe build service,
+  then capture a passing Verify, the editor and the Console's Serial tab.
 
 ## Questions for the owner
 
@@ -84,8 +91,8 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 2. **Code font in decks.** The design system has one face (Helvetica Neue) and no
    monospace. Decks use Courier New (a basic face that survives .pptx) for code. OK, or
    add a mono face to the design system?
-3. **`startUserThreads()`** appears in the built site, from the existing Session 11 notes
-   (`lessons/phase-2/session-11-analog-sensors-adc.md`). It is not in any `wiki/*.md`
+3. **`startUserThreads()`** appears in the built site, from the existing Session 11 and 12 notes
+   (`lessons/phase-2/session-11-analog-sensors-adc.md`, `session-12-digital-sensors-protocols.md`). It is not in any `wiki/*.md`
    page, so new lessons do not use it. Is it approved for publication?
 4. The dev build shows a "Test mode" banner with a staging URL on new projects; it was
    dismissed before capturing and is not in any screenshot.
