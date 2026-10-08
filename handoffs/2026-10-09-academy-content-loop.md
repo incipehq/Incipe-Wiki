@@ -16,7 +16,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - [-] Session 7 — Introduction to C++ for embedded systems · **already covered** by the existing M2 Lessons 1–5 decks (owner, 2026-10-09); their content is the standard. A draft page was set aside, not committed.
 - [x] Session 8 — Control structures & functions (gaps only) · deck: https://claude.ai/artifact/1iVoDUPtWW9MHdcp8iPhm3 · **.pptx and .pdf pending**
 - [x] Session 9 — Arrays, pointers & bitwise operations (gaps only) · deck: https://claude.ai/artifact/XWTrgHUxz6Myt7j681mfM3 · **.pptx and .pdf pending**
-- [ ] Session 10 — Structs & state machines (FSM) · not covered by M2 — write in full
+- [x] Session 10 — Structs & state machines (FSM) · deck: https://claude.ai/artifact/J9nYPccoVnefmod11t4Ji4 · **.pptx and .pdf pending**
 
 ### INCIPE Board, Sensors & Modules → `content/m3-incipe-board-sensors-modules/`
 - [ ] Session 13 — Actuators: PWM & motor control
@@ -126,6 +126,20 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - Checked: all printed values run on the host; full sketch compiled for
   `esp32:esp32:esp32`; build clean; 375px; no console errors; privacy grep clean.
 
+### Iteration 6 — Session 10: Structs & state machines (in full)
+
+- Notes: `lessons/m2-fundamentals-of-programming/session-10-structs-state-machines.md`; page:
+  `content/m2-fundamentals-of-programming/10-structs-state-machines.md`.
+- `struct SensorData` filled by `readAll()` from the temperature, humidity and light
+  sensors (Wiki-style "One line of code" + "What you get"); state machines with an `enum`,
+  planned as a table, then the curriculum's Red → Yellow → Green traffic light as a
+  `switch`. The practice runs on the Serial monitor; the LED-strip version waits for the
+  strip's published arguments (Question 6). AI review prompt plus a reviewer checklist.
+- Two walkthroughs; deck 35 slides, one per step.
+- Checked: `sizeof` 12, `21.50`, `23.40 700.00`, RED/YELLOW/GREEN/RED and the 7000 ms
+  cycle run on the host; the full sketch compiled for `esp32:esp32:esp32`; build clean;
+  both themes and 375px; no console errors; privacy grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -136,6 +150,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   - Session 3 → .pdf (the .pptx is in)
   - Session 8 → .pptx and .pdf
   - Session 9 → .pptx and .pdf
+  - Session 10 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
@@ -192,3 +207,4 @@ kept in the session scratchpad, never in this repo) for the ESP32 Dev Module tar
 | 9 | References (60 vs 50 by copy), pointer write (600), `*p * 2` (10), flags (`101`, `1`, `100`), `6&3`=2, `6\|1`=7, `1<<4`=16, `average({10,20,30})`=20 and the moving-average prints `50.00`, `102.00` run on the host; the full sketch compiles for `esp32:esp32:esp32`. |
 | 8 | `showDice`, the countdown, `do-while`, `addDice` and the fall-through checkpoint run on the host with the printed results in the notes; the Digital Dice sketch (with `rollDice`, `showDice`, release logic and the debounce) compiles for `esp32:esp32:esp32`. |
 | 2 | Both `readClimate()` (AI draft) and `printClimate()` plus a thread that calls it every 2000 ms compile for `esp32:esp32:esp32`; `static_assert` confirms `float` = 4 and `double` = 8 bytes. Printed values (`23.40`, `51.00`) follow Arduino's two-decimal `print(float)`. |
+| 10 | `sizeof(SensorData)` = 12 (static_assert), `21.50`, `23.40 700.00`, the first four states RED, YELLOW, GREEN, RED and the 7000 ms cycle run on the host; the full sketch compiles for `esp32:esp32:esp32`. |
