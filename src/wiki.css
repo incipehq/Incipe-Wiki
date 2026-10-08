@@ -1,0 +1,1362 @@
+/* ─────────────────────────────────────────────────────────────
+   INCIPE WIKI — the shell and its views.
+
+   Built from the Incipe Workspace's own recipes, not new ones:
+     · the 48px bar          → `.sh-header` / `.lms-topbar`
+     · the left rail         → `.nav-pane` / `.lms-pane` (opaque ground,
+                               hairline on the side it divides, inc-nav-in)
+     · the right panel       → `.sh-panel-inner` (card surface, inc-panel-in)
+     · rows                  → `inc-row` / `inc-row--on` (ui.css): hover tint,
+                               quiet ON fill + layered shadow, 0.98 press dip
+     · buttons               → `inc-btn` ladder (ui.css)
+     · catalog / lesson      → `.lms-catalog` / `.lms-lessonview`
+   Tokens only; no raw hex. Dark-first, flat, no gradients, hard low shadows.
+   ───────────────────────────────────────────────────────────── */
+
+.wk-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+}
+a.inc-btn {
+  text-decoration: none;
+}
+
+/* ── Top bar (48px) ── */
+.wk-topbar {
+  flex: none;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-2) 0 var(--space-3);
+  border-bottom: var(--border-hair);
+  position: relative;
+  z-index: 40;
+}
+
+.wk-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-2);
+  text-decoration: none;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.wk-brand:active {
+  transform: scale(0.98);
+}
+/* The Incipe Wiki logo (components/Logo.tsx), in the theme's ink. Its inner
+   node takes the accent on hover — the one place the mark moves. */
+.wk-logo {
+  display: block;
+  height: 19px;
+  width: auto;
+  color: var(--text);
+}
+.wk-logo-node {
+  transition: fill var(--transition-base);
+}
+.wk-brand:hover .wk-logo-node {
+  fill: var(--signal);
+}
+
+.wk-vdiv {
+  width: 0.5px;
+  height: 22px;
+  margin: 0 var(--space-2);
+  background: var(--line-2);
+  flex: none;
+}
+
+.wk-crumbbar {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  font-weight: var(--weight-label);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-faint);
+}
+.wk-crumbbar a {
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+.wk-crumbbar a:hover {
+  color: var(--text);
+}
+.wk-crumbbar b {
+  font-weight: var(--weight-label);
+  color: var(--text-muted);
+}
+
+/* The divider only divides something: on the landing page there is no crumb. */
+.wk-vdiv:has(+ .wk-spacer) {
+  display: none;
+}
+
+.wk-spacer {
+  flex: 1 1 auto;
+  min-width: var(--space-2);
+}
+
+.wk-menu {
+  display: none;
+}
+
+/* ── Body row ── */
+.wk-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  position: relative;
+}
+
+.wk-nav {
+  flex: none;
+  width: 288px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Left rail: the nav pane's frame ── */
+.wk-pane {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg);
+  border-right: var(--border-hair);
+  overflow: hidden;
+}
+.wk-pane-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  animation: inc-nav-in var(--dur-3) var(--ease-out);
+}
+.wk-pane-head {
+  height: 40px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2) 0 var(--space-3);
+}
+
+.wk-label {
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-muted);
+}
+.wk-label--accent {
+  color: var(--text-accent);
+}
+
+.wk-search {
+  flex: none;
+  padding: var(--space-2);
+}
+
+.wk-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-1) var(--space-2) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.wk-empty {
+  padding: var(--space-4) var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+/* A row in the rail. Hover, ON and press all come from `inc-row` — do not
+   declare `background` here (ui.css explains why). */
+.wk-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 30px;
+  padding: 6px var(--space-2);
+  text-decoration: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.wk-row.inc-row--on,
+.wk-row:hover {
+  color: var(--text);
+}
+.wk-row-glyph {
+  flex: none;
+  display: inline-flex;
+  color: var(--text-faint);
+  transition: color var(--transition-base);
+}
+.wk-row:hover .wk-row-glyph {
+  color: var(--text-muted);
+}
+.wk-row.inc-row--on .wk-row-glyph {
+  color: var(--text-accent);
+}
+.wk-row-title {
+  flex: 1 1 auto;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: var(--weight-medium);
+}
+.wk-row-meta {
+  flex: none;
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-faint);
+}
+
+/* ── The two section tabs at the head of the rail: Wiki, Academy ── */
+.wk-tabs {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: var(--space-2) var(--space-2) 0;
+}
+.wk-tab .wk-row-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semi);
+  font-size: 13.5px;
+}
+
+/* The module id — `M1`, `M2`. A label, in the accent, never a filled chip. */
+.wk-tag {
+  flex: none;
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-accent);
+}
+
+/* ── Module switcher ──
+   A box that floats takes `--edge-soft`, never a hairline (design.md §2); it is
+   filled at the comfy secondary's tint, lifts on hover, and dips on press like
+   every other pressable thing. */
+.wk-switch-wrap {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-2) var(--space-1);
+  border-top: var(--border-hair);
+}
+.wk-switch-label {
+  padding: var(--space-1) var(--space-2) 0;
+  color: var(--text-faint);
+}
+.wk-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-2);
+  background: var(--btn-tint);
+  box-shadow: var(--edge-soft);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    filter var(--transition-base),
+    background var(--transition-base);
+}
+.wk-switch:hover:not([aria-expanded='true']) {
+  background: var(--btn-tint-hover);
+  filter: brightness(var(--hover-lift));
+}
+.wk-switch:active {
+  transform: scale(0.98);
+  filter: brightness(var(--press-dim));
+}
+.wk-switch[aria-expanded='true'] {
+  background: var(--surface-on);
+}
+.wk-switch-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.wk-switch-title {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--weight-semi);
+  font-size: 13px;
+  letter-spacing: -0.01em;
+}
+.wk-switch-meta {
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-faint);
+}
+.wk-switch-caret {
+  flex: none;
+  color: var(--text-faint);
+}
+.wk-switch-menu {
+  top: calc(100% + 2px);
+  left: var(--space-2);
+  right: var(--space-2);
+  animation: wk-pop-in var(--dur-1) var(--ease-out);
+}
+@keyframes wk-pop-in {
+  from {
+    opacity: 0;
+  }
+}
+.wk-switch-item {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.wk-switch-item .wk-tag {
+  min-width: 42px;
+}
+.wk-switch-item-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.wk-switch-item-count {
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-label-sm);
+  color: var(--text-faint);
+}
+.wk-switch-item-gap {
+  width: 13px;
+  flex: none;
+}
+
+/* ── Search results, grouped by module ── */
+.wk-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.wk-group-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2) var(--space-1);
+  min-width: 0;
+}
+.wk-group-title {
+  display: block;
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-muted);
+}
+
+/* ── Right panel: the stage ── */
+.wk-stage {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--surface-card);
+  animation: inc-panel-in var(--dur-3) var(--ease-out);
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Each view arrives the way the stage did, at a quarter of the travel. */
+.wk-enter {
+  animation: wk-enter var(--dur-3) var(--ease-out);
+}
+@keyframes wk-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Catalog (home + course) — `.lms-catalog` ── */
+.wk-catalog {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) var(--space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.wk-catalog-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+.wk-catalog-head h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-head-lg);
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-head-lg);
+  color: var(--text);
+}
+.wk-catalog-head > p,
+.wk-catalog-head .wk-prose {
+  max-width: 64ch;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.wk-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+  margin: var(--space-2) 0;
+}
+.wk-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-2);
+  background: var(--bg);
+  box-shadow: var(--edge-soft);
+}
+.wk-stat strong {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* ── Sections of a module page ── */
+.wk-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.wk-section-title {
+  margin: 0;
+  padding-bottom: var(--space-2);
+  border-bottom: var(--border-hair);
+  font-family: var(--font-display);
+  font-weight: var(--weight-head-lg);
+  font-size: 19px;
+  letter-spacing: var(--tracking-head-lg);
+  color: var(--text);
+}
+.wk-placeholder {
+  padding: var(--space-6);
+  border-radius: var(--radius-dialog);
+  background: var(--bg);
+  box-shadow: var(--edge-soft);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  line-height: 1.5;
+  color: var(--text-faint);
+  text-align: center;
+}
+.wk-curriculum {
+  max-width: 760px;
+}
+.wk-curriculum .wk-prose p:has(> strong:only-child) {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-2);
+  color: var(--text);
+}
+.wk-curriculum .wk-prose > p:first-child {
+  margin-top: 0;
+}
+/* ── Real-life projects: cards, not sessions ──
+   A box that floats takes `--edge-soft` and no hairline; the project number is
+   the accent label, the deliverable the card's foot. */
+.wk-prose .wk-projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-4) 0 var(--space-6);
+}
+.wk-prose .wk-project {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--radius-dialog);
+  background: var(--bg);
+  box-shadow: var(--edge-soft);
+  overflow: hidden;
+}
+.wk-prose .wk-project > p.wk-project-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-3) var(--space-4) var(--space-2);
+}
+.wk-project-tag {
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-accent);
+}
+.wk-project-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semi);
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.wk-prose .wk-project > ul {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-3) calc(var(--space-4) + var(--space-4));
+  font-size: 13px;
+}
+.wk-prose .wk-project > p.wk-project-deliverable {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-top: var(--border-hair);
+  font-size: 13px;
+  color: var(--text);
+}
+.wk-project-deliverable-label {
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-faint);
+}
+
+.wk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+/* ── Cards — `.lms-card`, with the cover on top. The whole card is the link,
+   so it answers like every pressable thing: lift on hover, 0.98 dip on press. ── */
+.wk-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-4);
+}
+.wk-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--radius-dialog);
+  background: var(--bg);
+  box-shadow: var(--edge-soft);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--text);
+  cursor: pointer;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    filter var(--transition-base),
+    box-shadow var(--transition-base);
+}
+.wk-card:hover {
+  filter: brightness(var(--hover-lift-soft));
+  box-shadow: var(--edge-soft), var(--shadow-layered);
+}
+.wk-card:active {
+  transform: scale(0.98);
+  filter: brightness(var(--press-dim));
+  transition:
+    transform var(--dur-1) var(--ease-out),
+    filter var(--dur-1) var(--ease-out);
+}
+.wk-card-thumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  background: var(--panel-2);
+  color: var(--text-faint);
+  overflow: hidden;
+}
+.wk-card-thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-4) var(--ease-out);
+}
+.wk-card-thumb[data-portrait] img {
+  object-position: top;
+}
+.wk-card:hover .wk-card-thumb img {
+  transform: scale(1.02);
+}
+.wk-card-mark {
+  font-family: var(--font-display);
+  font-weight: var(--weight-black);
+  font-size: 40px;
+  letter-spacing: -0.03em;
+  color: var(--line-2);
+}
+.wk-card-play {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  background: var(--signal);
+  color: var(--text-invert);
+}
+.wk-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: var(--border-hair);
+}
+.wk-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.wk-card-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-faint);
+}
+.wk-card-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semi);
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.wk-card-summary {
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  line-height: 1.55;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Detail page — `.lms-lessonview` ── */
+.wk-page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) var(--space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.wk-page-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+.wk-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-2);
+  padding: 2px var(--space-1) 2px 0;
+  border-radius: var(--radius-1);
+  text-decoration: none;
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-faint);
+  transition:
+    color var(--transition-base),
+    transform var(--dur-press) var(--ease-out);
+}
+.wk-crumb svg {
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.wk-crumb:hover {
+  color: var(--text-accent);
+}
+.wk-crumb:hover svg {
+  transform: translateX(-2px);
+}
+.wk-crumb:active {
+  transform: scale(0.98);
+}
+.wk-page-head h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-head-lg);
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-head-lg);
+  color: var(--text);
+}
+.wk-page-head > p {
+  max-width: 64ch;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.wk-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+.wk-facts span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-faint);
+}
+
+/* The thumbnail and its download, as ONE floating block: a soft inset edge
+   instead of a hairline (a box that floats takes `--edge-soft`, never both). */
+.wk-feature {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-dialog);
+  background: var(--bg);
+  box-shadow: var(--edge-soft);
+  overflow: hidden;
+}
+.wk-media {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0;
+  aspect-ratio: 16 / 9;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+.wk-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wk-media[data-portrait] img {
+  object-fit: contain;
+  padding: var(--space-4);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+.wk-media-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.wk-media--none {
+  display: grid;
+  place-items: center;
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  color: var(--text-faint);
+}
+/* The poster is a button: the play control rides it, and the whole frame
+   answers the press. */
+.wk-media--poster {
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.wk-media--poster img {
+  transition: filter var(--transition-base);
+}
+.wk-media--poster:hover img {
+  filter: brightness(var(--hover-lift-soft));
+}
+.wk-media-play {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.wk-media--poster:active .wk-media-play {
+  transform: scale(0.98);
+}
+
+.wk-download {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-top: var(--border-hair);
+  background: var(--surface-card);
+}
+.wk-download-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: var(--space-1);
+}
+.wk-download-text strong {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: var(--weight-medium);
+  color: var(--text);
+}
+.wk-download-text small {
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-faint);
+}
+
+/* ── Rich text: the workspace Markdown surface, set into the page ── */
+.wk-prose.md-preview__content {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  color: var(--silk-dim);
+}
+.wk-body-text {
+  padding-top: var(--space-2);
+}
+.wk-prose h2 {
+  margin-top: var(--space-8);
+}
+.wk-prose > h2:first-child {
+  margin-top: 0;
+}
+.wk-prose table {
+  display: table;
+  width: 100%;
+}
+.wk-prose details {
+  margin: 0 0 var(--space-2);
+  border-radius: var(--radius-2);
+  background: var(--bg);
+  box-shadow: var(--edge-soft);
+}
+.wk-prose details > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-2);
+  cursor: pointer;
+  list-style: none;
+  color: var(--text);
+  transition: background var(--transition-base);
+}
+.wk-prose details > summary::-webkit-details-marker {
+  display: none;
+}
+.wk-prose details > summary::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid var(--text-faint);
+  border-bottom: 1.5px solid var(--text-faint);
+  transform: rotate(-45deg);
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.wk-prose details[open] > summary::before {
+  transform: rotate(45deg);
+}
+.wk-prose details > summary:hover {
+  background: var(--surface-hover);
+}
+.wk-prose details > summary:active {
+  transform: scale(0.99);
+}
+.wk-prose details > :not(summary) {
+  margin-left: var(--space-3);
+  margin-right: var(--space-3);
+}
+.wk-prose details > :last-child {
+  margin-bottom: var(--space-3);
+}
+.wk-prose details[open] > summary {
+  margin-bottom: var(--space-2);
+}
+
+/* ── Previous / next ── */
+.wk-page-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding-top: var(--space-4);
+  border-top: var(--border-hair);
+}
+.wk-step {
+  max-width: 60%;
+}
+.wk-step-text {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ── The landing page: one door per half of the site ── */
+.wk-doors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-4);
+}
+.wk-door {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-dialog);
+  background: var(--bg);
+  box-shadow: var(--edge-soft);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--text);
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    filter var(--transition-base),
+    box-shadow var(--transition-base);
+}
+.wk-door:hover {
+  filter: brightness(var(--hover-lift-soft));
+  box-shadow: var(--edge-soft), var(--shadow-layered);
+}
+.wk-door:active {
+  transform: scale(0.98);
+  filter: brightness(var(--press-dim));
+  transition:
+    transform var(--dur-1) var(--ease-out),
+    filter var(--dur-1) var(--ease-out);
+}
+.wk-door-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 8;
+  background: var(--panel-2);
+  color: var(--text-faint);
+  overflow: hidden;
+}
+.wk-door-art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-4) var(--ease-out);
+}
+.wk-door:hover .wk-door-art img {
+  transform: scale(1.02);
+}
+.wk-door-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-top: var(--border-hair);
+}
+.wk-door-head {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-accent);
+}
+.wk-door-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-head-lg);
+  font-size: 19px;
+  letter-spacing: var(--tracking-head-lg);
+  color: var(--text);
+}
+.wk-door-text {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+.wk-door-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  color: var(--text-faint);
+}
+.wk-door:hover .wk-door-meta svg {
+  transform: translateX(2px);
+}
+.wk-door-meta svg {
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+/* ── Sensor finder (Wiki home) ── */
+.wk-finder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 720px;
+  margin-top: var(--space-2);
+}
+.wk-finder-field .inc-input {
+  height: 40px;
+  font-size: 14px;
+}
+.wk-finder-field[data-filled] .inc-search-input {
+  padding-left: var(--space-3);
+}
+.wk-finder-field:not([data-filled]) .inc-search-input {
+  padding-left: 34px;
+}
+.wk-finder-field .inc-search-glyph {
+  left: var(--space-3);
+}
+.wk-finder-field .inc-search-clear {
+  right: var(--space-2);
+}
+.wk-finder-filter {
+  align-self: flex-start;
+}
+.wk-finder-suggest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+}
+.wk-finder-suggest .wk-label {
+  margin-right: var(--space-1);
+  color: var(--text-faint);
+}
+/* A suggestion: a borderless pill of the control's own tint (the comfy
+   secondary), that lifts on hover and dips on press. */
+.wk-chip {
+  height: var(--control-h-sm);
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-2);
+  background: var(--btn-tint);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-mono);
+  font-size: var(--text-label-sm);
+  cursor: pointer;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    background var(--transition-base),
+    color var(--transition-base);
+}
+.wk-chip:hover {
+  background: var(--btn-tint-hover);
+  color: var(--text);
+}
+.wk-chip:active {
+  transform: scale(0.98);
+}
+.wk-section-sub {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: 14px;
+  letter-spacing: 0;
+  color: var(--text-faint);
+}
+.wk-placeholder code,
+.wk-placeholder em {
+  color: var(--text-muted);
+}
+
+/* ── Wiki cards: the 3D render sits on the panel, not cropped ── */
+.wk-card-thumb--model img {
+  object-fit: contain;
+  padding: var(--space-2);
+}
+.wk-card-id {
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-mono);
+  font-size: var(--text-label-sm);
+  color: var(--text-muted);
+}
+
+/* ── 3D model viewer ── */
+.wk-model {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 16 / 9;
+  background: var(--panel-2);
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.wk-model-poster,
+.wk-model-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.wk-model-poster {
+  object-fit: contain;
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+.wk-model-stage {
+  opacity: 0;
+  cursor: grab;
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+.wk-model-stage:active {
+  cursor: grabbing;
+}
+.wk-model[data-state='ready'] .wk-model-stage {
+  opacity: 1;
+}
+.wk-model[data-state='ready'] .wk-model-poster {
+  opacity: 0;
+}
+.wk-model-hint {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-1);
+  background: var(--surface-raised);
+  box-shadow: var(--edge-soft);
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  color: var(--text-faint);
+  pointer-events: none;
+  animation: wk-pop-in var(--dur-3) var(--ease-out);
+}
+
+/* ── What it reads: the function table ── */
+.wk-fn-table {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-dialog);
+  background: var(--bg);
+  box-shadow: var(--edge-soft);
+  overflow: hidden;
+}
+.wk-fn-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 2fr) 3fr;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--silk-dim);
+}
+.wk-fn-row + .wk-fn-row {
+  border-top: var(--border-hair);
+}
+.wk-fn-row--head {
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  color: var(--text-faint);
+}
+.wk-fn-name {
+  display: inline-block;
+  border-radius: var(--radius-1);
+  text-decoration: none;
+  color: var(--text);
+  word-break: break-word;
+  transition: color var(--transition-base);
+}
+.wk-fn-name:hover {
+  color: var(--text-accent);
+}
+.wk-fn-name code,
+.wk-fn-returns code {
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-mono);
+  font-size: 12px;
+}
+.wk-fn-returns code {
+  padding: 1px var(--space-1);
+  border-radius: var(--radius-1);
+  background: var(--panel-2);
+  color: var(--silk);
+}
+
+/* ── Narrow: the rail becomes the peeked rail (shell.css `.sh-nav--peek`) ── */
+@media (max-width: 820px) {
+  .wk-menu {
+    display: inline-flex;
+  }
+  .wk-topbar {
+    padding-left: var(--space-2);
+  }
+  .wk-nav {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    width: min(300px, 86vw);
+    display: none;
+    box-shadow: var(--shadow-pop-bordered);
+  }
+  .wk-nav[data-open] {
+    display: block;
+    animation: wk-peek-in var(--dur-peek-out) var(--ease-out);
+  }
+  .wk-nav[data-closing] {
+    pointer-events: none;
+    animation: wk-peek-out var(--dur-peek-out) var(--ease-out) forwards;
+  }
+  .wk-nav .wk-pane-inner {
+    animation: none;
+  }
+  .wk-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: var(--scrim);
+    animation: wk-peek-in var(--dur-peek-out) var(--ease-out);
+  }
+  .wk-catalog,
+  .wk-page {
+    padding: var(--space-6) var(--space-4) var(--space-12);
+  }
+  .wk-catalog-head h1 {
+    font-size: 24px;
+  }
+  .wk-page-head h1 {
+    font-size: 22px;
+  }
+  .wk-download {
+    flex-wrap: wrap;
+  }
+  .wk-download-text {
+    flex-basis: 100%;
+    padding: 0 0 var(--space-2) var(--space-1);
+  }
+  .wk-fn-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+  .wk-fn-row--head {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .wk-vdiv,
+  .wk-crumbbar {
+    display: none;
+  }
+  .wk-cards {
+    grid-template-columns: 1fr;
+  }
+}
+@keyframes wk-peek-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes wk-peek-out {
+  from {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    filter: blur(3px);
+    transform: translateX(-20px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wk-pane-inner,
+  .wk-stage,
+  .wk-enter,
+  .wk-nav[data-open],
+  .wk-scrim {
+    animation: none;
+  }
+  .wk-card,
+  .wk-card:active,
+  .wk-card-thumb img {
+    transition: none;
+    transform: none;
+  }
+}
