@@ -19,7 +19,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - [x] Session 10 — Structs & state machines (FSM) · deck: https://claude.ai/artifact/J9nYPccoVnefmod11t4Ji4 · **.pptx and .pdf pending**
 
 ### INCIPE Board, Sensors & Modules → `content/m3-incipe-board-sensors-modules/`
-- [ ] Session 13 — Actuators: PWM & motor control
+- [ ] Session 13 — Actuators: PWM & motor control · **stopped: needs the owner** (Question 8)
 - [ ] Session 14 — Audio & indicators
 - [ ] Session 15 — Input devices: joystick, IR & buttons
 - [ ] Session 16 — Data logging with SD card
@@ -140,6 +140,18 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   cycle run on the host; the full sketch compiled for `esp32:esp32:esp32`; build clean;
   both themes and 375px; no console errors; privacy grep clean.
 
+### Iteration 7 — Session 13: stopped and asked
+
+- Session 13's practice is "sweep the Servo from 0° to 180° and control DC motor speed with
+  a potentiometer". `wiki/servo.md` and `wiki/motor.md` are frontmatter only: they name
+  `incipe.writeMicroseconds(value)` and `incipe.setMotorSpeed(speed)` but give no range,
+  no direction rule and no example, so neither the sweep nor the speed control can be
+  written accurately. There is no potentiometer page on the Wiki at all.
+- The same gap blocks most of the module: Sessions 14 (buzzer, LED strip), 16 (SD card),
+  17 (IR sender/receiver), 18 (pump, servo, LED strip) and 19 (LED strip as a display).
+  Session 15's joystick half and Session 20's debugging half are teachable today.
+- Nothing written for Session 13. The loop stops here (STOP AND ASK) — Question 8.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -189,6 +201,12 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
    whether students may touch ESP32 registers on the INCIPE Board (or whether that would
    interfere with the runtime), so the lesson keeps both on students' own data. Is a
    register example wanted, and is it safe alongside the runtime?
+8. **Sessions 13–19 need the actuator and module pages.** What do `setMotorSpeed(speed)`
+   (range, and how to reverse), `writeMicroseconds(value)` (the µs for 0° and 180°),
+   the buzzer, LED strip, SD card, IR and pump functions take? And the curriculum's
+   potentiometer has no Wiki page — is there a potentiometer module, or should Session 13
+   use the joystick X axis as the dial? Until then: wait, write the teachable parts only,
+   or move on to Ideation (5–6) and Presentation (21–28)?
 5. **Session 4 needs the build path.** The curriculum says "use the terminal to compile and
    upload firmware" and "automate the process using INCIPE Board". The public Wiki says
    compilation happens on Incipe's build service, and the dev build's local compile fails
