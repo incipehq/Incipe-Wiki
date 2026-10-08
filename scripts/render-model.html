@@ -1,0 +1,34 @@
+<!doctype html>
+<!-- Headless thumbnail page for scripts/models.mjs: one model on a fixed
+     1280×720 transparent stage. When it has drawn, the canvas is exported as a
+     PNG data URL into #out, which the script reads back with --dump-dom.
+     (A --screenshot is the wrong shape: headless Chrome's viewport is shorter
+     than its --window-size.) -->
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      html, body { margin: 0; background: transparent; overflow: hidden; }
+      #stage { width: 1280px; height: 720px; }
+    </style>
+  </head>
+  <body>
+    <div id="stage"></div>
+    <pre id="out"></pre>
+    <script type="module">
+      import { mountModel } from '/src/three/scene.ts';
+      const stage = document.getElementById('stage');
+      const src = new URLSearchParams(location.search).get('src');
+      mountModel(stage, src, {
+        interactive: false,
+        preserveDrawingBuffer: true,
+        onReady: () => {
+          document.getElementById('out').textContent = stage.querySelector('canvas').toDataURL('image/png');
+        },
+        onError: (e) => {
+          document.getElementById('out').textContent = 'error: ' + e;
+        },
+      });
+    </script>
+  </body>
+</html>
