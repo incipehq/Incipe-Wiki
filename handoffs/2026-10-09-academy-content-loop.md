@@ -14,7 +14,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 
 ### Fundamentals of Programming (curriculum "M3") → `content/m2-fundamentals-of-programming/`
 - [-] Session 7 — Introduction to C++ for embedded systems · **already covered** by the existing M2 Lessons 1–5 decks (owner, 2026-10-09); their content is the standard. A draft page was set aside, not committed.
-- [ ] Session 8 — Control structures & functions · gaps only (owner): `switch`, `while` / `do-while`, own functions; link M2 Lessons 2 and 4
+- [x] Session 8 — Control structures & functions (gaps only) · deck: https://claude.ai/artifact/1iVoDUPtWW9MHdcp8iPhm3 · **.pptx and .pdf pending**
 - [ ] Session 9 — Arrays, pointers & bitwise operations · gaps only: pointers, references, bitwise; link M2 Lesson 4 for arrays
 - [ ] Session 10 — Structs & state machines (FSM) · not covered by M2 — write in full
 
@@ -96,6 +96,21 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   The draft page written this iteration was moved out of the repo; its Session 7 deck
   artifact (https://claude.ai/artifact/V3UBH8Hr1jtLUUeS3r43qi) was created but left empty.
 
+### Iteration 4 — Session 8: Control structures & functions (gaps only)
+
+- Notes: `lessons/m2-fundamentals-of-programming/session-08-control-structures-functions.md`;
+  page: `content/m2-fundamentals-of-programming/08-control-structures-functions.md`.
+- Teaches only what M2 Lessons 2–4 do not: `switch` (with fall-through), `while` and
+  `do-while`, writing functions with parameters and return values; links back to the M2
+  lessons for `if`/`else`, the button release pattern and `for`. Follows the M2 style:
+  `setup()`/`loop()`, Serial at 9600, `incipe.getButtonResponse()` read in `loop()`.
+- Practice (Digital Dice) shows the roll on the Serial monitor; the LED-strip display waits
+  on the LED strip page (Question 6). AI task: an AI-style `millis()` debounce, reviewed.
+- Four walkthroughs; deck 52 slides, one slide per walkthrough step.
+- Checked: every printed result run on the host (C++17) and the full sketch compiled for
+  `esp32:esp32:esp32` against the scratch stub; build clean; page at 375px; no console
+  errors; privacy grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -104,6 +119,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   and `pdf:` and runs `npm run ingest`.
   - Session 2 → .pptx and .pdf
   - Session 3 → .pdf (the .pptx is in)
+  - Session 8 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
@@ -152,4 +168,5 @@ kept in the session scratchpad, never in this repo) for the ESP32 Dev Module tar
 
 | Session | Result |
 | --- | --- |
+| 8 | `showDice`, the countdown, `do-while`, `addDice` and the fall-through checkpoint run on the host with the printed results in the notes; the Digital Dice sketch (with `rollDice`, `showDice`, release logic and the debounce) compiles for `esp32:esp32:esp32`. |
 | 2 | Both `readClimate()` (AI draft) and `printClimate()` plus a thread that calls it every 2000 ms compile for `esp32:esp32:esp32`; `static_assert` confirms `float` = 4 and `double` = 8 bytes. Printed values (`23.40`, `51.00`) follow Arduino's two-decimal `print(float)`. |
