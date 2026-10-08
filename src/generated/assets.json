@@ -1,0 +1,50 @@
+{
+  "m1-ai-literacy/01-ai-development-workflows": {
+    "file": "/files/m1-ai-literacy--01-ai-development-workflows.pptx",
+    "downloadName": "Lesson 1_ Introduction to AI Development Workflows.pptx",
+    "format": "PPTX",
+    "bytes": 888650,
+    "pages": 14,
+    "thumbnail": "/thumbs/m1-ai-literacy--01-ai-development-workflows.jpg"
+  },
+  "m2-fundamentals-of-programming/01-coding-basics": {
+    "file": "/files/m2-fundamentals-of-programming--01-coding-basics.pptx",
+    "downloadName": "Lesson 1 Coding Basics.pptx",
+    "format": "PPTX",
+    "bytes": 7463258,
+    "pages": 25,
+    "thumbnail": "/thumbs/m2-fundamentals-of-programming--01-coding-basics.jpg"
+  },
+  "m2-fundamentals-of-programming/02-data-types-if-else": {
+    "file": "/files/m2-fundamentals-of-programming--02-data-types-if-else.pptx",
+    "downloadName": "Lesson 2 Data Type If-else.pptx",
+    "format": "PPTX",
+    "bytes": 227770,
+    "pages": 22,
+    "thumbnail": "/thumbs/m2-fundamentals-of-programming--02-data-types-if-else.jpg"
+  },
+  "m2-fundamentals-of-programming/03-sensors": {
+    "file": "/files/m2-fundamentals-of-programming--03-sensors.pptx",
+    "downloadName": "Lesson 3 Sensors.pptx",
+    "format": "PPTX",
+    "bytes": 207263,
+    "pages": 16,
+    "thumbnail": "/thumbs/m2-fundamentals-of-programming--03-sensors.jpg"
+  },
+  "m2-fundamentals-of-programming/04-arrays-for-loop": {
+    "file": "/files/m2-fundamentals-of-programming--04-arrays-for-loop.pptx",
+    "downloadName": "Lesson 4 Arrays and for Loop.pptx",
+    "format": "PPTX",
+    "bytes": 205694,
+    "pages": 17,
+    "thumbnail": "/thumbs/m2-fundamentals-of-programming--04-arrays-for-loop.jpg"
+  },
+  "m2-fundamentals-of-programming/05-recap": {
+    "file": "/files/m2-fundamentals-of-programming--05-recap.pptx",
+    "downloadName": "Lesson 5 Recap.pptx",
+    "format": "PPTX",
+    "bytes": 210321,
+    "pages": 18,
+    "thumbnail": "/thumbs/m2-fundamentals-of-programming--05-recap.jpg"
+  }
+}
