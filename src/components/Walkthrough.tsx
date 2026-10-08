@@ -21,7 +21,8 @@
  * `println:` continues it and then ends it (`Serial.println`). Wrap the text in
  * double quotes when its leading or trailing spaces matter: `prints: "x = "`.
  * Fields are split on ` | ` — a pipe with a space either side — so `||` in a
- * sentence is safe.
+ * sentence is safe. A line `output: Terminal` among the steps renames that pane
+ * (default `Serial monitor`), for walkthroughs of shell commands.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
@@ -40,6 +41,8 @@ interface Step {
 export interface WalkthroughSource {
   code: string[];
   steps: Step[];
+  /** The output pane's name. */
+  output: string;
 }
 
 const PLAY_MS = 1800;
@@ -48,8 +51,11 @@ export function parseWalkthrough(source: string): WalkthroughSource {
   const lines = source.replace(/\s+$/, '').split(/\r?\n/);
   const cut = lines.findIndex((line) => line.trim() === '---');
   const code = cut < 0 ? lines : lines.slice(0, cut);
-  const steps = (cut < 0 ? [] : lines.slice(cut + 1))
-    .filter((line) => line.trim())
+  const rest = cut < 0 ? [] : lines.slice(cut + 1);
+  const named = rest.find((line) => /^output:/.test(line.trim()));
+  const output = named ? named.trim().replace(/^output:\s*/, '') : 'Serial monitor';
+  const steps = rest
+    .filter((line) => line.trim() && line !== named)
     .map((line): Step => {
       const [num, text = '', vars = '', prints = ''] = line.split(/(?<=\s)\|(?=\s)/).map((part) => part.trim());
       return {
@@ -67,7 +73,7 @@ export function parseWalkthrough(source: string): WalkthroughSource {
       };
     })
     .filter((step) => Number.isFinite(step.line));
-  return { code, steps };
+  return { code, steps, output };
 }
 
 function parsePrints(field: string): Step['prints'] {
@@ -97,7 +103,7 @@ function history(steps: Step[], upTo: number) {
 const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
 export function Walkthrough({ source }: { source: string }) {
-  const { code, steps } = useMemo(() => parseWalkthrough(source), [source]);
+  const { code, steps, output: outputName } = useMemo(() => parseWalkthrough(source), [source]);
   const [at, setAt] = useState(0);
   const [playing, setPlaying] = useState(false);
   const timer = useRef<number>();
@@ -204,8 +210,8 @@ export function Walkthrough({ source }: { source: string }) {
         )}
 
         {steps.some((s) => s.prints != null) && (
-          <div className="wk-walk-out" aria-label="Serial monitor">
-            <span className="wk-label">Serial monitor</span>
+          <div className="wk-walk-out" aria-label={outputName}>
+            <span className="wk-label">{outputName}</span>
             <pre>{output || ' '}</pre>
           </div>
         )}
