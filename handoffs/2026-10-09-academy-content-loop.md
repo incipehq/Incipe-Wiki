@@ -14,9 +14,9 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 
 ### Fundamentals of Programming (curriculum "M3") → `content/m2-fundamentals-of-programming/`
 - [-] Session 7 — Introduction to C++ for embedded systems · **already covered** by the existing M2 Lessons 1–5 decks (owner, 2026-10-09); their content is the standard. A draft page was set aside, not committed.
-- [ ] Session 8 — Control structures & functions
-- [ ] Session 9 — Arrays, pointers & bitwise operations
-- [ ] Session 10 — Structs & state machines (FSM)
+- [ ] Session 8 — Control structures & functions · gaps only (owner): `switch`, `while` / `do-while`, own functions; link M2 Lessons 2 and 4
+- [ ] Session 9 — Arrays, pointers & bitwise operations · gaps only: pointers, references, bitwise; link M2 Lesson 4 for arrays
+- [ ] Session 10 — Structs & state machines (FSM) · not covered by M2 — write in full
 
 ### INCIPE Board, Sensors & Modules → `content/m3-incipe-board-sensors-modules/`
 - [ ] Session 13 — Actuators: PWM & motor control
@@ -104,12 +104,8 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   and `pdf:` and runs `npm run ingest`.
   - Session 2 → .pptx and .pdf
   - Session 3 → .pdf (the .pptx is in)
-- **Stray files in `raw/`** (owner to keep or delete — `raw/` is owner-owned):
-  - `raw/LMS/M2 Fundamentals of Programming/m2-fundamentals-of-programming--04-arrays-for-loop.view.pdf`
-    is a **throwaway test PDF** (one picture of the Lesson 4 cover) from checking the new
-    viewer; opening its URL in the browser pane raised a save dialog. Not a real deck.
-  - `raw/LMS/M1 AI Literacy/m2-fundamentals-of-programming--02-data-types-if-else.pptx` is
-    the same file as M2 Lesson 2's deck (same size), saved into the M1 folder.
+- Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
+  folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
   build on 2026-10-09). Still missing: a Verify result, the code editor with the AI
   draft, and the Console showing output. What the dev build showed when they were tried:
