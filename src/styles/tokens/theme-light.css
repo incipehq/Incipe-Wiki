@@ -1,0 +1,223 @@
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · BEGINNER MODE — the opt-in light theme.
+
+   NOT copied from the design system. The DS is dark-first by brand
+   mandate (_ds/readme.md §"Colour"); this file is the sanctioned
+   second appearance, gated behind VITE_FEATURE_BEGINNER_MODE and
+   selected by `<html data-theme="beginner">` (see state/uiStore.ts).
+
+   Scope every override to :root — NOT body. PlotterTab.tsx and
+   lib/termRegistry.ts both resolve tokens off document.documentElement,
+   and a body-scoped block would silently leave them reading dark values.
+
+   Imported LAST from styles/index.css so it can override component
+   rules as well as tokens.
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Theme-neutral app tokens ──────────────────────────────────
+   These live here rather than in tokens/effects.css because that file
+   is a verbatim DS copy. Interaction filters have to change DIRECTION
+   between themes: lightening a near-white surface saturates to nothing,
+   so on light "hover" means slightly darker. */
+:root {
+  --hover-lift: 1.22; /* filter: brightness() on hover        */
+  --hover-lift-soft: 1.15; /* the gentler variant (chat cards)     */
+  --press-dim: 0.86; /* filter: brightness() on press        */
+
+  /* Full-screen scrim for the connect overlay. A token because text sits
+     DIRECTLY on it (the connect caption) — a scrim pinned to one theme while
+     the ink follows the other is the bug this replaced. */
+  --scrim: rgba(14, 13, 11, 0.72);
+  --scrim-from: rgba(14, 13, 11, 0); /* the fade-in start, same hue */
+}
+
+:root[data-theme='beginner'] {
+  /* ── Material palette, inverted ──
+     NEUTRAL greys, not the warm bone the dark theme inverts to. The dark
+     palette's near-blacks are warm on purpose (they read as material under
+     copper); flipped to light, that same warmth turned into a visible yellow
+     cast across the whole app — every surface, hairline and body line at once,
+     which reads as a screen-tint rather than as paper. The greys are now
+     achromatic and the ONLY hue in the theme is the copper accent and the
+     status colours, which is what makes them register as signal.
+
+     The ground and the card surface are given (#F5F5F5 / #FEFEFE). Every OTHER
+     grey is the neutral of the SAME RELATIVE LUMINANCE as the warm value it
+     replaces — hue removed, tonal hierarchy untouched, so every contrast ratio
+     in the theme survives the change. Flattening to the red channel instead
+     (#6B675E → #6B6B6B) silently LIGHTENS a warm grey, and the tertiary hints
+     had already slipped 3.2:1 → 2.9:1 that way before this was caught.
+     --bg and --surface-card MUST differ (~4% luminance) or the right panel
+     disappears against it. It is a flush docked column now rather than a
+     floating card, so the fill difference and one hairline are the ONLY things
+     separating it from the chat — which makes this gap matter more, not less. */
+  --mask: #f5f5f5; /* ground                        */
+  --panel: #fefefe; /* cards, panels                 */
+  --panel-2: #fafafa; /* highest raised surface        */
+  /* The page you write on. Off white on purpose — see `--surface-doc` (ui.css).
+     Mirrored by hand in monacoTheme.ts. */
+  --surface-doc: #fdfefd;
+  --silk: #151515; /* text, strokes                 */
+  --silk-dim: #373737;
+
+  --ash: #676767; /* secondary text                */
+  --ash-dim: #909090; /* tertiary / hints              */
+  --line: #e0e0e0; /* hairlines                     */
+  --line-2: #cacaca; /* stronger hairline             */
+
+  /* ── Accents ──
+     Copper deepens so it clears WCAG AA as text on white (#B0703A is
+     ~4.2:1, just under). It stays unmistakably copper — the single
+     accent rule is unchanged; blue remains reserved for OTA. */
+  --copper: #a0632f;
+  --copper-hi: #86501f; /* hover = DARKER on light       */
+  --copper-lo: #6b3f18; /* press                         */
+  --copper-wash: rgba(160, 99, 47, 0.1);
+  --gold: #8a6412;
+  --tin: #6e727a;
+  --green: #14663d;
+  --blue: #1f5490;
+  --warn-wash: rgba(138, 100, 18, 0.1);
+  --danger-wash: rgba(179, 38, 30, 0.1);
+  --green-wash: rgba(20, 102, 61, 0.1);
+  --blue-wash: rgba(31, 84, 144, 0.1);
+
+  /* ── Status — re-toned for contrast on white.
+     The transport mapping is unchanged: USB/Flash green, OTA blue,
+     offline copper (CLAUDE.md § UI conventions, design.md §2). */
+  --ok: #14663d;
+  --warn: #8a6412; /* #C2922F is ~2.4:1 on white — fails AA */
+  /* Danger is red, not copper (base.css). Deepened for white the same way the
+     accent is: #E4574C is ~3.1:1 on the card and fails as text. */
+  --red: #b3261e;
+  --red-hi: #8f1e17;
+  --red-lo: #6d1611;
+  --danger: var(--red);
+  --info: #1f5490;
+
+  /* ── Elevation — the documented exemption to the hard-shadow rule.
+     _ds/readme.md mandates "hard and low, never soft glows" for the
+     dark theme, and effects.css keeps that literally true: --shadow-*
+     is NOT redefined globally. On a light ground a 0-blur lip reads as
+     a printing defect, so this theme gets a layered ambient+key scale
+     and re-points the legacy tokens at it INSIDE this block only. */
+  --elev-1: 0 1px 2px rgba(21, 21, 21, 0.06), 0 1px 3px rgba(21, 21, 21, 0.05);
+  --elev-2:
+    0 1px 2px rgba(21, 21, 21, 0.05), 0 4px 8px rgba(21, 21, 21, 0.05),
+    0 12px 24px rgba(21, 21, 21, 0.06);
+  --elev-3:
+    0 0 0 1px rgba(21, 21, 21, 0.06), 0 2px 4px rgba(21, 21, 21, 0.06),
+    0 8px 16px rgba(21, 21, 21, 0.06), 0 24px 48px rgba(21, 21, 21, 0.09);
+
+  --shadow-1: var(--elev-1);
+  --shadow-2: var(--elev-2);
+  --shadow-pop: var(--elev-3);
+  /* --elev-3 without its 1px ring — for a pop surface that draws its own border
+     (see base.css). Here the ring is only 6% ink so the doubling is invisible,
+     but the two themes must agree on what the token MEANS. */
+  --shadow-pop-bordered:
+    0 2px 4px rgba(21, 21, 21, 0.06), 0 8px 16px rgba(21, 21, 21, 0.06),
+    0 24px 48px rgba(21, 21, 21, 0.09);
+  --inset-press: inset 0 1px 2px rgba(21, 21, 21, 0.14);
+
+  /* ── The selected row, on paper ──
+     `--surface-on` (ui.css) is a tint of `currentColor` at 16%, which is right
+     on the dark theme — white ink over near-black reads as a lift. Inverted, the
+     same formula is near-black ink over near-white, i.e. a GREY slab: the one
+     "you are here" state in the app became the darkest thing on the page. On a
+     light ground a raised thing is LIGHTER than its ground, not darker, so the
+     selected row takes the card surface — the same off-white every other
+     floating box in this theme sits on (never pure #FFF, per the brand rule) —
+     and the shadow does the lifting.
+
+     `--shadow-layered` has to come with it. Its dark-theme values are 25% and
+     50% black, which is a correct contact-plus-cast over #0E0D0B and a bruise
+     over #F5F5F5 — the selected row was landing heavier than the app's modals.
+     Still two casts, so the token keeps its meaning across themes (design.md
+     §2); only the ink comes down, to this theme's own elevation weights. */
+  --surface-on: var(--panel);
+  --shadow-layered: 0 1px 2px rgba(21, 21, 21, 0.07), 0 2px 6px rgba(21, 21, 21, 0.1);
+
+  /* ── Interaction direction flips ── */
+  --hover-lift: 0.96;
+  --hover-lift-soft: 0.975;
+  --press-dim: 0.93;
+
+  /* ── Grain — `screen` blend is a no-op on white; multiply at a much
+     lower opacity keeps the paper texture without muddying the ground. */
+  --grain-opacity: 0.035;
+
+  /* Frosted rather than blacked-out: the connect caption is near-black ink in
+     this theme, so the surface under it has to be light. The dark board floats
+     on it like a product shot, which is also the friendlier read for beginner
+     mode — a full-screen blackout mid-session is jarring. */
+  --scrim: rgba(245, 245, 245, 0.88);
+  --scrim-from: rgba(245, 245, 245, 0);
+}
+
+/* ── Surfaces pinned dark in BOTH themes ───────────────────────────
+   Just the sensor tag chip now: it paints its OWN near-black fill
+   (`rgba(20,19,16,.92)`, board3d.css) so it stays a dark object in either
+   theme, and this theme's near-black ink on it would land at ~1.5:1.
+
+   `.bp-stage` used to be listed here too, back when the dock sat on a hardcoded
+   `#100f0d` plate. The canvas is transparent now and the dock composites onto
+   the light card, so pinning it would invert the ink on a light surface.
+
+   Raw tokens only, deliberately: this subtree reads --silk/--ash directly, and
+   re-declaring the semantic aliases here would not help anyway — a custom
+   property is substituted where it is DECLARED (`:root`), not where it is read,
+   so overriding --silk on a descendant never reaches an inherited
+   `--text: var(--silk)`. */
+:root[data-theme='beginner'] .b3d-tag-chip {
+  --silk: #e7e4dc;
+  --silk-dim: #c9c6bd;
+  --ash: #8d8a80;
+  --ash-dim: #5f5d56;
+  --line: #2a2926;
+  --line-2: #3a3833;
+  /* --signal, not --copper: the chip reads `var(--signal)` for its hover
+     border, and a custom property is substituted where it is DECLARED, so
+     re-pointing --copper here would never reach the :root-level
+     `--signal: var(--accent)`. --accent-dark (tokens/accent.css) is the
+     current accent as tuned for a DARK ground, which is what this fill is. */
+  --signal: var(--accent-dark);
+}
+
+/* The internal-account badge (`DEV` / `ADMIN`, nav.css) is the other pinned
+   object: its fill is `--info`, a status colour that does not move between
+   themes, so its ink must not move either. Only `--silk` is re-declared — the
+   badge reads that one token and nothing else. */
+:root[data-theme='beginner'] .nav-role-badge {
+  --silk: #e7e4dc;
+}
+
+/* Native scrollbars, form controls and caret follow the theme. */
+:root[data-theme='beginner'] body {
+  color-scheme: light;
+}
+
+:root[data-theme='beginner'] .inc-grain {
+  mix-blend-mode: multiply;
+}
+/* The DRC sweep line is --silk (now near-black) — `screen` would erase it. */
+:root[data-theme='beginner'] .pcb-sweep {
+  mix-blend-mode: multiply;
+}
+
+/* ── The right panel is not a card ─────────────────────────────
+   It was a floating card in both themes, and light added the one
+   thing dark could not have: the layered elevation shadow. The card
+   state is off — the panel is a docked column with a hairline down
+   its left edge (shell.css) — and a docked column does not cast, so
+   there is nothing for this theme to add. A shadow here would be the
+   only surface in the light theme lifting off a boundary it shares
+   with the chat. */
+
+/* ── The 3D board is no longer a plate ─────────────────────────
+   It used to be treated as a media surface — an inset, rounded dark rectangle
+   inside the light card, the way a photo would be — because the scene is lit as
+   a dark studio (copper rim Lightformer, additive particles, Bloom). The canvas
+   is transparent now and the board floats directly on the card, so the inset
+   frame that gave the plate its edges has nothing left to frame. Nothing is
+   needed here: `.bp-stage` is theme-neutral in board3d.css. */

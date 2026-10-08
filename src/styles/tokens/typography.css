@@ -1,0 +1,104 @@
+/* Copied verbatim from the design system (source of truth):
+   raw/.../\_ds/incipe-design-system-.../tokens/typography.css
+   Do not edit here — update the DS and re-copy. */
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · TYPOGRAPHY
+   Two families. Archivo (heavy, expanded, caps) for display;
+   JetBrains Mono for the technical layer. Type scale = 1.25 modular.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* ── Families ── */
+  --font-display: 'Archivo', system-ui, sans-serif; /* headlines + body */
+  --font-sans: 'Archivo', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* ── Weights ── */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semi: 600;
+  --weight-bold: 800;
+  --weight-black: 900;
+
+  /* ── Width axis (Archivo variable) ── */
+  --wdth-display: 125; /* @kind other */
+  --wdth-h1: 120; /* @kind other */
+  --wdth-h2: 118; /* @kind other */
+  --wdth-h3: 112; /* @kind other */
+  --wdth-body: 100; /* @kind other */
+
+  /* ── Sizes (px) — 1.25 modular scale ── */
+  --text-display: 96px; /* hero: clamp 76–176 in use */
+  --text-h1: 52px;
+  --text-h2: 40px;
+  --text-h3: 24px;
+  --text-body: 16px;
+  --text-small: 13px;
+  --text-label: 11px; /* mono label: 11–12 */
+
+  /* ── Line heights ── */
+  --leading-display: 0.84;
+  --leading-h1: 0.92;
+  --leading-h2: 0.96;
+  --leading-h3: 1.02;
+  --leading-body: 1.55;
+  --leading-small: 1.5;
+
+  /* ── Tracking ── */
+  --tracking-display: -0.03em;
+  --tracking-h1: -0.02em;
+  --tracking-h2: -0.01em;
+  --tracking-h3: 0em;
+  --tracking-body: 0em;
+  --tracking-label: 0.16em; /* tracked mono caps */
+}
+
+/* ── Type role helpers (optional; tokens are the source of truth) ── */
+.inc-display {
+  font-family: var(--font-display);
+  font-weight: var(--weight-black);
+  font-variation-settings: 'wdth' var(--wdth-display);
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.inc-h1 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-black);
+  font-variation-settings: 'wdth' var(--wdth-h1);
+  font-size: var(--text-h1);
+  line-height: var(--leading-h1);
+  letter-spacing: var(--tracking-h1);
+  text-transform: uppercase;
+}
+.inc-h2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-variation-settings: 'wdth' var(--wdth-h2);
+  font-size: var(--text-h2);
+  line-height: var(--leading-h2);
+  letter-spacing: var(--tracking-h2);
+  text-transform: uppercase;
+}
+.inc-h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-variation-settings: 'wdth' var(--wdth-h3);
+  font-size: var(--text-h3);
+  line-height: var(--leading-h3);
+  text-transform: uppercase;
+}
+.inc-body {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-variation-settings: 'wdth' var(--wdth-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+.inc-mono {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}

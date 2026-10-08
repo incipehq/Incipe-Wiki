@@ -1,0 +1,576 @@
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · BASE — reset, app ground, global interaction patterns,
+   and the animation keyframes from design.md. Everything reads
+   tokens; no raw hex outside the token files.
+   ───────────────────────────────────────────────────────────── */
+
+* {
+  box-sizing: border-box;
+}
+
+/* ── App-local tokens ──
+   Declared here, not in tokens/*.css — those are verbatim DS copies ("do not
+   edit, re-copy"). */
+:root {
+  /**
+   * ── Mono label type: one weight, tighter tracking, two sizes ──
+   *
+   * The DS pins tracked mono caps at `wght 800 / 0.16em / 11px`, and this app ran
+   * that plus four ad-hoc sizes (8–11px) and two weights (800 for most labels,
+   * 400 for the dim secondary rows). Three consequences, all visible: labels read
+   * heavy and blobby at 9px on the near-black ground, the same kind of label came
+   * in two weights depending on where it was, and 0.16em spent ~8% of every
+   * label's width on air — which is what forces the nav rail and panel heads wide.
+   *
+   * JetBrains Mono is MONOSPACED, so weight is free: 600 and 800 occupy identical
+   * width. Tracking is the only lever on space, hence tightening it rather than
+   * shrinking type.
+   *
+   * These override DS token values, so they live here — tokens/*.css are verbatim
+   * DS copies ("do not edit, re-copy") and base.css is imported after them.
+   * Recorded as a deliberate deviation in design.md §1.
+   */
+  /**
+   * ── Radii, app-local: ONE radius, 6px ──
+   * The DS ships a scale of `0/2/4/6` ("near-square"). This app uses one value:
+   * **6px on every rounded thing** — button, field, card, panel, dialog, row,
+   * badge, the 20px row action. A scale of near-identical radii is a decision
+   * nobody can see and every new component has to re-make; one value cannot
+   * drift. It has been 8px (soft, at a control's size) and 4px (barely there);
+   * 6 is the one that reads as deliberate on both a 24px chip and a 460px
+   * dialog.
+   *
+   * **6 is deliberately off the 4/8/16 rhythm the rest of the app spaces on**,
+   * and it is the only such exception. Spacing is a rhythm you feel across a
+   * layout; a corner is a single judgement about one shape, and the nearest
+   * steps on that scale are visibly wrong in both directions. `--radius-0` is untouched and still means CAD-true (tables,
+   * reticles, title blocks), and `--radius-pill` still means a capsule; the
+   * three steps between them now resolve to the same 4px, so the token names in
+   * ~60 call sites keep working and say which INTENT was meant.
+   *
+   * These override DS token values, so they live here — tokens/*.css are
+   * verbatim DS copies ("do not edit, re-copy") and base.css is imported after
+   * them. Recorded in design.md §2.
+   */
+  /**
+   * ── Corner smoothing: the iOS rule at 60% ──
+   *
+   * A circular corner meets the straight edge with a sudden change of
+   * curvature — the join is what makes a rounded rectangle read as "a rectangle
+   * with its corners cut round". A superellipse eases the curvature in, which is
+   * the shape iOS uses and what Figma's corner-smoothing slider produces.
+   *
+   * `superellipse(k)` is CSS Borders 4, where the exponent is 2^k: `k: 1` is the
+   * plain circular arc, `k: 2` is the `squircle` keyword. Figma's 60% — the
+   * "iOS" preset — sits between the two, at an exponent near 3, so `k` is
+   * log2(3) ≈ **1.6**.
+   *
+   * **It is inert in the app today.** `corner-shape` landed in Chromium 139 and
+   * this app ships Electron 33 (Chromium 130), so the declaration is dropped and
+   * the corners stay circular — which is exactly the right failure. The shape
+   * arrives on its own with the next Electron that crosses 139; nothing has to
+   * be remembered or re-done. (The browser preview is on current Chromium, so it
+   * is visible there now.)
+   *
+   * A true pill or circle opts out with `corner-shape: round` — a superellipse
+   * on a semicircular end is no longer a capsule. Applied through `:where()` so
+   * it carries zero specificity and any rule can override it.
+   */
+  --corner-smooth: superellipse(1.6);
+
+  --radius-1: 6px; /* DS: 2px */
+  --radius-2: 6px; /* DS: 4px */
+  --radius-3: 6px; /* DS: 6px */
+
+  /**
+   * CONCENTRIC CORNERS: a surface that floats a padded card around 6px controls
+   * takes 12px (design.md §2).
+   *
+   * Not a second radius in the scale — a consequence of the first one. Two
+   * corners sharing a centre only look concentric when the outer one is larger;
+   * matched radii make the outer corner look TIGHTER than the inner, because
+   * the eye reads the gap between the two arcs, and at equal radii that gap
+   * pinches at 45°. Modal cards are the only surfaces this applies to today:
+   * they are the only ones that float a whole card around their controls
+   * rather than sitting flush against the app.
+   */
+  --radius-dialog: 12px;
+
+  /**
+   * ── Hairlines, app-local: 0.5px ──
+   *
+   * Every hard border in the app is half a pixel. On the retina displays this
+   * app is built for that is a true hairline — the thinnest line the screen can
+   * draw — where 1px was two device pixels and read as a drawn rule around
+   * things that only needed defining. The three tokens move together because
+   * they are one line at three weights of colour, not three thicknesses.
+   *
+   * **On a 1× display a 0.5px border is at the mercy of rounding**: Chromium
+   * paints it as one device pixel or, at some zoom levels, drops it. That is a
+   * real cost, accepted deliberately — the app's own window is a retina Mac in
+   * practice, and where it lands on a 1× screen the line degrades to what it was
+   * before rather than to nothing structural.
+   */
+  --border-hair: 0.5px solid var(--line);
+  --border-soft: 0.5px solid var(--line-2);
+  --border-bright: 0.5px solid var(--silk);
+
+  /**
+   * ── Label tracking: ZERO (design.md §1.1) ──
+   *
+   * Tracking is the other half of the caps device, and the caps are gone. It was
+   * the DS's 0.16em, halved twice to 0.04em while these labels were still
+   * TRACKED UPPERCASE — spacing letters apart is what makes a run of caps read
+   * as a label rather than as shouting. Sentence case needs none of that: the
+   * word shapes already do the work, and 4% on a lowercase 10px string just
+   * loosens it.
+   *
+   * Kept as a token at 0 rather than deleted from ~60 rules: it is the one place
+   * label tracking is decided, and a rule that reads it still says which role it
+   * belongs to.
+   */
+  --tracking-label: 0;
+
+  /**
+   * ONE TRACKING FOR MONO, and it is NEGATIVE (design.md §1.2).
+   *
+   * JetBrains Mono is drawn on a wide advance — every glyph gets the same box,
+   * and the narrow ones (i, l, punctuation, the digits in a device path) get it
+   * too. At normal tracking a run of it reads as though it has been spaced out
+   * on purpose. Pulling 3% back closes the gaps the monospace grid opens
+   * without touching the grid itself, so code still lines up in columns.
+   *
+   * Every rule that sets `--font-mono` sets this with it — enforced by
+   * `fontRoles.test.ts`, the same test that keeps mono's blast radius small.
+   */
+  --tracking-mono: -0.03em;
+  /* The reading size inside a card or a row — one step under the DS's
+     `--text-small` (13px), which is this app's card HEAD. It was a 12px literal
+     in about thirty rules; the token is so the next one has something to read. */
+  --text-body-sm: 12px;
+  /**
+   * The TITLE step — the heading that names a surface or a bar you are working
+   * in: the chat's own title, and the secrets form's `Wi-Fi password`.
+   *
+   * Between the DS's `--text-body` (16px) and `--text-small` (13px), and in the
+   * app since long before it had a name: a literal 14px in a dozen rules, the
+   * same reason `--text-body-sm` above exists. Named here the moment a SECOND
+   * heading had to be the same size as the first — two literals agreeing by
+   * coincidence is not two headings agreeing.
+   *
+   * Not the big-header instance, which leads a whole SURFACE at 19–30px, and not
+   * `.inc-card-title` (13px), which heads a card inside a panel.
+   */
+  --text-title: 14px;
+  /**
+   * ── THE UI SCALE IS TWO STEPS: 14 and 12 ──
+   *
+   * It was five — 14 title, 13 card head, 12 body, 10 label, 10 label-sm — which
+   * is four decisions between the largest UI text and the smallest, none of them
+   * visible as a step when you look at the app. Merged: `--text-small` joins
+   * `--text-title` at 14, and both label tokens join `--text-body-sm` at 12.
+   *
+   * **The names all survive**, exactly as `--radius-1/2/3` are all 6px: they say
+   * which INTENT was meant at the call site, and one value cannot drift. A card
+   * head still reads `--text-small` and a badge still reads `--text-label-sm`;
+   * the difference between them is now a fact about the design, not about the
+   * rendering.
+   */
+  --text-small: 14px; /* DS: 13px — merged up into the title step */
+  --text-label: 12px; /* DS: 11px — panel/section/button labels */
+  /**
+   * ── CAPS ARE SET ONE STEP DOWN ──
+   *
+   * Uppercase has no descenders and its cap-height is the whole of it, so a run
+   * of caps reads about a step larger than the same size in sentence case. At
+   * 12px `RESCAN PORTS` and `RECONNECT` sat visually level with the 14px
+   * headings above them — the buttons were shouting because of the case, and
+   * the size was agreeing with them.
+   *
+   * 11px is the one declared step below the floor, and it is declared for this
+   * reason only: an ALL-CAPS surface, and nothing else. Sentence-case text at
+   * 11px is the thing the floor exists to prevent, which is why this is a
+   * separate name rather than a smaller `--text-label`. It was 10px for a day
+   * and that is genuinely too small for a button label — caps read larger than
+   * lowercase, but not by two steps.
+   */
+  --text-caps: 11px;
+  /**
+   * ── THE FLOOR: 12px, and nothing in the app is set below it ──
+   *
+   * The smallest type the app is willing to draw, calibrated on the port
+   * menu's group headings (`USB Serial`, `Wireless Connection`). Below this the
+   * UI face's counters close up and a label stops being read and starts being
+   * recognised by its shape.
+   *
+   * It was 9px, then 10px, and every literal that had drifted under it —
+   * 8px and 8.5px meta lines in the chat cards, the port detail, the dev
+   * inspector's notes. They all read this token now, so the floor is one number
+   * in one place and `typeScale.test.ts` fails on anything below it.
+   *
+   * **The same value as `--text-label` and `--text-body-sm`, deliberately** —
+   * see the scale note above. The names record intent, not size.
+   */
+  --text-label-sm: 12px; /* app-local — badges, meta, data captions */
+  --weight-label: var(--weight-semi); /* 600, for EVERY mono label */
+
+  /**
+   * The pop shadow for a surface that draws its OWN border.
+   *
+   * `--shadow-pop`'s first layer is `0 0 0 1px --line-2`: it exists so a popover
+   * can have an edge with no border at all. Every pop surface in this app also
+   * declares `border: var(--border-soft)` — the same 1px, the same colour — and a
+   * box-shadow ring sits immediately OUTSIDE the border box, so the two stacked
+   * into a 2px edge, twice every other hairline in the app. This is the same
+   * shadow with the ring dropped; the border is the edge.
+   */
+  --shadow-pop-bordered: 0 18px 50px rgba(0, 0, 0, 0.6);
+
+  /**
+   * ── The big-header Archivo instance: wdth 110 / wght 600 ──
+   *
+   * For BIG headers — the large titles that lead a surface or a section of a
+   * document (the empty-chat line, a rendered document's h1/h2). Not for h3 and
+   * below, and not for panel heads: those are mono labels, or already
+   * distinguished by size, and spending the app's widest, heaviest instance on
+   * every heading is what made display type shout.
+   *
+   * The DS ramp puts a big header at wdth 118–120 / wght 800–900. At the sizes
+   * this app actually sets them (19–30px, not the DS's 40–52px), that instance
+   * is too wide and too heavy: the extended width eats line length a panel
+   * does not have, and 800+ at 24px goes solid. 600/110 keeps the expanded
+   * character of the face while leaving the counters open.
+   *
+   * `--tracking-head-lg` applies to every SENTENCE-CASE header on this
+   * instance. The wdth axis widens the letters but not the space between them,
+   * so at 110 the words sit loose; -4% pulls them back into one shape. The
+   * all-caps exception (`.ch-empty-title`) does NOT take it — caps have no
+   * ascender/descender interlock to close up, and negative tracking there just
+   * jams the stems together.
+   */
+  /**
+   * ── Status washes ──
+   *
+   * `--copper-wash` used to double as the fill for anything bordered --danger,
+   * which was free while the accent WAS copper. It is not free now: with a blue
+   * or green accent picked (tokens/accent.css) a danger block would have taken a
+   * blue border-and-wash pairing that says nothing has gone wrong.
+   *
+   * The wash used to be aliased to `--copper-wash`, because --danger WAS the
+   * copper material. It is red now (below), so the wash is mixed from the red and
+   * theme-light.css tunes its own. --warn had no wash at all.
+   */
+  /**
+   * ── DANGER IS RED, NOT COPPER ──
+   *
+   * The DS maps danger onto the copper material (`tokens/colors.css`), which
+   * made the app's one accent and its one alarm the same colour. It reads as a
+   * mistake in the product rather than as a system: `Remove project`, a failed
+   * payment and an offline board came up in the SAME copper the send button, the
+   * active tab and every selected row are drawn in, so nothing about the colour
+   * said anything had gone wrong. And when the accent is pointed at blue or
+   * green (tokens/accent.css) the coincidence breaks anyway, leaving danger as
+   * an orange nobody chose.
+   *
+   * Red solder mask is a real PCB finish, so the palette stays material.
+   * `#E4574C` is 5.3:1 on the `--mask` ground — a red that is legible as TEXT,
+   * which is what `.inc-btn--danger` needs, rather than a warning-light red that
+   * has to be a fill to be seen. theme-light.css deepens it to `#B3261E` (6.5:1
+   * on the card) the same way copper deepens there.
+   *
+   * Declared here rather than in `tokens/colors.css`: that file is a verbatim DS
+   * copy ("do not edit, re-copy"), and base.css is imported after it.
+   */
+  /**
+   * ── A COLOURED EDGE IS A TINT, NEVER THE COLOUR (doc/AI_SLOP.md §007) ──
+   *
+   * A hairline drawn in a status or accent colour at FULL strength is the
+   * machine-default move for "make this look important", and it reads as one:
+   * the 100% line is the loudest thing on the card, louder than the words it is
+   * fencing, and it fences a box that was already a box. Every status block in
+   * the app had one.
+   *
+   * 35% is the strength at which the edge stops competing and still says which
+   * status it belongs to — the same figure the two rules that got this right on
+   * their own arrived at (`.ch-att--unread`, `.con-banner`).
+   *
+   * A box that FLOATS takes `--edge-soft` instead and no coloured line at all:
+   * its status lives in its dot, its wash and its words (design.md §2).
+   */
+  --edge-danger: color-mix(in srgb, var(--danger) 35%, transparent);
+  --edge-ok: color-mix(in srgb, var(--ok) 35%, transparent);
+  --edge-warn: color-mix(in srgb, var(--warn) 35%, transparent);
+  --edge-info: color-mix(in srgb, var(--info) 35%, transparent);
+  --edge-signal: color-mix(in srgb, var(--signal) 35%, transparent);
+
+  --red: #e4574c;
+  --red-hi: #ee6d63;
+  --red-lo: #c73f36;
+  --danger: var(--red);
+  --danger-wash: rgba(228, 87, 76, 0.12);
+  --warn-wash: rgba(194, 146, 47, 0.12);
+
+  /**
+   * ── THE `wdth` AXIS IS OFF. Archivo draws at its natural width. ──
+   *
+   * The DS tier and the app's big-header instance both stretched the face
+   * through `font-variation-settings: 'wdth' …` — 125 on display down to 112 on
+   * h3, and 110 here. Neutralising the tokens to 100 turns that off everywhere
+   * at once and leaves every rule that reads them in place, so this is one edit
+   * to undo rather than a dozen: the DS copy in `tokens/typography.css` stays
+   * verbatim, and the feature rules keep saying which tier they belong to.
+   *
+   * A stretched face is a DIFFERENT face, drawn by an axis rather than by a
+   * designer, and it only ever applied to the one font of the four that has the
+   * axis — so the same heading was a slightly different shape depending on
+   * which UI face the user had picked. At 100 they agree.
+   */
+  --wdth-display: 100;
+  --wdth-h1: 100;
+  --wdth-h2: 100;
+  --wdth-h3: 100;
+  --wdth-body: 100;
+  --wdth-head-lg: 100;
+
+  --weight-head-lg: var(--weight-semi);
+  /**
+   * −2%, not −4%. The −4% existed to COMPENSATE for the widened letters: the
+   * `wdth` axis widens the glyphs but not the space between them, so at 110 the
+   * words sat loose and 4% pulled them back into one shape. With the axis off
+   * there is nothing to pull back, and the old value would now be over-tight on
+   * a face at its natural width.
+   */
+  --tracking-head-lg: -0.02em;
+}
+
+/**
+ * ── No caps on the DS display helpers, no italic anywhere (design.md §1.1) ──
+ *
+ * `tokens/typography.css` upcases `.inc-display`/`.inc-h1`/`.inc-h2`/`.inc-h3`,
+ * but that file is a verbatim DS copy ("do not edit, re-copy"), so the app's
+ * position is stated here instead — base.css is imported after it. The helpers
+ * are unused today; this exists so reaching for one later cannot smuggle caps
+ * back into the display tier.
+ *
+ * Caps survive on BUTTONS ALONE now (design.md §1.1) — `.inc-btn` and the
+ * handful of controls that copy it. Everything else in the app is sentence
+ * case, so this neutraliser covers `.inc-mono` too.
+ *
+ * The italic reset is absolute. Neither variable face declares an italic style
+ * (`styles/fonts.css`), so any `font-style: italic` is a browser-synthesised
+ * faux oblique — a sheared upright with broken stroke contrast.
+ *
+ * `<em>` keeps its MEANING but moves to the weight axis: 500 against body 400,
+ * a step below `<strong>`'s 800. Stripping the slant without replacing it would
+ * have made `*emphasis*` in agent-authored markdown render identically to the
+ * text around it, collapsing two distinct marks into one.
+ */
+.inc-display,
+.inc-h1,
+.inc-h2,
+.inc-h3,
+.inc-mono {
+  text-transform: none;
+}
+
+em,
+i,
+address,
+cite,
+dfn,
+var {
+  font-style: normal;
+}
+
+em,
+i {
+  font-weight: var(--weight-medium);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  /* The app is a fixed workspace — the page itself never scrolls sideways;
+     wide content (code, tables, logs) scrolls inside its own container. */
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  -webkit-font-smoothing: antialiased;
+  color-scheme: dark;
+  user-select: none; /* app chrome; opt back in for content */
+}
+
+/* Content areas (chat, editor, logs) re-enable selection. */
+.inc-selectable {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-mono);
+}
+
+/* ── Form controls inherit the app's type (design.md §2) ──
+   They do not by default: a `<button>`, `<input>`, `<select>` or `<textarea>`
+   that declares no family gets the UA's own — Arial here — and it is invisible
+   until you put one beside a themed control. The shared primitives all declare
+   a family, so this only ever bit the bespoke ones, silently, one at a time:
+   the port rows in the board menu, a chat card, a question chip, the editor's
+   tab-close button. Size and weight come along for the same reason. */
+button,
+input,
+select,
+textarea,
+optgroup {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+/* ── Focus — 2px copper outline (brand rule) ── */
+:focus-visible {
+  outline: var(--focus-w) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+/* ── Scrollbars — none ──
+   Nothing in this app scrolls without something else already saying so: a list
+   runs off the bottom of its panel, a tab strip fades at its edge (`.inc-fade-x`,
+   ui.css). A track and a thumb painted on top of that are a second, uglier copy
+   of the same fact — and on a dark ground the 10px light bar was the brightest
+   thing in a panel full of hairlines.
+
+   Scrolling itself is untouched: wheel, trackpad, keyboard and
+   `scrollIntoView` all behave exactly as before, and macOS overlay scrollbars
+   were already invisible at rest. This only removes the chrome, everywhere and
+   in both themes. */
+/* `scrollbar-width` does not inherit, so it has to be said everywhere — at zero
+   specificity, so a future scroller can still opt back in. */
+:where(*) {
+  scrollbar-width: none;
+}
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* ── Keyframes (design.md §10) ── */
+@keyframes inc-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes inc-wave {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+@keyframes inc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes inc-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes inc-shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+@keyframes inc-slidein {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes inc-slidein-l {
+  from {
+    transform: translateX(-26px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes inc-indet {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+@keyframes inc-livedot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+}
+@keyframes inc-nav-in {
+  from {
+    transform: translateX(-22px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes inc-panel-in {
+  from {
+    transform: translateX(26px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Every corner in the app, at zero specificity — see `--corner-smooth`. */
+:where(*, *::before, *::after) {
+  corner-shape: var(--corner-smooth);
+}

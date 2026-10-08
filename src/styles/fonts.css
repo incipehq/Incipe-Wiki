@@ -1,0 +1,94 @@
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · FONTS — self-hosted (Electron must work offline).
+   Replaces the DS fonts.css CDN @import (the DS file itself says
+   "swap to self-hosted @font-face if you need asset-bundled delivery").
+
+   The pairing (v3): Archivo for display/sans, JetBrains Mono for every
+   mono surface — labels, data, code, serial. Both are variable fonts
+   under the SIL Open Font License. Archivo carries wght 300–900 AND
+   wdth 75–125; JetBrains Mono carries wght 100–800.
+   ───────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Archivo';
+  src: url('./fonts/archivo-variable.woff2') format('woff2-variations');
+  font-weight: 300 900;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Vendored from the official JetBrains release in `raw/JetBrains_Mono`
+   (OFL.txt ships with that drop). TTF rather than woff2 on purpose: woff2 buys
+   smaller NETWORK transfer, which is close to meaningless for an Electron app
+   loading its own bundled assets — and the Google Fonts woff2 build is a latin
+   SUBSET. This is the editor and serial-monitor face, where arbitrary UTF-8
+   turns up, so full glyph coverage is worth the ~150KB on disk. */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('./fonts/jetbrains-mono-variable.ttf') format('truetype-variations');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   The two READABILITY faces, added alongside Archivo so the user can
+   pick a UI font in Settings → Appearance (`<html data-font>`, see
+   state/uiStore.ts and styles/tokens/font-theme.css).
+
+   Archivo stays the brand default and is the only one of the three with a
+   `wdth` axis — the big-header instance (`wdth 110`) is expressly an
+   Archivo instance. Inter and Outfit carry weight only, so the
+   `font-variation-settings: 'wdth' …` on those rules is silently ignored
+   rather than needing a per-face rule; that is why the display tier does
+   not have to fork.
+
+   latin + latin-ext ONLY, split by `unicode-range` — unlike JetBrains Mono
+   above, which ships full coverage because the editor and serial monitor
+   render arbitrary UTF-8. These faces only ever set app chrome and
+   user-authored names, so the rest of Unicode would be weight for nothing.
+   Both are SIL Open Font License; the licences ship beside the files
+   (`fonts/inter-OFL.txt`, `fonts/outfit-OFL.txt`).
+   ───────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Inter';
+  src: url('./fonts/inter-variable-latin.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('./fonts/inter-variable-latin-ext.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('./fonts/outfit-variable-latin.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('./fonts/outfit-variable-latin-ext.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}

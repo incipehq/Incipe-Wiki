@@ -1,0 +1,201 @@
+/* Shared rendered-Markdown surface for editor and Skills. */
+
+.md-preview {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  /* The page, not the ground (`--surface-doc`, ui.css) — the same surface the
+     code editor beside it is set on. */
+  background: var(--surface-doc);
+  color: var(--silk-dim);
+}
+
+.md-preview__content {
+  width: min(100%, 840px);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-6) var(--space-8);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-variation-settings: 'wdth' var(--wdth-body);
+  line-height: var(--leading-body);
+  overflow-wrap: anywhere;
+}
+
+.md-preview__content > :first-child {
+  margin-top: 0;
+}
+
+.md-preview__content > :last-child {
+  margin-bottom: 0;
+}
+
+.md-preview__content h1,
+.md-preview__content h2,
+.md-preview__content h3,
+.md-preview__content h4,
+.md-preview__content h5,
+.md-preview__content h6 {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  line-height: 1.2;
+  /* Sentence case (design.md §1.1): caps are a label device, not a display one.
+     These headings are authored by the user or the agent — upcasing them made
+     the app shout copy it did not write. Size + weight + wdth already say
+     "heading". */
+  letter-spacing: var(--tracking-h3);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+/* The two big headers of a rendered document — its title and its section heads,
+   the two that carry a rule under them — take the big-header instance from
+   base.css, tracking included (they are sentence case; only the all-caps
+   `.ch-empty-title` opts out of the -4%). h3 and below stay on the DS ramp
+   above: the rule is scoped to big headers, not to headings generally. */
+.md-preview__content h1,
+.md-preview__content h2 {
+  font-weight: var(--weight-head-lg);
+  font-variation-settings: 'wdth' var(--wdth-head-lg);
+  letter-spacing: var(--tracking-head-lg);
+}
+
+.md-preview__content h1 {
+  padding-bottom: var(--space-2);
+  border-bottom: var(--border-hair);
+  font-size: 24px;
+}
+
+.md-preview__content h2 {
+  padding-bottom: var(--space-1);
+  border-bottom: var(--border-hair);
+  font-size: 19px;
+}
+
+.md-preview__content h3 {
+  font-size: 16px;
+  font-variation-settings: 'wdth' var(--wdth-h3);
+}
+
+/* One step under the big headers, not over them. The DS `--weight-bold` these
+   used to share with h1/h2 became an INVERTED ramp the moment the big headers
+   dropped to 600: an h3 rendered heavier than the h2 it sits under, so the page
+   read bottom-heavy even though the sizes still descended. Weight has to fall
+   with the level. Still clear of body (400 at wdth 100). */
+.md-preview__content h3,
+.md-preview__content h4,
+.md-preview__content h5,
+.md-preview__content h6 {
+  font-weight: var(--weight-medium);
+}
+
+.md-preview__content h4,
+.md-preview__content h5,
+.md-preview__content h6 {
+  font-size: 14px;
+}
+
+.md-preview__content p,
+.md-preview__content ul,
+.md-preview__content ol,
+.md-preview__content blockquote,
+.md-preview__content pre,
+.md-preview__content table,
+.md-preview__content hr {
+  margin: 0 0 var(--space-3);
+}
+
+.md-preview__content ul,
+.md-preview__content ol {
+  padding-left: var(--space-6);
+}
+
+.md-preview__content li + li {
+  margin-top: var(--space-1);
+}
+
+.md-preview__content a {
+  color: var(--signal);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.md-preview__content strong {
+  color: var(--text);
+}
+
+.md-preview__content code {
+  padding: 1px var(--space-1);
+  border-radius: var(--radius-1);
+  background: var(--panel-2);
+  color: var(--silk);
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-mono);
+  font-size: 12px;
+}
+
+.md-preview__content pre {
+  padding: var(--space-3);
+  overflow: auto;
+  border: var(--border-hair);
+  border-radius: var(--radius-2);
+  background: var(--panel-2);
+  line-height: 1.55;
+}
+
+.md-preview__content pre code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.md-preview__content blockquote {
+  padding: var(--space-1) var(--space-3);
+  border-left: 2px solid var(--signal);
+  color: var(--text-muted);
+}
+
+.md-preview__content hr {
+  border: 0;
+  border-top: var(--border-hair);
+}
+
+.md-preview__content table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+}
+
+.md-preview__content th,
+.md-preview__content td {
+  padding: var(--space-2);
+  border: var(--border-hair);
+  text-align: left;
+  vertical-align: top;
+}
+
+.md-preview__content th {
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  font-weight: var(--weight-label);
+}
+
+.md-preview__content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.md-preview__content input[type='checkbox'] {
+  accent-color: var(--signal);
+}
+
+@media (max-width: 760px) {
+  .md-preview__content {
+    padding: var(--space-4);
+  }
+}

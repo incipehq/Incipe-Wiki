@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.DS_Store
+.vercel
+# Source drops. `npm run ingest` copies what the site needs into public/.
+raw/
+# PRIVATE — Incipe firmware references (incipe-firmware skill). Never commit them:
+# this repository is public. See CLAUDE.md.
+wiki/references/
+# Personal Claude Code permissions — not shared.
+.claude/settings.local.json

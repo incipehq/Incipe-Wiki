@@ -1,0 +1,18 @@
+/* ═══════════════════════════════════════════════════════════════
+   INCIPE WIKI · STYLE ENTRY — the Incipe Workspace stack, verbatim.
+   fonts → tokens → base → light theme → accent, exactly as
+   Incipe-Workspace/apps/desktop/src/renderer/styles/index.css orders
+   them. Then the shared primitives (ui.css) and the Markdown surface.
+   Re-copy these from the workspace rather than editing them here.
+   ═══════════════════════════════════════════════════════════════ */
+@import './fonts.css';
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/font-theme.css';
+@import './tokens/spacing.css';
+@import './tokens/effects.css';
+@import './base.css';
+@import './tokens/theme-light.css';
+@import './tokens/accent.css';
+@import './ui.css';
+@import './markdown.css';

@@ -1,0 +1,26 @@
+/* Copied verbatim from the design system (source of truth):
+   raw/.../\_ds/incipe-design-system-.../tokens/spacing.css
+   Do not edit here — update the DS and re-copy. */
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · SPACING
+   Atomic unit 4px. Layout module 48px (= via pitch).
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --space-0: 0;
+  --space-1: 4px; /* base atomic unit            */
+  --space-2: 8px; /* inline, labels              */
+  --space-3: 12px;
+  --space-4: 16px; /* component padding           */
+  --space-6: 24px;
+  --space-8: 32px; /* block gaps                  */
+  --space-12: 48px; /* layout grid / via pitch     */
+  --space-16: 64px;
+  --space-24: 96px; /* section rhythm              */
+
+  --module: 48px; /* layout grid module          */
+  --gutter: clamp(18px, 4vw, 56px); /* @kind spacing */
+  --maxw: 1080px; /* content max width — @kind spacing */
+
+  /* Page frame inset (CAD frame) */
+  --frame-inset: clamp(20px, 3vw, 46px);
+}

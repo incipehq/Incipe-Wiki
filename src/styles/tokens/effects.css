@@ -1,0 +1,59 @@
+/* Copied verbatim from the design system (source of truth):
+   raw/.../\_ds/incipe-design-system-.../tokens/effects.css
+   Do not edit here — update the DS and re-copy. */
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · EFFECTS — radii, borders, shadow, grain, motion
+   Industrial / CAD posture: near-square corners, hairline borders,
+   flat fills. Shadows are sparse and hard, never soft glows.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* ── Corner radii — sharp by default ── */
+  --radius-0: 0px; /* CAD-true: title blocks, reticles, tables */
+  --radius-1: 2px; /* chips, inputs, buttons — barely softened */
+  --radius-2: 4px; /* cards, panels                            */
+  --radius-3: 6px; /* dialogs, large surfaces                  */
+  --radius-pill: 999px; /* status pills / tags only                 */
+
+  /* ── Borders ── */
+  --border-hair: 1px solid var(--line); /* default hairline      */
+  --border-soft: 1px solid var(--line-2); /* raised surface edge   */
+  --border-bright: 1px solid var(--silk); /* inverted / emphasis   */
+  --stroke-w: 1px; /* @kind other */
+
+  /* ── Shadow — hard, low, never glowing ── */
+  --shadow-0: none;
+  --shadow-1: 0 1px 0 rgba(0, 0, 0, 0.5); /* press lip */
+  --shadow-2: 0 2px 0 rgba(0, 0, 0, 0.45), 0 8px 24px rgba(0, 0, 0, 0.45); /* raised panel */
+  --shadow-pop: 0 0 0 1px var(--line-2), 0 18px 50px rgba(0, 0, 0, 0.6); /* dialog / popover */
+  --inset-press: inset 0 2px 0 rgba(0, 0, 0, 0.4); /* button press */
+
+  /* ── Focus ── */
+  --focus-w: 2px; /* @kind other */
+  --focus-offset: 2px; /* @kind other */
+
+  /* ── Grain overlay (apply on the body / full-bleed surfaces) ── */
+  --grain-opacity: 0.14; /* @kind other */
+  --grain-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); /* @kind other */
+
+  /* ── Motion — mechanical, quick, no bounce ── */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1); /* @kind other */
+  --ease-in: cubic-bezier(0.4, 0, 1, 1); /* @kind other */
+  --ease-mech: cubic-bezier(0.3, 0.7, 0, 1); /* @kind other */
+  --dur-1: 90ms; /* @kind other */
+  --dur-2: 160ms; /* @kind other */
+  --dur-3: 240ms; /* @kind other */
+  --dur-4: 400ms; /* @kind other */
+  --transition-base: 160ms cubic-bezier(0.2, 0.8, 0.2, 1); /* @kind other */
+}
+
+/* Grain overlay utility — fixed, full-bleed, non-interactive.
+   <div class="inc-grain"></div> as the last child of a dark surface. */
+.inc-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: screen;
+  background-image: var(--grain-url);
+}

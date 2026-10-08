@@ -1,0 +1,135 @@
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · FONT ROLES — which face plays which part, and the
+   user-selectable UI face behind it.
+
+   NOT a design-system copy. `tokens/typography.css` is verbatim DS and
+   declares `--font-display` / `--font-sans` / `--font-mono` as three
+   fixed families; this file is imported after it and re-points the two
+   sans roles at a single switchable `--font-ui`, then adds the role the
+   DS never had a name for.
+
+   ── The roles ──────────────────────────────────────────────────
+   --font-ui      The UI face. Archivo (brand default), Inter, Outfit or
+                  Helvetica Neue, chosen in Settings → Appearance and
+                  mirrored onto `<html data-font>` by state/uiStore.ts.
+                  The first three ship with the app; the fourth is the
+                  operating system's (see below).
+   --font-display Headings and display type.        = --font-ui
+   --font-sans    Body, prose, inputs, tables.      = --font-ui
+   --font-label   Tracked UPPERCASE labels — panel heads, tabs, badges,
+                  tooltips, meta, chips.            = --font-ui
+   --font-mono    JetBrains Mono. NOT switchable, and deliberately narrow
+                  now (see below).
+
+   ── Why --font-label exists at all ─────────────────────────────
+   It resolves to the same family as --font-sans today, so it buys nothing
+   at runtime. It exists because these two sets of rules answer different
+   questions, and the app used to answer them with one token. A rule that
+   says `var(--font-label)` is claiming "this is a tracked-caps label" —
+   design.md §1.1's label device, which survived this change. A rule that
+   says `var(--font-sans)` is claiming "this is reading text". Collapsing
+   them would mean the next person deciding where mono belongs has to
+   re-derive the distinction from `text-transform` and font-size, which is
+   how 171 call sites ended up on the mono token in the first place.
+
+   ── Where mono is still allowed ────────────────────────────────
+   Mono is now spent only where a monospaced face is doing work:
+
+     · buttons (`.inc-btn`) — the app's one deliberate mono chrome
+     · the serial monitor / terminal / compile log output
+     · the code editor, its diffs, and literal code (`code`, `pre`, `kbd`)
+     · verbatim machine strings the user may have to retype or quote —
+       an approved shell command, a relay error, a secret's value
+
+   Everything else — every label, tab, badge, chip, panel head, empty
+   state, table, file tree and input — is UI type and takes --font-ui.
+   Adding `font-family: var(--font-label)` to anything outside that list is
+   a regression; see design.md §1.2.
+   ───────────────────────────────────────────────────────────── */
+
+/* The CJK fallback, appended to every UI-face stack.
+   ──────────────────────────────────────────────────────────────
+   None of the four UI faces contains a CJK glyph — not a poor version, none —
+   so in Chinese or Japanese the browser falls through to whatever it likes,
+   which is how one screen ends up in three different faces. These are
+   the OS faces, in the order each platform actually ships them; nothing is
+   downloaded, because the smallest usable Noto CJK subset is heavier than the
+   entire app's type today (design.md §19).
+
+   Language-tagged and not one global list, because Han characters SHARE
+   codepoints across the three languages and are drawn differently in each: the
+   `lang` on `<html>` (uiStore's `applyLocale`) is what picks the right one, and
+   the stacks below make sure the right FACE is available to draw it. */
+:root {
+  --font-cjk:
+    'PingFang TC', 'Hiragino Sans', 'Microsoft JhengHei', 'Noto Sans CJK TC', 'Noto Sans TC',
+    sans-serif;
+
+  --font-ui: 'Archivo', system-ui, var(--font-cjk);
+
+  --font-display: var(--font-ui);
+  --font-sans: var(--font-ui);
+  --font-label: var(--font-ui);
+}
+:root[lang='zh-Hans'] {
+  --font-cjk: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Noto Sans SC', sans-serif;
+}
+:root[lang='ja'] {
+  --font-cjk:
+    'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', Meiryo, 'Noto Sans CJK JP',
+    'Noto Sans JP', sans-serif;
+}
+
+/* Inter — the neutral, high-legibility default of the two additions. Large
+   x-height, so it holds the app's small sizes (10px labels, 12.5px body)
+   better than either of the others. */
+:root[data-font='inter'] {
+  --font-ui: 'Inter', system-ui, var(--font-cjk);
+}
+
+/* Outfit — geometric, rounder, noticeably lighter in colour on the page.
+   Its x-height is smaller than Inter's, which is a look, not a defect; the
+   sizes are NOT nudged per face. A `--font-scale` that silently moved every
+   size when you changed font would make the picker a layout change rather
+   than a type change. */
+:root[data-font='outfit'] {
+  --font-ui: 'Outfit', system-ui, var(--font-cjk);
+}
+
+/* Helvetica Neue — THE ONE THE APP DOES NOT SHIP.
+   ──────────────────────────────────────────────────────────────
+   The other three are self-hosted variable fonts in `fonts.css`; this one is
+   asked of the operating system, and it is licensed with macOS rather than
+   redistributable, so asking is the only option there is. In practice that
+   means macOS has it and Windows and Linux do not — hence the full fallback
+   run: Helvetica, then Arial (the metric-compatible substitute Windows does
+   ship), then `system-ui`. Nothing here is downloaded and nothing is faked.
+
+   It is also NOT a variable font, so the two axes the brand type leans on are
+   unavailable: `wdth` (Archivo-only already, and ignored elsewhere) and the
+   800–900 display weights, which resolve to Helvetica Neue's Bold at 700. That
+   is a quieter headline, not a broken one — and it is the trade the user is
+   making when they pick a face the app did not draw. Settings says so on the
+   row (`FONT_NOTES`). */
+:root[data-font='helvetica'] {
+  --font-ui: 'Helvetica Neue', Helvetica, Arial, system-ui, var(--font-cjk);
+}
+
+/**
+ * Tabular figures for the surfaces that lost mono but kept a column.
+ *
+ * Mono was doing two jobs at these sites: it was the label voice AND it made
+ * digits the same width, so a token counter, a meter percentage or a seat
+ * count did not jitter as it counted. Only the first job moved. Every UI face
+ * offered here can give the digits back their column — the three shipped ones
+ * through `tnum`, and Helvetica Neue because its figures are tabular already,
+ * which makes the property a no-op there rather than a gap — but it has to be
+ * asked for, because proportional figures are correct for prose and this must
+ * not leak into it.
+ *
+ * Applied by rule in the feature stylesheets, not by a utility class, so a
+ * number that needs it cannot be shipped without it by forgetting a className.
+ */
+.inc-tnum {
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,279 @@
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · ACCENT THEMES — the one primary accent, made choosable.
+
+   NOT a design-system copy. The DS pins a single accent ("--copper, and
+   only --copper"); this file keeps that rule intact and changes only
+   WHICH colour fills the role. There is still exactly one accent on
+   screen at a time — eight palettes, never eight colours.
+
+   Imported LAST from styles/index.css, after tokens/theme-light.css, so
+   an accent can win over the light theme's copper without that file
+   having to know the accent exists.
+
+   ── The layering ───────────────────────────────────────────────
+   `--copper*` in tokens/colors.css stays what it always was: the MATERIAL,
+   a fixed printed-copper hex, re-toned for the light ground in
+   theme-light.css. It is no longer read by feature CSS.
+
+   `--accent*` is the ROLE. It defaults to the copper material, so nothing
+   changes until the user picks otherwise, and `<html data-accent>` swaps
+   it (state/uiStore.ts).
+
+   `--signal*` is the alias the app actually reads — 130-odd call sites
+   across components/ and features/. It was already the DS's semantic name
+   for "the one primary accent"; it now points at the role rather than at
+   the material, which is the whole change.
+
+   ── -hi and -lo mean hover and press, NOT lighter and darker ───
+   theme-light.css already established this ("hover = DARKER on light").
+   The neutral palette makes it unavoidable in BOTH directions: an
+   off-white accent on the dark ground has no headroom above it, and a
+   near-black accent on the light ground has none below. Each palette
+   picks whichever direction it has room for.
+
+   ── What does NOT follow the accent ────────────────────────────
+   Status stays material (CLAUDE.md § brand rules): --ok green, --warn
+   gold, --danger copper, --info blue are fixed, and so is the transport
+   mapping they carry (USB/Flash green, OTA blue, offline copper —
+   design.md §2). Two consequences worth knowing before picking:
+
+     · the BLUE accent shares a hue with --info/OTA
+     · the GREEN accent shares a hue with --ok/USB
+     · the YELLOW accent shares a hue with --warn
+     · the PINK accent sits near --danger, especially on the light theme
+       where a legible pink is necessarily a deep rose
+
+   That is a real cost and it is the user's to accept. The alternative —
+   re-hueing status to dodge the accent — would mean a green that means
+   "connected over USB" changes colour because somebody liked blue, which
+   breaks the one mapping the app cannot afford to make ambiguous.
+
+   With the COPPER accent, --danger is literally the accent (design.md
+   §17.4, "the container carries the warning"). With any other accent they
+   separate, and the danger-zone treatment still reads correctly — it just
+   stops being the only thing distinguishing destructive from primary.
+
+   ── Contrast ───────────────────────────────────────────────────
+   Every value below is measured, not eyeballed. The bar is the one the
+   shipped copper already sets: ≥4.4:1 as text on its own theme's ground
+   (--mask) and ≥4.6:1 on the panel surface. Ratios are noted per palette.
+   `--text-invert` (= --mask, which flips per theme) is the ink on a filled
+   accent and clears 4.6:1 against every palette in both themes, including
+   the neutral one where the accent itself is the light value.
+   ───────────────────────────────────────────────────────────── */
+
+/* ── The [data-swatch] twin on every palette below ──
+   Settings' accent picker has to paint every swatch at once, all but one of
+   them in a palette the app is not currently wearing. Rather than restate the hexes
+   there, each palette block ALSO matches `[data-swatch=…]`, so a swatch
+   element overrides --accent for ITSELF and paints with `background:
+   var(--accent)`.
+
+   It cannot leak. The --signal aliases at the bottom of this file are declared
+   on :root and therefore computed on :root, so every descendant inherits the
+   root's accent no matter what a swatch does to its own --accent.
+
+   Copper needs no twin: its palette is `var(--copper)`, which resolves per
+   element to whatever the active theme's copper is. */
+
+/* ── Copper — the brand default ──
+   Aliased to the material rather than restated, so theme-light.css stays
+   the single place the light-ground copper is tuned.
+   Text on ground: 4.83:1 dark / 4.46:1 light. */
+:root,
+[data-swatch='copper'] {
+  --accent: var(--copper);
+  --accent-hi: var(--copper-hi);
+  --accent-lo: var(--copper-lo);
+  --accent-wash: var(--copper-wash);
+
+  /* The dark-ground value of the CURRENT accent, exposed regardless of the
+     active theme. For the handful of surfaces pinned dark in both themes
+     (the sensor tag chip — theme-light.css), which would otherwise take a
+     light-tuned accent onto a near-black fill. */
+  --accent-dark: #b0703a;
+  --accent-dark-hi: #c2864e;
+}
+
+/* ── Blue — #3083ED, the specified hue ──
+   Text on ground: 5.18:1 dark. On the light ground #3083ED itself is
+   3.44:1 and fails, so light deepens to #1A6FD4 (4.51:1 ground / 4.88:1
+   panel) — the same move theme-light.css makes for copper, and the
+   closest step to the specified blue that clears the bar. */
+:root[data-accent='blue'],
+[data-swatch='blue'] {
+  --accent: #3083ed;
+  --accent-hi: #4e97f1;
+  --accent-lo: #2168c6;
+  --accent-wash: rgba(48, 131, 237, 0.12);
+  --accent-dark: #3083ed;
+  --accent-dark-hi: #4e97f1;
+}
+:root[data-theme='beginner'][data-accent='blue'],
+:root[data-theme='beginner'] [data-swatch='blue'] {
+  --accent: #1a6fd4;
+  --accent-hi: #12539f;
+  --accent-lo: #0d3f7b;
+  --accent-wash: rgba(26, 111, 212, 0.1);
+}
+
+/* ── Orange — Apple systemOrange ──
+   Dark takes Apple's dark-mode value #FF9F0A verbatim (9.45:1). Light
+   CANNOT take Apple's #FF9500: it is 2.02:1 on this ground, and Apple's
+   own guidance is that the system colours are tuned as fills, not as small
+   text. Deepened to #A85B00 (4.63:1 ground / 5.00:1 panel), which is the
+   same hue at a legible value. */
+:root[data-accent='orange'],
+[data-swatch='orange'] {
+  --accent: #ff9f0a;
+  --accent-hi: #ffb03a;
+  --accent-lo: #d97f00;
+  --accent-wash: rgba(255, 159, 10, 0.12);
+  --accent-dark: #ff9f0a;
+  --accent-dark-hi: #ffb03a;
+}
+:root[data-theme='beginner'][data-accent='orange'],
+:root[data-theme='beginner'] [data-swatch='orange'] {
+  --accent: #a85b00;
+  --accent-hi: #8a4b00;
+  --accent-lo: #6d3b00;
+  --accent-wash: rgba(168, 91, 0, 0.1);
+}
+
+/* ── Green — Apple systemGreen ──
+   Dark takes Apple's #30D158 (9.61:1). Light deepens from #34C759
+   (2.04:1, unusable as text) to #1E7F3C (4.63:1 ground / 5.01:1 panel). */
+:root[data-accent='green'],
+[data-swatch='green'] {
+  --accent: #30d158;
+  --accent-hi: #58dc77;
+  --accent-lo: #22a845;
+  --accent-wash: rgba(48, 209, 88, 0.12);
+  --accent-dark: #30d158;
+  --accent-dark-hi: #58dc77;
+}
+:root[data-theme='beginner'][data-accent='green'],
+:root[data-theme='beginner'] [data-swatch='green'] {
+  --accent: #1e7f3c;
+  --accent-hi: #17652f;
+  --accent-lo: #114d24;
+  --accent-wash: rgba(30, 127, 60, 0.1);
+}
+
+/* ── Pink — Apple systemPink ──
+   Dark takes Apple's dark-mode value #FF375F verbatim (5.52:1 ground /
+   5.28:1 panel). Light cannot take #FF2D55: it is 3.34:1 on this ground.
+   Deepened to #D81F4F (4.56:1 / 4.92:1) — **Apple's exact hue (344.5°) at
+   the highest lightness that clears the bar**, with the saturation eased
+   off. Holding saturation at 100% while deepening produces #E4003B, which
+   is a crimson: at low lightness a 344° hue stops reading as pink and
+   starts reading as the danger red it sits three feet from. */
+:root[data-accent='pink'],
+[data-swatch='pink'] {
+  --accent: #ff375f;
+  --accent-hi: #ff6584;
+  --accent-lo: #ff0436;
+  --accent-wash: rgba(255, 55, 95, 0.12);
+  --accent-dark: #ff375f;
+  --accent-dark-hi: #ff6584;
+}
+:root[data-theme='beginner'][data-accent='pink'],
+:root[data-theme='beginner'] [data-swatch='pink'] {
+  --accent: #d81f4f;
+  --accent-hi: #bd1b45;
+  --accent-lo: #a2173b;
+  --accent-wash: rgba(216, 31, 79, 0.1);
+}
+
+/* ── Purple — Apple systemPurple ──
+   Dark takes Apple's #BF5AF2 verbatim (5.51:1 / 5.27:1). Light deepens
+   #AF52DE (3.79:1, short of the bar) to #A835DE (4.55:1 / 4.92:1) on the
+   same 280.9° hue — the smallest move that clears it, so the palette is
+   still recognisably Apple's purple rather than an indigo. */
+:root[data-accent='purple'],
+[data-swatch='purple'] {
+  --accent: #bf5af2;
+  --accent-hi: #d085f5;
+  --accent-lo: #ad2bee;
+  --accent-wash: rgba(191, 90, 242, 0.12);
+  --accent-dark: #bf5af2;
+  --accent-dark-hi: #d085f5;
+}
+:root[data-theme='beginner'][data-accent='purple'],
+:root[data-theme='beginner'] [data-swatch='purple'] {
+  --accent: #a835de;
+  --accent-hi: #9a22d2;
+  --accent-lo: #871eb8;
+  --accent-wash: rgba(168, 53, 222, 0.1);
+}
+
+/* ── Yellow — Apple systemYellow, and the biggest gap between fill and text ──
+   Dark takes Apple's #FFD60A verbatim and is the brightest accent here by
+   a distance (13.76:1 / 13.16:1).
+
+   Light is the hard case and it is worth being blunt about: #FFCC00 is
+   **1.39:1** on this ground — invisible, not merely poor. There is no
+   yellow that is both bright and legible as small text on white, so this
+   deepens to #876C00 (4.61:1 / 4.99:1), which is Apple's 48° hue at the
+   only value that works and reads as dark gold rather than as yellow.
+   Exactly the trade orange already makes (#FF9500 → #A85B00), one step
+   further along. A user picking yellow gets a bright accent on the dark
+   theme and a gold one on the light. */
+:root[data-accent='yellow'],
+[data-swatch='yellow'] {
+  --accent: #ffd60a;
+  --accent-hi: #ffde38;
+  --accent-lo: #d6b200;
+  --accent-wash: rgba(255, 214, 10, 0.12);
+  --accent-dark: #ffd60a;
+  --accent-dark-hi: #ffde38;
+}
+:root[data-theme='beginner'][data-accent='yellow'],
+:root[data-theme='beginner'] [data-swatch='yellow'] {
+  --accent: #876c00;
+  --accent-hi: #685400;
+  --accent-lo: #4a3b00;
+  --accent-wash: rgba(135, 108, 0, 0.1);
+}
+
+/* ── Neutral — off-white on dark, off-black on light ──
+   The no-accent accent: the app in one material, with emphasis carried by
+   value alone. Never pure #FFF or #000 — #F9FAFB is white with a trace of
+   blue in it, #16181D is its opposite number, and both keep a tint so the
+   UI does not go clinical.
+
+   18.59:1 dark / 16.29:1 light — the only palette here that is limited by
+   headroom rather than by contrast, which is why -hi/-lo run toward the
+   ground in both themes instead of away from it. */
+:root[data-accent='neutral'],
+[data-swatch='neutral'] {
+  --accent: #f9fafb;
+  --accent-hi: #e4e7eb;
+  --accent-lo: #cbd1d8;
+  --accent-wash: rgba(249, 250, 251, 0.12);
+  --accent-dark: #f9fafb;
+  --accent-dark-hi: #e4e7eb;
+}
+:root[data-theme='beginner'][data-accent='neutral'],
+:root[data-theme='beginner'] [data-swatch='neutral'] {
+  --accent: #16181d;
+  --accent-hi: #2a2e36;
+  --accent-lo: #3a3f49;
+  --accent-wash: rgba(22, 24, 29, 0.09);
+}
+
+/* ── The aliases the app reads ──
+   Both selectors are listed so this wins over theme-light.css's
+   higher-specificity `:root[data-theme='beginner']` block, which still
+   owns --copper for the light ground. */
+:root,
+:root[data-theme='beginner'] {
+  --signal: var(--accent);
+  --signal-hi: var(--accent-hi);
+  --signal-lo: var(--accent-lo);
+  --signal-wash: var(--accent-wash);
+
+  --text-accent: var(--accent);
+  --border-accent: var(--accent);
+  --focus-ring: var(--accent);
+}

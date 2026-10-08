@@ -1,0 +1,1813 @@
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · UI PRIMITIVES — Button, Input, Popover, Menu, Tooltip.
+   Global interaction grammar (design.md §9):
+     hover  = brightness(--hover-lift), 1.22 dark / 0.96 light
+     press  = scale(0.98) + brightness(--press-dim), on everything
+   The filters are tokens because they invert direction between themes:
+   lightening a near-white surface saturates to nothing (theme-light.css).
+     focus  = 2px copper outline (from base.css :focus-visible)
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Control height — ONE scale for every control that sits on a row ──
+   A button and the text box beside it are the same object as far as a row is
+   concerned, so their height cannot be decided independently. It used to be:
+   `.inc-btn` declared 31px and `.inc-input` declared none at all, taking whatever
+   `font-size` + vertical padding happened to add up to — 36px. Every input+button
+   row in the app was 5px out of alignment (the serial send row, the plan-revision
+   row, the question cards' free-text rows), and none of them could be fixed
+   locally without the next one drifting again.
+
+   Both sizes are declared here and BOTH controls read them. Vertical padding on
+   either is therefore zero: with `box-sizing: border-box` (base.css) the height
+   is the whole box, and padding would only fight it. */
+:root {
+  --control-h: 31px;
+  --control-h-sm: 24px;
+  /* How long a press takes to go down and come back. Longer than the motion
+     scale's steps on purpose (`--dur-2` is 160ms): this is the one gesture where
+     the control should be seen moving, not caught having moved. */
+  --dur-press: 0.2s;
+  /**
+   * How long the peeked rail takes to LEAVE (shell.css). Also off the scale, and
+   * for the same kind of reason: the exit is the only part of that gesture the
+   * user watches, and 160ms is a blink while 240ms drags. It is the one duration
+   * with a JS twin — `PEEK_EXIT_MS` in `AppShell.tsx` must match it, or the pane
+   * unmounts mid-fade (too short) or a dead overlay hangs there (too long).
+   */
+  --dur-peek-out: 0.2s;
+  /* The one easing in the app that overshoots — the list row's press return.
+     An app-local deviation from the DS, argued at `.inc-row` below and recorded
+     in design.md §2. `effects.css` is a verbatim DS copy and says "no bounce";
+     that stands everywhere else, which is why this lives here and not there. */
+  --ease-press-return: cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+/* ── Button ── */
+.inc-btn {
+  /* A positioning context, for anything a button carries in a corner — the
+     notice dot, the agent's nudge (`.inc-dot--pinned`). Without it an absolutely
+     positioned child escapes to the nearest positioned ANCESTOR, which for a
+     header button is the window: the dot flew to the top-right corner of the app
+     (solved bug). Inert until something inside actually positions itself. */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-label);
+  /* Caps, so one step down (base.css). */
+  font-size: var(--text-caps);
+  /* ── The one mono surface at NORMAL tracking ──
+     `--tracking-mono` pulls 3% back to close the gaps JetBrains Mono's fixed
+     advance opens in a RUN of it: a log line, a path, a column of code. A button
+     label is one or two words in caps at 10px, where that same negative jams the
+     stems of `START` and `CLEAR` into each other. It was also declared twice
+     here, which is how it read as double the value it was. Buttons keep the
+     caps — they are the last thing in the app that shouts, and deliberately —
+     but they take the tracking off. */
+  letter-spacing: 0;
+  text-transform: uppercase;
+  /* 8px — the radius every bordered rectangle in the app carries (base.css,
+     design.md §2). It has been both 2px and 0 here; both read as a rectangle
+     someone failed to round rather than as a decision. `.inc-input` moves with
+     it: the two are one object as far as a row is concerned. */
+  border-radius: var(--radius-2);
+  /* TERTIARY, the default: TEXT — no outline and no fill until you point at it
+     (design.md §2). A resting tint made every tertiary a faint box, which put a
+     third box in rows that already had two and, worse, left the rung looking
+     like a quiet PRIMARY rather than like text. The fill is the hover; that is
+     what the rung has instead of an edge. */
+  border: 0.5px solid transparent;
+  background: transparent;
+  color: var(--text);
+  padding: 0 var(--space-3);
+  height: var(--control-h);
+  min-width: 36px;
+  cursor: pointer;
+  /* The press is a MOVE, so it takes a duration: 0.2s on the travel, the dim and
+     the fill, rather than snapping between two states. `--transition-base` is
+     160ms and stays for hover, where a slower move would lag the pointer; the
+     press is the one moment a control should be seen going down and coming back.
+     A list row does the same thing with a scale (`.inc-row`, below). */
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    box-shadow var(--dur-press) var(--ease-out),
+    filter var(--transition-base),
+    background var(--transition-base);
+}
+/* EVERY rung has a hover, and it is a FILL plus the lift. The lift alone is for
+   the filled rung — on a tint or an outline `filter: brightness()` has almost
+   nothing to act on, which is the trap design.md §2 records. */
+/* ── A control that is ON does not answer hover ──
+   The same rule the row recipe runs on (`.inc-row:hover:not(.inc-row--on)`), and
+   for the same reason: hover means "you are pointing at this", selection means
+   "this is the one" — and a selected thing that also lights up under the pointer
+   is saying the louder of the two twice. The header's panel toggles were the
+   visible case: the open panel's button darkened when you passed over it, while
+   the selected chat row beside it did not.
+
+   Keyed on `aria-pressed`, which is where a toggle already states it. A button
+   that says it is pressed and then still brightens is describing two states at
+   once, whatever the fill underneath happens to be. */
+.inc-btn:hover:not(:disabled):not([aria-pressed='true']) {
+  filter: brightness(var(--hover-lift));
+  background: var(--btn-tint-hover);
+}
+/* The press is a DIP, not a drop — the same 2% scale a list row takes, so every
+   pressable thing in the app answers a press the same way. `translateY(1px)`
+   moved the control down a pixel and left it the same size, which reads as a
+   nudge rather than as something taking the pressure; and at 8px corners the
+   inset lip that went with it drew a dark crescent instead of a shadow line. */
+.inc-btn:active:not(:disabled) {
+  transform: scale(0.98);
+  filter: brightness(var(--press-dim));
+}
+.inc-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* PRIMARY — the one filled thing in a row. */
+.inc-btn--accent {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: var(--text-invert);
+}
+/* SECONDARY — an outline, in the text's own colour at low opacity, never in the
+   accent. Copper here made every "clearly offered, but not the main thing"
+   button compete with the primary beside it, and it is what made `secondary`
+   and `danger` indistinguishable. */
+.inc-btn--secondary {
+  background: transparent;
+  border-color: var(--btn-outline);
+  color: var(--text);
+}
+
+/* ── COMFY: a secondary control is a FILL, not a line (design.md §2) ──
+   The app's default chrome. `secondary` outlines its label — correct when the
+   ladder was first drawn, and in a window whose top bar is a row of them it
+   turns into a strip of boxes: three outlined controls beside each other read as
+   a form, not as a toolbar.
+
+   Filled instead, at the SAME 8% the tertiary hover uses (`--btn-tint`, a tint
+   of the control's own ink — near-black on paper, off-white on the dark ground).
+   The rung is unchanged in the ladder's terms: quieter than a fill in the
+   accent, louder than text, and still the one you offer clearly without making
+   it the main thing on the surface.
+
+   `outline` keeps the earlier appearance, unchanged. It is a look the user
+   picks in Settings → Appearance, so both have to stay correct. */
+:root[data-chrome='comfy'] .inc-btn--secondary {
+  background: var(--btn-tint);
+  border-color: transparent;
+}
+:root[data-chrome='comfy'] .inc-btn--secondary:hover:not(:disabled):not([aria-pressed='true']) {
+  background: var(--btn-tint-hover);
+  border-color: transparent;
+}
+
+/* ── The rungs that need something other than the shared tint ── */
+.inc-btn--accent:hover:not(:disabled):not([aria-pressed='true']) {
+  /* Keeps the lift alone — a tint over copper would only mute it. */
+  background: var(--signal);
+}
+.inc-btn--secondary:hover:not(:disabled):not([aria-pressed='true']) {
+  background: var(--btn-tint);
+  border-color: var(--btn-outline-hover);
+}
+.inc-btn--ghost:hover:not(:disabled):not([aria-pressed='true']),
+.inc-btn--danger:hover:not(:disabled):not([aria-pressed='true']) {
+  background: var(--surface-hover);
+}
+/* ── Hover fill for controls that are transparent at rest ──
+   No border and no fill means the global `filter: brightness()` hover has nothing
+   to act on: ghost buttons read as dead text until clicked, and for a bare label
+   ("ASK", "GLM 5.2") the hit area is invisible until you find it by trial.
+
+   A TINT OF THE CONTROL'S OWN TEXT COLOUR, not a surface token. `--surface-raised`
+   is the obvious choice and it silently fails: in the light theme it is #FAFAFA on
+   an #F5F5F5 ground — 1.04:1, i.e. nothing. A currentColor tint is always a real
+   step away from whatever is behind it, in either theme and on any surface, and it
+   costs no per-theme override. Deliberately neutral, not copper: the accent means
+   "this is ON" (design.md §7.1), and hover is not a state. */
+:root {
+  --surface-hover: color-mix(in srgb, currentColor 10%, transparent);
+
+  /* ── Fill for a control/row that is ON ──
+     The header panel toggles set the precedent (shell.css): selection is carried
+     entirely by a quiet fill, never by copper — the accent stays for things the
+     user acts on. Same tint of currentColor as the hover fill, one step stronger,
+     so it is a real step away from whatever surface is behind it in EITHER theme.
+     A surface token cannot do this job: `--surface` is #FEFEFE in the light theme,
+     which is what made the selected project row read as a white slab rather than a
+     highlight. Declared here rather than tokens/colors.css — that file is a
+     verbatim design-system copy ("do not edit, re-copy"). */
+  /**
+   * ── The DOCUMENT surface ──
+   *
+   * The one surface you read and write ON: the code editor, the rendered
+   * Markdown, a skill's document. It is not `--panel` (a card) and not `--mask`
+   * (the ground) — it is the page, and in the light theme it is deliberately
+   * **not pure white**: #FDFEFD, a hair off, because a full-strength white page
+   * under a text cursor for an hour is the thing that tires eyes. The code area
+   * and the Markdown area read the same token so the two halves of one editor
+   * cannot drift apart.
+   *
+   * Dark keeps the ground — an editor on the mask is what this app has always
+   * looked like. `monacoTheme.ts` mirrors the value by hand (Monaco cannot read
+   * CSS variables), so changing it is a TWO-PLACE edit (design.md §13).
+   */
+  --surface-doc: var(--mask);
+
+  --surface-on: var(--surface-on-tint);
+
+  /**
+   * The TINT form of the ON fill, kept as its own token because one surface
+   * needs it in both themes: the file tree (`.ft-row`, filetree.css). The light
+   * theme re-points `--surface-on` at the card surface — a selected row there is
+   * a white card lifted off the grey — which is right everywhere except inside
+   * an editor, where a file strip is a strip and its selection is a band of
+   * shading. See design.md §2, "the one exception".
+   */
+  --surface-on-tint: color-mix(in srgb, currentColor 16%, transparent);
+}
+
+/* ── Selectable list row — ONE recipe for every list in the app ──
+   Selection is a quiet neutral fill, FULL STOP. No leading bar, no rail, no
+   marker of any kind.
+
+   The recipe used to add a 2px copper bar down the leading edge (an inset
+   shadow). An inset shadow is clipped by the row's own `border-radius`, so on a
+   rounded row — the project list is `--radius-1` — the bar's ends bent inward
+   and it stopped being a straight rule: a 2px brown sliver curving away from the
+   edge it was supposed to mark. An edge marker whose shape is decided by the
+   radius of the box behind it is not an edge marker. The alternatives all cost
+   more than the bar was worth: squaring the row throws away the radius, an
+   absolutely positioned ::before drifts outside the fill it belongs to (that is
+   what the project row did before this recipe existed), and a real border-left
+   costs layout on every unselected row. The fill already says "selected", in
+   both themes, at every row height, with no geometry to keep in sync.
+
+   Opted into with `inc-row` + `inc-row--on` instead of each list inventing its
+   own: the project list, chat history, skills list and file tree had four
+   different selected looks (white slab, raised surface, left border, copper
+   wash), and the first two were invisible in the light theme — #FEFEFE and
+   #FAFAFA on a #F5F5F5 ground.
+
+   **The fill is `--surface-on`, not copper.** It was `--signal-wash` — copper at
+   12% — on the argument that a selected row is a thing the user acted on. In a
+   rail of them it reads as an alert: copper is the app's one accent, it means
+   "act on this", and spending it on "you are here" made the quietest state in
+   the UI the loudest thing in the pane. `--surface-on` is a tint of the row's own
+   text (white on the dark theme, near-black on the light one) at 16%, so it is a
+   real step away from whatever is behind it in either theme and costs no
+   per-theme override — the same token the header's panel toggles already use for
+   ON. The accent goes back to being reserved. */
+/* The base carries the transparent rest state so the recipe OWNS the row's
+   background outright (solved bug). A row that is a <button> has to null out the
+   UA `buttonface` fill somewhere, and when that lived in the feature's own CSS
+   (`.sk-item { background: transparent }`) it silently beat the selected fill:
+   same specificity, and the feature stylesheet is bundled after this one, so
+   source order decided it and the selected skill painted nothing at all. Every
+   background state for an `inc-row` belongs in these three rules — do not
+   declare `background` on a row class in a feature stylesheet. */
+.inc-row {
+  background: transparent;
+  /* The recipe owns the SHAPE as well as the fill. It was left to each list to
+     add, so the four of them disagreed: project and chat rows were rounded,
+     the file tree and the skills list square. The visible cost was the focus
+     ring, which follows the element's own radius — a square copper rectangle
+     around a row in a pane where everything else is 6px (design.md §2). */
+  border-radius: var(--radius-2);
+  /* Return leg of the press — see below. */
+  transition: transform var(--dur-2) var(--ease-press-return);
+}
+/* A button that FILLS a row takes the row's corners, or its focus ring is a
+   square drawn inside a rounded box. `inherit`, not the token, so the two can
+   never drift apart. */
+.inc-row-main {
+  border-radius: inherit;
+}
+.inc-row:hover:not(.inc-row--on) {
+  background: var(--surface-hover);
+}
+.inc-row--on {
+  background: var(--surface-on);
+  color: var(--text);
+  /* The selected row is the one thing in a list that is off the surface, so it
+     is the one thing that casts (design.md §2 — every shadow in this app is
+     layered). */
+  box-shadow: var(--shadow-layered);
+}
+
+/* ── Press ──
+   The row dips 2% under the finger and springs back — the same dip a button
+   takes (`.inc-btn:active`), which is the point: every pressable thing in the
+   app answers a press the same way, whether or not it has an edge. Scaling the
+   whole pill — fill included — is what gives a borderless row a surface to push,
+   and the small overshoot on release is the recoil that says it was a physical
+   thing rather than a state that changed.
+
+   **An app-local deviation from the DS, deliberately.** `effects.css` (a
+   verbatim DS copy — do not edit it) says "motion: mechanical, quick, no
+   bounce", and every other easing in the app obeys that. This one easing
+   overshoots, barely — the dip is 2% and the recoil past rest is a fraction of
+   that, so the whole travel stays inside the 2% the press asked for. Recorded in
+   design.md §2; do not generalise it to panels, popovers or buttons.
+
+   WHICH press counts. A row is either the click target itself (the file tree,
+   the skills list, a port row) or a container holding one (`.inc-row-main`, the
+   project and chat rows, which also carry a twisty and a `⋯`). Pressing the ⋯
+   must not shrink the row it opens a menu for — that button is its own control,
+   and the row is only the thing it sits in — so the container form reacts to its
+   main target alone. */
+.inc-row:active:not(:has(.inc-row-main)),
+.inc-row:has(.inc-row-main:active) {
+  transform: scale(0.98);
+  /* Down is instant and linear-ish; only the return is allowed the overshoot. */
+  transition: transform var(--dur-1) var(--ease-out);
+}
+/* The fill and the selection are untouched by reduced motion — only the travel
+   goes. The OS preference is about movement, not about feedback. */
+@media (prefers-reduced-motion: reduce) {
+  .inc-row,
+  .inc-row:active:not(:has(.inc-row-main)),
+  .inc-row:has(.inc-row-main:active) {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── The soft edge, for a box that floats ──
+   A hairline border is a hard, absolute line: correct for a pane divider, which
+   IS a boundary between two regions, and too literal for a box that sits ON the
+   ground — the composer, a card in the conversation. Those want to be *lifted*,
+   not fenced. An inset shadow with a 1px blur gives the same 1px of definition
+   without the drawn line: the edge fades into the surface instead of ending at
+   it.
+
+   It replaces `border`, it does not join it — two edges on one box is the
+   2px-edge bug the popover shadow already documents (base.css). And it costs no
+   layout: a border is 1px of box, an inset shadow is 0. */
+:root {
+  --edge-soft: inset 0 0 1px 1px color-mix(in srgb, currentColor 8%, transparent);
+}
+
+/* ── A strip that scrolls sideways ──
+   With no scrollbar to say so (base.css), the only thing left to tell you a row
+   continues past its edge is the row itself: it fades out. A hard cut reads as
+   the end of the list; a fade reads as more of it.
+
+   `mask-image` and not a gradient overlay, because the strip sits on three
+   different backgrounds (panel, mask, card) and an overlay would have to match
+   each one. */
+/* How far a strip fades at an edge that has more content past it. */
+:root {
+  --fade-x: 24px;
+}
+.inc-fade-x {
+  overflow-x: auto;
+}
+/* Which edge fades is written by `useFadeEdges` — a strip that fits shows no
+   fade at all, or the last tab looks half-cut for no reason. Until the hook has
+   measured (and in a test), the attribute is absent and nothing is masked. */
+.inc-fade-x[data-fade='end'] {
+  mask-image: linear-gradient(to right, #000 calc(100% - var(--fade-x)), transparent);
+}
+.inc-fade-x[data-fade='start'] {
+  mask-image: linear-gradient(to left, #000 calc(100% - var(--fade-x)), transparent);
+}
+.inc-fade-x[data-fade='both'] {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade-x) calc(100% - var(--fade-x)),
+    transparent
+  );
+}
+
+/* ── A modal card (`.inc-dialog`) ──
+   The sign-in dialog and Edit project, which were byte-identical apart from
+   their width. Two rules the app already has, applied here:
+
+   · **A box that FLOATS takes the soft inset edge, not a hairline**
+     (`--edge-soft`, design.md §2) — the same edge as the composer, the popover
+     and a chat card. A 0.5px bright line around a raised card reads as a cut-out
+     rather than as something lifted off the page.
+   · **Concentric corners**: 12px around the 6px controls inside it
+     (`--radius-dialog`, base.css). */
+.inc-dialog {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  /* Explicit: the soft edge replaces the border, and never joins it. */
+  border: none;
+  border-radius: var(--radius-dialog);
+  background: var(--surface-raised);
+  box-shadow: var(--edge-soft), var(--shadow-2);
+}
+
+/* ── Tab strip ──
+   One tab strip for the app: the console's, which is now everyone's. A tab is a
+   mono label with a 2px underline in the strip's own hairline, so the selected
+   one reads as continuous with the panel below it — not a coloured word, and not
+   a floating bar inset from the label (the artifact panel had both, and two
+   different tab metaphors in one window is one too many).
+
+   Gaps follow the button rule: 4px between tabs, the same cluster gap as a
+   button group. */
+/* Its BACKGROUND is not set here. Inside a right panel the strip takes the
+   head's colour so the two read as one band (`.sh-panel-body .inc-tabs`,
+   shell.css) — that pattern belongs to the panel frame, not to the token. */
+.inc-tabs {
+  flex: none;
+  display: flex;
+  gap: var(--space-1);
+  padding: 0 var(--space-2);
+  border-bottom: var(--border-hair);
+}
+.inc-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  /* The BOX stays square, because the 2px underline below is this element's own
+     border: a radius here would curve the ends of that line away from the edge
+     it marks (doc/AI_SLOP.md §001 — the trap the row recipe's leading bar fell
+     into). The HOVER has its own rounded box; see below. */
+  border-radius: 0;
+  padding: var(--space-2) var(--space-3);
+  position: relative;
+  /* The hover layer below sits at `z-index: -1`, and a negative child escapes
+     its parent unless the parent is a stacking context — without this it paints
+     behind the PANEL's background instead of behind the tab's own text, which
+     means it does not paint at all. `position: relative` alone is not enough:
+     it makes the element a containing block, not a stacking context. */
+  isolation: isolate;
+  cursor: pointer;
+  transition:
+    color var(--transition-base),
+    border-color var(--transition-base);
+}
+/* ── The hover is a ROUNDED box over the label, sitting above the underline ──
+   The app's one hover FILL (`--surface-hover`) — a tint of the control's own ink,
+   a real step away from whatever is behind it in either theme. It was
+   `filter: brightness()` first, which is the lift for a control that HAS a fill
+   and does nothing at all on a transparent box; then it was that fill on the
+   element itself, which is the BORDER box — a hard-cornered rectangle with the
+   2px underline welded to its bottom edge, and the only sharp corner in an app
+   where everything rounded is 6px (design.md §2).
+
+   So the fill gets a layer of its own, inset 2px from the bottom: it stops ABOVE
+   the underline and never shares a corner with it. `z-index: -1` puts it behind
+   the label without wrapping the text in an element — an absolutely positioned
+   pseudo otherwise paints OVER the in-flow text it is meant to sit behind.
+
+   `::before`, so a tab that ever grows a trailing mark keeps `::after` free. */
+.inc-tab::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 2px;
+  z-index: -1;
+  border-radius: var(--radius-2);
+  background: transparent;
+  transition: background var(--transition-base);
+}
+.inc-tab:hover:not(.inc-tab--active):not([aria-selected='true'])::before {
+  background: var(--surface-hover);
+}
+/* The app's one press: a 2% dip. */
+.inc-tab:active {
+  transform: scale(0.98);
+}
+/* `aria-selected` counts as well as the modifier class. A `role="tab"` already
+   states which tab is current, and a strip that has to say it twice is a strip
+   where the two can disagree — which is what the LMS's own tab classes were
+   doing before they moved onto this one. */
+.inc-tab--active,
+.inc-tab[aria-selected='true'] {
+  color: var(--text);
+  border-bottom-color: var(--signal);
+}
+
+/* ── Button groups, and the space between them ──
+   A toolbar is not a row of buttons, it is a row of GROUPS. Inside a group the
+   controls belong together — the view toggles, the two select boxes, the actions
+   — and sit at the app's one button gap, 4px. Between groups the gap doubles to
+   8px, and that step is the only thing telling you where one set of controls
+   ends and the next begins: it is what separates a toggle from an action
+   without a divider, a heading or a second row (design.md §2).
+
+   The group is also the unit of WRAPPING: a toolbar breaks between groups, never
+   inside one, so a button can never end up alone on a line (doc/AI_SLOP.md §004).
+
+   Two levels of gap, and no third. If a toolbar seems to need one, it needs
+   another group. */
+.inc-groups {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.inc-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  /* Indivisible: the wrap happens between groups. */
+  flex-wrap: nowrap;
+}
+
+/* ── The dot ────────────────────────────────────────────────────────────────
+   A 6px mark that says "there is something here", pinned to the corner of the
+   control it belongs to. Four of them had been drawn separately: the running
+   agent's on a terminal tab, the header's nudge on the console toggle, and now
+   the help button's and the collapsed nav's.
+
+   `--pinned` places it in a control's top-right corner; without it the dot is an
+   inline mark in a row of text.
+
+   **The pulse is opt-in** (`--live`), and that is the difference between the two
+   uses. A pulsing dot means something is HAPPENING — the agent is running, the
+   log is moving — and it earns the motion because it stops. A standing marker
+   for a condition (a board that is offline, an update waiting) would pulse for
+   as long as the condition lasts, which is a light left on in the corner of the
+   eye. Same mark, one of them animated. */
+.inc-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--signal);
+}
+.inc-dot--pinned {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+.inc-dot--live {
+  animation: inc-livedot 1.2s infinite;
+}
+/* Status tones — the same three the app means everywhere else (design.md §2). */
+.inc-dot[data-tone='ok'] {
+  background: var(--ok);
+}
+.inc-dot[data-tone='info'] {
+  background: var(--info);
+}
+.inc-dot[data-tone='danger'] {
+  background: var(--danger);
+}
+
+/* ── A control ON a row (`.inc-row-action`) ──
+   The `⋯` and `+` that appear on a row when you point at it. A button sitting on
+   top of another pressable surface, which is the whole difficulty: two fills that
+   share an edge read as one torn shape rather than as a control inside a row.
+
+   **The rule: at least 4px of the row stays visible on every side of it**
+   (doc/AI_SLOP.md §003). That is what the 20px box and the uniform `--space-1`
+   margin are for — the row is 28px, the control is 20px, and the 4px band around
+   it is the row's own fill showing through. The nav and chat rows each declared
+   their own 24px version of this control, at the row's exact height, with a
+   margin on the right edge only: the hover fill met the row's top, bottom and
+   (in the chat rows) right edge with nothing between them.
+
+   Hidden until the row is pointed at or something in it takes focus — these are
+   secondary actions, and a `⋯` on every row of a list is noise you scroll past. */
+/* ── The three button states (design.md §2) ──
+   Primary FILLS, secondary OUTLINES, tertiary TINTS — one ladder, each rung a
+   step quieter than the one above, and every rung has a hover.
+
+   They are mixed from a THEME colour, not from `currentColor`: a white line at
+   28% on the dark theme is a near-black one at 28% on the light one, with no
+   per-theme override — the same reasoning `--surface-hover` runs on.
+
+   The OUTLINE reads `--text` rather than `currentColor` on purpose. Following
+   the button's own ink gave the push button a green border on USB and a blue
+   one on OTA — the transport code leaking into the box around it. The colour
+   belongs to the LABEL, which is what changes state; the outline is the
+   control's edge and stays the same whatever the control is saying. (The tints
+   below do follow `currentColor`: a fill under coloured text reading in that
+   colour is the fill agreeing with the text, not a second signal.) */
+:root {
+  --btn-outline: color-mix(in srgb, var(--text) 28%, transparent);
+  --btn-outline-hover: color-mix(in srgb, var(--text) 48%, transparent);
+  --btn-tint: color-mix(in srgb, currentColor 8%, transparent);
+  --btn-tint-hover: color-mix(in srgb, currentColor 16%, transparent);
+}
+
+:root {
+  --row-action: 20px;
+  /** The inline row's trailing slot — a caret, a status glyph. Read by the row
+      that carries an ACTION as well, so the two cannot drift apart. */
+  --inline-trail: 24px;
+  /* ── Every shadow in this app is LAYERED (design.md §2) ──
+     Two casts, never one: a tight, dark contact shadow that says the edge is
+     touching the surface, and a wider, softer one that says how far above it
+     the thing sits. A single blur does one job badly — turn it up and it is a
+     haze, turn it down and nothing is lifted — which is why one-layer shadows
+     read as a rectangle with grey behind it rather than as an object. */
+  --shadow-layered: 0 0 2px rgba(0, 0, 0, 0.25), 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+.inc-row-action {
+  flex: none;
+  width: var(--row-action);
+  height: var(--row-action);
+  margin: var(--space-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  /* The small step, not the 8px one: this box is 20px, and 8px on it is a pill
+     rather than a rounded square. */
+  border-radius: var(--radius-1);
+  color: var(--text-faint);
+  cursor: pointer;
+}
+.inc-row-action svg {
+  flex: none;
+}
+
+/* ── The trailing controls OVERLAY the row; they never reserve space in it ──
+   `opacity: 0` hides a control, it does not un-occupy it. Every row's `⋯` was
+   still 20px wide with 4px either side, so `.inc-row-main` — `flex: 1` beside
+   it — was 28px narrower on EVERY row, hovered or not. Chat titles came out
+   clipped a word early with nothing on screen to explain the missing space, and
+   a project row with the extra `+` lost 56px.
+
+   Reserving the slot only while it shows is the obvious fix and the wrong one:
+   the label would reflow under the pointer as it crossed a list. So the trail
+   comes out of flow instead — the label always has the whole row, and the
+   controls sit on top of its tail when they appear.
+
+   A GROUP, not each control: the row's actions are a set (the project row has
+   `+` and `⋯`), and positioning them individually would stack them on one
+   another. `.inc-row` is already `position: relative` for the press dip. */
+.inc-row-trail {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* ...and while they are showing, the label fades out beneath them, so a long
+   name never runs UNDER a button. Paint only — a mask reflows nothing, which is
+   the whole point of not reserving the space. The distance is the trail's own
+   width plus a ramp, sized by how many controls are in it; `--fade-out`'s 24px
+   is for a box that ends at its own edge, and this one ends 28 or 56px early. */
+.inc-row {
+  --row-trail-fade: 40px;
+}
+.inc-row:has(.inc-row-trail > :nth-child(2)) {
+  --row-trail-fade: 68px;
+}
+.inc-row:hover .inc-row-main,
+.inc-row:focus-within .inc-row-main {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 calc(100% - var(--row-trail-fade)),
+    transparent calc(100% - var(--space-2))
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 calc(100% - var(--row-trail-fade)),
+    transparent calc(100% - var(--space-2))
+  );
+}
+/* ── The reveal belongs to the ROW, not to the control ──
+   `opacity: 0` used to sit on the base, which quietly made this token unusable
+   anywhere else: an `.inc-row-action` outside a row was invisible for good, so
+   four ✕ buttons that wanted exactly this box (the coach mark's, the composer
+   attachment's, the nav search's, the editor tab's) each drew their own instead.
+   Hidden-until-pointed-at is a property of being IN a list — a `⋯` on every row
+   is noise you scroll past — and of a TAB strip, for the same reason. On a card
+   or an input, the same control is simply visible. */
+.inc-row .inc-row-action,
+.inc-tab .inc-row-action {
+  opacity: 0;
+}
+.inc-row:hover .inc-row-action,
+.inc-row:focus-within .inc-row-action,
+.inc-tab:hover .inc-row-action,
+.inc-tab:focus-within .inc-row-action,
+.inc-tab--active .inc-row-action {
+  opacity: 1;
+}
+/* The app's one hover fill for a control transparent at rest — a tint of its own
+   text colour, so it is a step away from the row's fill underneath rather than a
+   surface token that may or may not contrast with it. */
+.inc-row-action:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+/* Keyboard users get the same reveal focus-within gives the mouse. */
+.inc-row-action:focus-visible {
+  opacity: 1;
+}
+
+/* ── A CARD'S HEAD AND ITS EXPLANATION ──────────────────────────────────
+   The pair a small card is built from: a name, and one or two lines saying what
+   it means. `--font-sans` at `--weight-bold` over `--font-sans` at
+   `--text-muted` — weight and ink do the separating, which is why the two sit
+   only 1px apart in size.
+
+   It was the coach mark's private pair (12.5px over 12px, both literals), while
+   every other card in the app reached for the LABEL role instead and got a 10px
+   tracked caps head — the notice card read as chrome rather than as something
+   the app was telling you. Two users on day one: the coach mark and the offline
+   notice.
+
+   NOT the big-header instance (base.css): that is for a title that leads a
+   SURFACE, at 19–30px. A card inside a panel is not a surface. */
+.inc-card-title {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-bold);
+  /* `--text-small` (13px), one step down the DS scale from `--text-body`. 16px
+     was a headline in a card that is 300px wide; at 13 over 12 the weight and
+     the ink carry the hierarchy, which is what a toast does — the head names the
+     thing, the body explains it, and neither shouts. Taken from the scale, never
+     invented: the steps are 24 / 16 / 13 / 11 (`tokens/typography.css`). */
+  font-size: var(--text-small);
+  line-height: var(--leading-h3);
+  color: var(--text);
+}
+.inc-card-text {
+  font-family: var(--font-sans);
+  /* Stated, not inherited: these two land inside surfaces that set the LABEL
+     weight on their container (the notice strip does), and body copy at 600 is
+     the thing that made a wrapped sentence read as a label in the first place. */
+  font-weight: var(--weight-regular);
+  font-size: var(--text-body-sm);
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+/* ── One-line text that runs out of room ─────────────────────────────────
+   Stays on one line and FADES at the trailing edge — no wrap, no ellipsis.
+   Used by the chat-column title and the chat-history rows (title + preview).
+
+   Three parts, all load-bearing:
+   · `min-width: 0` — a flex item refuses to shrink below its own text width
+     without it, so `overflow: hidden` never engages and the item pushes its
+     container wide instead. That is the bug behind BOTH reports: the chat title
+     wrapped to a second line, and the history row grew past the dialog and gave
+     the list a horizontal scrollbar.
+   · `overflow: hidden` + `nowrap` — the clip itself.
+   · the mask — fades the last 24px of the BOX, not of the text. For a string
+     that fits, those 24px are empty space and nothing happens; the fade lands on
+     glyphs only when the text actually overruns. That is the entire overflow
+     test — no measuring, no ResizeObserver.
+
+   The element must fill its line for that to hold: a shrink-to-fit box ends
+   where the text ends, and the mask would eat the last characters of a short
+   string. Give it `flex: 1` (or let it stretch) wherever this is applied.
+
+   Not a breach of "no gradients ever" (design.md §2) — an alpha mask paints no
+   colour and adds no second hue.
+
+   `.inc-truncate` is the same clip with an ellipsis instead of the fade. Use it
+   where the text is prose the user scans rather than a heading they read — a
+   chat-history preview breaks off mid-sentence either way, and "…" says the
+   sentence continues where a fade only says the box ended. Both share the same
+   three-part base, so the `min-width: 0` lesson is not re-learned per site. */
+/* ── TEXT THAT RUNS OUT OF ROOM FADES — AND ONLY THEN ──
+   (design.md §2, doc/AI_SLOP.md §008.)
+
+   An ellipsis is a GLYPH the app adds to someone's name: `Michael Kwebb…` is
+   three characters that are not in the string, sitting where the next letters
+   should be, and at a small size they read as content. A fade says the same
+   thing with no glyph at all — the text is still going, you are just not being
+   shown the rest — and it is what the app already does when a tab strip or a
+   toolbar overflows (`.inc-fade-x`).
+
+   One gradient, named once — the 24px is the distance over which the last letters
+   go, wide enough to read as a fade rather than as a cut.
+
+   **Every use is gated on `[data-clipped='true']`, and that is not optional.**
+   `mask-image` is unconditional: on a box that HUGS its text — `flex: 0 1 auto`,
+   which most labels in this app are — it eats the last 24px of a name that fits
+   perfectly well, so the landing page's recent projects came out greyed at both
+   ends with half the row empty beside them. `useClipFade` measures and sets the
+   attribute; nothing fades while it fits. `styles/fadeOut.test.ts` fails on an
+   ungated mask. */
+:root {
+  --fade-out: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+}
+.inc-fade-out,
+.inc-truncate {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.inc-fade-out[data-clipped='true'],
+.inc-truncate[data-clipped='true'] {
+  mask-image: var(--fade-out);
+}
+/* `.inc-truncate` kept its name and stopped truncating: it IS `.inc-fade-out`
+   now — both declarations cover the pair — and the alias survives only so the
+   markup that reaches for it does not have to change in the same breath. Either
+   class clips on its own; the FADE needs the measurement. */
+.inc-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+}
+/* Ghost's HOVER is declared with the other rungs, above. It was written out a
+   second time here, and the later copy quietly outranked the first on source
+   order — which is how a rule added to one of them (here, "a pressed control
+   does not answer hover") can look applied and do nothing. */
+/* TEXT, not a box (design.md §2). The danger INK is the marker; an outline
+   around it was a second one saying the same thing, and in an action row it
+   made the choice you are declining the loudest thing in the row — louder than
+   the primary it sits beside, which is filled. It is also what made `danger`
+   and `secondary` render identically, a collision design.md flagged as a hazard
+   and this removes: secondary keeps its outline, danger keeps its colour. */
+.inc-btn--danger {
+  background: transparent;
+  border-color: transparent;
+  color: var(--danger);
+}
+.inc-btn--icon {
+  padding: 0;
+  width: 31px;
+}
+/* Secondary size (24px) — matches the compact icon buttons in panel toolbars, so
+   a labelled action can sit in a toolbar row without being the tallest thing in
+   it. Text padding tightens with the height; the label drops to 10px so a
+   two-word action still fits without the button growing wider than its row. */
+/**
+ * ── THE TWO SIZES DIFFER IN THE BOX, NEVER IN THE TYPE ──
+ *
+ * `sm` is a shorter, tighter box for an action attached to something else; the
+ * LABEL is the same caps at the same size in both, because a button's label is
+ * a button's label. There is deliberately no `font-size` here: inheriting it
+ * from `.inc-btn` is what makes the two impossible to drift apart.
+ *
+ * They drifted anyway, for a day: `.inc-btn--sm` carried `font-size: 10px` as a
+ * literal, a floor sweep rewrote every sub-floor literal to a token, and this
+ * one landed on `--text-body-sm` — so the SMALL button's label came out 12px
+ * against the medium's 10px, larger on the smaller control. `Reset` at md and
+ * `Refresh` at sm in the same settings column made it obvious.
+ */
+.inc-btn--sm {
+  height: var(--control-h-sm);
+  min-width: 0;
+  padding: 0 var(--space-2);
+  gap: var(--space-1);
+}
+.inc-btn--sm.inc-btn--icon {
+  width: 24px;
+  padding: 0;
+}
+/* Lucide SVG children: never stretch/shrink, always optically centered. */
+.inc-btn svg {
+  flex: none;
+  display: block;
+}
+
+/* ── The app's dropdown (`MenuSelect`) ──
+   A `<select>` trigger, drawn as a button: the VALUE is the label, and the caret
+   is the only chrome. It sizes to its content and truncates rather than growing
+   a toolbar, because the value can be a filename or a device path. */
+.inc-select {
+  justify-content: space-between;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.inc-select-value {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.inc-select-value[data-clipped='true'] {
+  mask-image: var(--fade-out);
+}
+/* A row's trailing detail — the same recessive tone the port rows use for a
+   device node under its name. */
+.inc-select-detail {
+  color: var(--text-faint);
+}
+
+/* ── Dropdown caret ──
+   One ChevronDown that ROTATES between states (a morph, not an icon swap).
+   down-opening: points down when closed, up when open.
+   up-opening  : points up when closed, down when open.
+   (Specificity: [data-up][data-open] beats each single-attr rule.) */
+.inc-caret {
+  display: inline-flex;
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.inc-caret[data-open='true'] {
+  transform: rotate(180deg);
+}
+.inc-caret[data-up='true'] {
+  transform: rotate(180deg);
+}
+.inc-caret[data-up='true'][data-open='true'] {
+  transform: rotate(360deg);
+}
+
+/* File-tree / explorer toggle — shared by the editor and PCB panels so both
+   read identically: a ghost icon button whose open state is a copper icon
+   only. Layout/margins stay with each panel's own class. */
+.inc-tree-toggle[aria-pressed='true'] {
+  background: transparent;
+  border-color: transparent;
+  color: var(--signal);
+}
+
+/* ── Input ──
+   Same height as the button it will sit beside — see `--control-h` above.
+
+   **Set in the sans face, not the mono one.** Everything the user TYPES is prose
+   — a project name, a search, a message — and mono is this app's device for
+   labels and machine data (design.md §1). Setting the field in mono made the
+   thing you are writing look like output; it also runs wide, so a placeholder
+   like "Search projects…" filled a 300px rail. Mono stays for the strings that
+   ARE data: code, logs, paths, the terminal. */
+.inc-input {
+  font-family: var(--font-sans);
+  /* The READING size, not the card-head one. `--text-small` merged up to 14px
+     with the scale (base.css), and an input quietly went with it — but a field
+     is a control, and 14px in a 31px box reads as a heading you can type into.
+     `--text-body-sm` is the size of the text a field sits beside. */
+  font-size: var(--text-body-sm);
+  color: var(--text);
+  background: var(--surface);
+  border: var(--border-soft);
+  /* With the button it shares a row with — one object, one radius (see
+     `.inc-btn`). */
+  border-radius: var(--radius-2);
+  padding: 0 var(--space-3);
+  height: var(--control-h);
+  width: 100%;
+  transition: border-color var(--transition-base);
+}
+/* The compact pairing, for inline rows (`.inc-btn--sm`'s counterpart). */
+.inc-input--sm {
+  height: var(--control-h-sm);
+  padding: 0 var(--space-2);
+}
+.inc-input::placeholder {
+  color: var(--text-faint);
+}
+.inc-input:focus {
+  outline: none;
+  border-color: var(--line-2);
+}
+.inc-input:focus-visible {
+  outline: none;
+}
+
+/* ── Popover surface ── */
+.inc-pop {
+  position: absolute;
+  /* Above every modal scrim (history 260) and the dev overlay (280): a
+     body-portaled popover/context menu is anchored to its trigger and must be
+     the topmost INTERACTIVE layer, else a menu opened from inside a dialog
+     renders behind that dialog's scrim (dimmed + unclickable). Stays below the
+     grain (300), which is decorative and pointer-events:none. */
+  z-index: 290;
+  background: var(--surface-raised);
+  /* 12px, the outer radius — the same concentric rule the dialogs run on (§2):
+     a 6px row inset 6px needs a corner wider than 6px, or the highlight's
+     corners cut across the menu's own. */
+  border-radius: var(--radius-dialog);
+  /* A popup FLOATS, by definition — so it takes the soft inset edge rather than
+     a hairline (§2), stacked with the drop shadow that lifts it. Not
+     `--shadow-pop`: its 1px ring is the hard edge this is replacing, and drawing
+     both would put a 2px edge on the one surface that is furthest off the
+     ground. See base.css for the ring/border pair this comes from. */
+  box-shadow: var(--edge-soft), var(--shadow-pop-bordered);
+  /* 6px, so the highlighted row keeps 6px of menu visible on every side — the
+     "a control placed on another control shows the surface around it" rule (§2).
+     Deliberately off the 4/8 rhythm, like the 6px radius it sits inside: the
+     inset and the corner are one shape here. At 4px the highlight read as
+     touching the edge, at 8px the menu looked padded rather than snug. */
+  padding: 6px;
+  min-width: 160px;
+  /* No entrance animation — a menu you summoned should already be there, and the
+     fly-in read as lag on right-click. */
+}
+/* …but it FADES on the way out. The asymmetry is the point: opening is time
+   between asking and getting, closing is a thing that has finished, and cutting
+   it dead makes the click feel like a fault rather than a completion. The menu
+   stays mounted for this long (`EXIT_MS`, Menu.tsx — the two must match) and
+   stops taking clicks the moment it starts to go, so a ghost can never eat the
+   next one. Reduced motion skips it and unmounts at once. */
+.inc-pop[data-closing='true'] {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-1) var(--ease-out);
+}
+
+/* ── Inline button — a menu's own row (InlineButton / InlineGroup) ──
+   The full-bleed control a side menu ends with: Learning and the account footer
+   in the nav pane. Not `.inc-btn` — that is an object placed ON a surface, with
+   an inset, a border and a radius. This IS a band of the surface: it spans the
+   menu edge to edge, has no outer padding, no border and no radius, and reads as
+   part of the pane rather than as something sitting in it.
+
+   Learning used to live in a padded, rounded wrapper while the account row was
+   flush, so the two controls at the foot of the same pane disagreed about where
+   the pane's edge was. The hairline belongs to the GROUP, not the row, so a run
+   of any length still gets exactly one rule above it. */
+.inc-inline-group {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  border-top: var(--border-hair);
+}
+/* A rule BETWEEN the rows as well as above the run. They are separate
+   destinations — a place to learn, and the account — not a list, and without the
+   line the two names sat in one undivided block at the foot of the pane.
+   `:not(:first-child)` rather than a sibling pair so it holds however many rows
+   the group ends up with, and it skips the popovers that share the group as a
+   positioning parent (they are neither an inline row nor a host). */
+.inc-inline-group > .inc-inline:not(:first-child),
+.inc-inline-group > .inc-inline-host:not(:first-child) {
+  border-top: var(--border-hair);
+}
+.inc-inline {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  /* 8 top and bottom, 12 left and right — the row hugs to 40px around a 24px
+     glyph. It was 12 all round, which made the two rows the pane ends with the
+     tallest things in it. */
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text);
+}
+/* The app's one hover fill for a control transparent at rest (above). */
+.inc-inline:hover {
+  background: var(--surface-hover);
+}
+.inc-inline:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+.inc-inline:disabled:hover {
+  background: transparent;
+}
+.inc-inline-glyph {
+  flex: none;
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+.inc-inline-glyph svg {
+  flex: none;
+}
+.inc-inline:hover .inc-inline-glyph {
+  color: var(--text-accent);
+}
+.inc-inline-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.inc-inline-title {
+  font-family: var(--font-sans);
+  /* `--text-small`, the DS step above the app's 12px reading size. These rows
+     lost their detail line — the row IS the name now — and at 12px a single
+     line of text sat small in a 28px glyph's row. */
+  font-size: var(--text-small);
+  font-weight: var(--weight-semi);
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.inc-inline-title[data-clipped='true'] {
+  mask-image: var(--fade-out);
+}
+.inc-inline-detail {
+  font-family: var(--font-label);
+  /* The role's own tokens, not a 9px/0.04em copy of them: this line was written
+     out by hand and so kept the old label tracking after the token went to 0
+     (design.md §1.1), which left `Incipe Academy courses` the one label in the
+     app still spaced apart. */
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.inc-inline-detail[data-clipped='true'] {
+  mask-image: var(--fade-out);
+}
+/* ── A row that carries an ACTION of its own ──
+   An `.inc-inline` is a `<button>`, so a second control cannot live inside it:
+   nested interactive content is invalid markup and a screen reader has no way to
+   reach the inner one. Given an `action`, `InlineButton` wraps the row and the
+   control in this host, as SIBLINGS.
+
+   The action is laid over the row's trailing end rather than beside it, so the
+   row still spans the whole band and stays clickable everywhere the action is
+   not — the same shape as a control on a list row (`.inc-row-action`, and its
+   4px rule, doc/AI_SLOP.md §003). It sits INSIDE the trailing slot's width, so
+   the order reads glyph · title · action · caret: the caret belongs to the row
+   it opens and stays at the edge.
+
+   The offset is stated once, in tokens, rather than as a number that has to be
+   kept in step with the slot beside it. */
+.inc-inline-host {
+  position: relative;
+}
+/* The row's text stops before the action, or a long name runs under it: the
+   action is absolutely positioned, so nothing in the flow knows it is there. The
+   slot's own width plus the app's cluster gap. */
+.inc-inline-host .inc-inline-text {
+  padding-right: calc(var(--inline-trail) + var(--space-1));
+}
+/* Both slots are 24px and both sit the row's own padding in from the edge, so a
+   row's action and the row below it's caret line up on one vertical — which is
+   what makes a run of these read as a column rather than as two rows that happen
+   to have something on the right.
+
+   A row that ALSO has a trailing slot steps its action in by that slot's width,
+   so the two never overlap: `?` then caret, in that order (the account row when
+   Learn is not rendered). `:has()` asks the row itself rather than making the
+   caller pass a flag. */
+.inc-inline-host-action {
+  position: absolute;
+  top: 50%;
+  right: var(--space-3);
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  /* The same 24px frame the trailing slot is, so the two centres agree. */
+  width: var(--inline-trail);
+  height: var(--inline-trail);
+  justify-content: center;
+}
+.inc-inline-host:has(.inc-inline-trail) .inc-inline-host-action {
+  right: calc(var(--space-3) + var(--inline-trail));
+}
+
+.inc-inline-trail {
+  flex: none;
+  width: var(--inline-trail);
+  height: var(--inline-trail);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  font-size: var(--text-body-sm);
+}
+.inc-inline-trail svg {
+  flex: none;
+}
+.inc-inline:hover .inc-inline-trail {
+  color: var(--text);
+}
+
+/* ── Info hint (ⓘ) ──
+   The shared "what is this?" affordance: panel-head explainers and any badge
+   whose text is only occasionally relevant. */
+.inc-info-hint {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: var(--text-faint);
+}
+.inc-info-hint:hover {
+  color: var(--text-muted);
+}
+
+/* ── Menu ── */
+.inc-mi {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-sans);
+  /* The reading size. 12.5 was a half-step between the app's two, visible to a
+     measuring tool and to nobody else (base.css). */
+  font-size: var(--text-body-sm);
+  color: var(--text);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-1);
+  /* 4px down the sides of the label, 12px in from the highlight's edge. The rows
+     were 8px tall inside a 4px menu, which made a three-item menu as tall as a
+     dialog; a menu is a LIST of choices and its height should be the sum of its
+     labels, not of its padding. 12px stays: that is the row's own inset, and it
+     is measured from the highlight rather than from the menu. */
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+}
+/* A MENU ROW HOVERS LIKE A BUTTON — the same tint of its own ink, the same
+   lift (`--btn-tint-hover`, the tertiary rung). It used to repaint: solid
+   `--signal` with inverted text, which made the row you were merely passing
+   over the loudest thing in the window and spent the accent on something that
+   is not a state. Every descendant override went with it — the mode label, its
+   description and the mention kind badge each had a rule to survive the invert,
+   and none of them is needed once the label keeps its own colour. A danger row
+   now hovers in a tint of the DANGER ink, which is the fill agreeing with the
+   text rather than a second signal. */
+.inc-mi:hover {
+  background: var(--btn-tint-hover);
+  filter: brightness(var(--hover-lift));
+}
+/* Danger rows are marked at REST — the label's colour is the marker — and they
+   hover like every other row. The severity of "Log out" or "Delete" is not
+   something hover has to restate, and pointing at a row must never be the moment
+   it becomes hardest to read: an earlier version filled it `--signal-lo` and put
+   `--text` on top, which is near-black on dark brown (~2:1) in the light theme.
+   The tint above is mixed from the row's OWN ink, so this rung needs no special
+   case at all. */
+.inc-mi--danger {
+  color: var(--danger);
+}
+/* Trailing state glyph (e.g. the on-check for a toggle item). */
+.inc-mi-check {
+  margin-left: auto;
+  /* Icon-only wrapper: centre it, or the SVG rides the span's baseline and sits
+     high against the row's label. */
+  display: inline-flex;
+  align-items: center;
+}
+/* ── The search box (`SearchField.tsx`) ───────────────────────────────────
+   One box for every list that has one. There were three and no two agreed: a
+   magnifier and a clear in the nav rail, a magnifier and no clear in the file
+   tree, and a bare `Input` in the artifact library. */
+.inc-search {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+/* Both affordances are laid OVER the field and anchored to its own box, not
+   centred on the wrapper — `top: 50%` on a padded wrapper is the middle of
+   padding + input, which sits half the padding above the field's real centre.
+   Anchoring to the edges also survives a change to the input's height. */
+.inc-search-glyph {
+  position: absolute;
+  left: var(--space-2);
+  top: 0;
+  bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-faint);
+  /* The glyph is a label, not a target: a click near it must land in the field
+     it names. */
+  pointer-events: none;
+}
+.inc-search-glyph svg {
+  flex: none;
+}
+/* ── THE INDENT BELONGS TO WHATEVER IS IN IT ──
+   The magnifier is part of the PLACEHOLDER, not furniture the field carries, so
+   it takes its indent with it: once there is a query the text starts where text
+   starts in every other field in the app. Holding 24px open for a glyph that is
+   no longer there leaves the box padded on one side for no reason a reader
+   could name.
+
+   The right side is the mirror: the ✕ exists only when there is something to
+   clear, so it opens its own indent only then. Both fall back to `.inc-input`'s
+   own `--space-3` the rest of the time, which is why neither is declared on the
+   base rule. */
+.inc-search-input {
+  flex: 1;
+  min-width: 0;
+}
+.inc-search:not([data-filled='true']) .inc-search-input {
+  padding-left: var(--space-6);
+}
+.inc-search[data-filled='true'] .inc-search-input {
+  padding-right: var(--space-6);
+}
+.inc-search-clear {
+  position: absolute;
+  right: var(--space-1);
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
+
+/* ── The segmented control (`Segmented.tsx`) ──────────────────────────────
+   Buttons that belong together, in ONE box: the box is the question, the
+   segments are its answers, and the filled one is where you are. It replaces
+   two hand-rolled versions — the serial toolbar's three bordered chips 4px
+   apart, and Settings' Day/Night and Comfy/Outline, which were the font
+   picker's chips wearing different labels.
+
+   THE GROUP OWNS THE FRAME. One fill, one 6px radius and one hairline around a
+   run of any length — the same argument `.inc-inline-group` makes for its rows.
+   The segments carry no border of their own; they are divided, not boxed. */
+.inc-seg {
+  display: inline-flex;
+  align-items: stretch;
+  /* NEVER SQUEEZED. A settings row is a flex row and its control is a flex item,
+     so the description beside it was winning the space: `Day mode` broke onto
+     two lines and `Outline` was cut off by the box's own `overflow: hidden`.
+     The control is as wide as its answers and the DESCRIPTION takes the slack —
+     which is the right way round, because prose can wrap and a segment label
+     cannot. */
+  flex: none;
+  /* The app's one radius, not the reference's pill. `overflow: hidden` is what
+     lets the end segments' fill take the box's corners without either of them
+     having to know it is on an end. */
+  border-radius: var(--radius-2);
+  overflow: hidden;
+  /* ── THE BOX IS A SECONDARY CONTROL, so it wears what one wears ──
+     It was `--surface`, which is `#FEFEFE` on the light theme: a white box
+     sitting in a toolbar of grey ones, and — worse — an OFF segment then had a
+     whiter ground than the on one, so the wrong half of the control read as
+     lifted. The fill is `--btn-tint` now, the same 8% of `currentColor` that
+     `.inc-btn--secondary` takes, so the box and the dropdowns beside it are one
+     material and both follow the theme without a light-theme override.
+
+     And it follows the CHROME setting for the same reason (§17): outlined when
+     the app is drawing lines, filled when it is not. A segmented control that
+     stayed filled while every button around it went to an outline would be the
+     one control in the row ignoring a setting the user just changed. */
+  background: transparent;
+  border: 0.5px solid var(--btn-outline);
+}
+:root[data-chrome='comfy'] .inc-seg {
+  background: var(--btn-tint);
+  border-color: transparent;
+}
+.inc-seg-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* The small button's box (`.inc-btn--sm`): 24px tall, 8px of side padding.
+     Height and padding are read from the same tokens the buttons use, so a
+     segmented control in a toolbar row cannot end up a different height from
+     the buttons beside it (design.md §2 — one control height scale). */
+  height: var(--control-h-sm);
+  padding: 0 var(--space-2);
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  /* One line, always. A segment is an ANSWER — `Night mode` folded in half is a
+     control that looks broken, and the label cannot be shortened to fit the way
+     a sentence can. */
+  white-space: nowrap;
+  transition:
+    color var(--transition-base),
+    background var(--transition-base);
+}
+/* The divider between segments, and only BETWEEN them: a leading border on
+   every segment but the first, so the run never draws a line against the box's
+   own edge. */
+.inc-seg-item + .inc-seg-item {
+  border-left: var(--border-hair);
+}
+/* AN OFF SEGMENT STAYS GREY. Transparent at rest, so hover is the app's one
+   hover FILL — the same `--surface-hover` a menu row and a list row take — and
+   that is ALL it is. Lifting the ink to `--text` as well took an off segment to
+   near-white, which is the value the ON segment's accent has to stand out
+   against: pointing at `Day mode` made it the brightest thing in the row while
+   `Night mode` was the one actually selected. `--surface-hover` is mixed from
+   `currentColor`, so leaving the ink alone also keeps the wash in the same grey
+   family instead of laying a white film over the box. */
+.inc-seg-item:hover:not([data-on='true']):not(:disabled) {
+  background: var(--surface-hover);
+}
+/* THE ONE THAT IS ON. `--signal-wash` and the accent ink: the app's selected
+   recipe (design.md §17.1, doc/AI_SLOP.md §001), which is what makes this the
+   blue-tinted control the reference shows WHEN the accent is blue — and the
+   copper, pink or purple one otherwise. No border and no fill of its own: the
+   wash against the box's plain surface is the whole state. */
+.inc-seg-item[data-on='true'] {
+  background: var(--signal-wash);
+  color: var(--text-accent);
+}
+/* ── The settings size ──
+   The same 24px box in the READING type, because a settings row puts its
+   control in one right-hand column and a `Segmented` there sits directly under
+   a `Combobox` trigger: `Day mode` was 9px tracked label type two rows below
+   `English` at 12px sans, in the same column, at the same height. This matches
+   the trigger's value exactly (`.inc-cbx-trigger .inc-select-value`) — same
+   family, size and weight — so the column reads as one column.
+
+   Not a taller box: the height is what keeps the column aligned, and it is the
+   SIZE OF THE TYPE that was wrong. Side padding opens to 12px so the bigger
+   type is not cramped against the divider. */
+.inc-seg[data-size='md'] .inc-seg-item {
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  letter-spacing: normal;
+  padding: 0 var(--space-3);
+}
+
+/* The app's one press — the same 2% dip every button, row and chip takes. */
+.inc-seg-item:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.inc-seg-item:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+/* The focus ring sits INSIDE the segment: an outline on a button flush against
+   its neighbours would be clipped by the group's `overflow: hidden` on three
+   sides and land under the divider on the fourth. */
+.inc-seg-item:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--focus-w) var(--focus-ring);
+}
+
+/* ── The empty state (`EmptyState.tsx`) ───────────────────────────────────
+   Glyph, title, hint — one recipe for every panel that can be empty. It was
+   five recipes: a centred 10px tracked label, an 11px sentence in the top-left
+   corner, a 12px one, and the editor's composed state, all in one window. */
+.inc-empty {
+  /* Fills whatever body it is dropped into and centres in it — an empty state
+     that hugs the top-left corner reads as a failed first row rather than as
+     the state of the panel (which is what three of the five it replaced did).
+
+     TWO WAYS OF FILLING, because the bodies are not all the same shape. `flex`
+     covers a flex parent; `min-height` covers a BLOCK one — the console's log
+     is a plain `overflow: auto` block, where a flex value means nothing and the
+     state sat in the top third of an empty panel. `border-box` is global
+     (base.css), so the padding below is inside the 100% and cannot overflow. */
+  flex: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  text-align: center;
+}
+.inc-empty-glyph {
+  /* Icon-only wrapper: `display` takes the SVG out of inline flow, or it rides
+     the span's baseline and the descender gap pushes the whole state off
+     centre (the bug the editor's version documents). */
+  display: flex;
+  color: var(--text-faint);
+}
+/* The panel naming itself while it has nothing to show, so it takes the size a
+   panel's name takes — `--text-title`, the same token the chat title reads
+   (base.css). Muted rather than full ink: it names an absence. */
+.inc-empty-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-title);
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+}
+/* The action, when there is one. A step further from the hint than the hint is
+   from the title: the words are one block, and this is a separate thing to do
+   with them. `--space-2` on top of the stack's own gap. */
+.inc-empty-action {
+  margin-top: var(--space-2);
+}
+
+/* What to do about it. Capped in ch so a long instruction wraps into a block
+   the eye can take in rather than running the panel's full width. */
+.inc-empty-hint {
+  max-width: 34ch;
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  line-height: 1.45;
+  color: var(--text-faint);
+}
+
+/* ── The combobox: a menu you can type into (`Combobox.tsx`) ──────────────
+   `MenuSelect`'s list with a search field over it, for a set rather than a
+   shortlist — the interface language, the UI face. Everything below the field
+   is an ordinary `.inc-mi` row; only the field and the scroll box are new. */
+
+/* ── The trigger states a NAME, so it comes out of the button's mono caps ──
+   Every other button in the app is 10px JetBrains Mono in uppercase, and that
+   is right for what buttons say: an ACTION, or a machine value (`115200`, `NL`,
+   `GLM 5.2` — which is why `MenuSelect` keeps it). What this control's trigger
+   shows is neither. It is a name out of the list below it, and the two lists it
+   holds today are the two where mono caps actively breaks the value:
+
+     · the UI face, whose name must be DRAWN IN THAT FACE to be a specimen at
+       all — `ARCHIVO` in a monospace is a picture of the wrong font;
+     · the interface language, whose endonym may be CJK — and `--font-mono` is
+       JetBrains Mono with no CJK in it and no `--font-cjk` behind it, so
+       選ぶ言語 would be drawn by whatever face the browser reached for, which
+       is the exact failure font-theme.css's language stacks exist to prevent.
+
+   So the value takes the UI face at the reading size, in the case it was typed
+   (design.md §1.1 — caps are a label device, and this is content). The button
+   around it keeps everything else it is: same height, same rungs, same press. */
+.inc-cbx-trigger .inc-select-value {
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* The field sits ON the menu surface — no border, no fill, no radius of its
+   own. A bordered input here would be a control inside a control at the top of
+   a list, which is the one thing the popover's 6px inset is there to avoid
+   (design.md §2). The magnifier says what the row is instead. */
+.inc-cbx-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  color: var(--text-faint);
+}
+.inc-cbx-search svg {
+  flex: none;
+}
+.inc-cbx-field {
+  flex: 1;
+  min-width: 0;
+  /* The row's own type, so the thing you type and the things you are choosing
+     between are set alike (`.inc-mi`). */
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--text);
+  background: none;
+  border: none;
+  padding: 0;
+}
+.inc-cbx-field::placeholder {
+  color: var(--text-faint);
+}
+/* No ring. Focus lands here the moment the menu opens and stays for as long as
+   it is open, so a focus ring would be permanent chrome marking the only thing
+   that could possibly have focus. The menu being open IS the focus indicator —
+   and the ACTIVE ROW, which the arrow keys move, is where the eye needs a mark
+   (`[data-active]` below). */
+.inc-cbx-field:focus,
+.inc-cbx-field:focus-visible {
+  outline: none;
+}
+/* A long list scrolls rather than growing past the window. `overflow-x` is
+   explicit: CSS resolves the other axis to `auto` once one scrolls, and a long
+   label would otherwise buy the menu a horizontal scrollbar. */
+.inc-cbx-list {
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/* The keyboard's position, drawn as the hover it stands in for. The field keeps
+   DOM focus the whole time — that is what a combobox is — so `:focus-visible`
+   on the rows would never fire and the arrow keys would move nothing visible.
+   Same tint as `.inc-mi:hover`, deliberately: it IS the hover, moved by a key
+   instead of by the pointer, and the pointer re-homes it on move so the list
+   never shows two highlighted rows at once. */
+/* A row is one line. `.inc-mi` is a flex row, so its label and its detail are
+   both shrinkable — and a menu anchored near the right edge of the window gets
+   narrow enough that `Helvetica Neue` came apart onto two lines with its note
+   under it. The menu is free to be as wide as its widest row; the rows are not
+   free to fold. */
+.inc-cbx-option {
+  white-space: nowrap;
+}
+.inc-cbx-option > * {
+  flex: none;
+}
+.inc-cbx-option[data-active='true'] {
+  background: var(--btn-tint-hover);
+  filter: brightness(var(--hover-lift));
+}
+/* Nothing matched. A sentence, not a disabled row: a row you cannot choose,
+   drawn like the rows you can, is worse than being told plainly. */
+.inc-cbx-empty {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--text-faint);
+}
+
+/* Trailing keyboard shortcut. Mono and faint: it reports how else to reach the
+   item, so it must never compete with the item's own label. */
+.inc-mi-hint {
+  margin-left: auto;
+  padding-left: var(--space-3);
+  font-family: var(--font-label);
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  font-weight: var(--weight-label);
+  color: var(--text-faint);
+}
+.inc-menu-div {
+  height: 1px;
+  /* 4px inside the rows it separates. Flush with them, it cut the menu in two
+     where its job is to group. */
+  margin: var(--space-1);
+  background: var(--border);
+  border: none;
+}
+
+/* ── Tooltip ──
+   The label renders in a document.body portal with position: fixed (see
+   Tooltip.tsx), so it escapes clipping ancestors instead of being cropped.
+   Visibility + placement are JS-driven; CSS only styles it and fades it in. */
+.inc-tip-wrap {
+  display: inline-flex;
+}
+.inc-tip {
+  position: fixed;
+  z-index: 250;
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  font-size: var(--text-label-sm);
+  letter-spacing: var(--tracking-label);
+  color: var(--text);
+  background: var(--surface-raised);
+  border: var(--border-soft);
+  border-radius: var(--radius-1);
+  padding: 3px var(--space-2);
+  opacity: 0;
+  transition: opacity var(--dur-1) var(--ease-out);
+}
+.inc-tip--show {
+  opacity: 1;
+}
+
+/* ── Pane resizer ──────────────────────────────────────────────
+   IS the seam between two panes. An 8px hit zone straddles the
+   1px border with symmetric negative margins, so it adds ZERO net
+   width (no gap/padding between panes). Rest = invisible; hover/drag
+   = a crisp 1px copper line plus a thicker center grip, so it clearly
+   reads as draggable. */
+.inc-resizer {
+  position: relative;
+  flex: none;
+  align-self: stretch;
+  z-index: 5;
+  width: 8px;
+  margin-left: -4px;
+  margin-right: -4px;
+  cursor: col-resize;
+  background: transparent;
+  touch-action: none;
+}
+/* NO SEAM LINE. A full-height accent stripe down the divider was the app's
+   longest, brightest mark, drawn for the length of a drag on the one thing that
+   is not content — and the panes on either side already draw their own edges.
+   The grip alone says the divider is grabbable; a line down the whole window
+   says something is wrong with it.
+
+   The center grip — a short copper pill that surfaces the drag affordance. */
+.inc-resizer::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  transition:
+    background var(--transition-base),
+    height var(--transition-base);
+}
+.inc-resizer:hover::after {
+  background: var(--signal-hi);
+}
+/* Dragging: the grip brightens and grows. That is the whole of it — the 8px hit
+   area used to fill with a wash as well, which is a second band beside the one
+   the stripe was already drawing. */
+.inc-resizer[data-active='true']::after {
+  background: var(--signal-hi);
+  height: 40px;
+}
+/* Keyboard focus lands on the GRIP, since that is now the only thing there. The
+   ring is the app's focus treatment, sized to the pill rather than to the 8px
+   strip it lives in. */
+.inc-resizer:focus-visible {
+  outline: none;
+}
+.inc-resizer:focus-visible::after {
+  background: var(--signal-hi);
+  height: 40px;
+  box-shadow: 0 0 0 var(--focus-w) var(--focus-ring);
+}
+
+/* ── Staggered reveal — content that arrives in reading order ──────────────
+   Transitions.dev's "texts reveal", taken as a shared recipe rather than as a
+   one-off per screen: a line rises 12px, unblurs and fades up, and each one
+   after it is held back 40ms so the eye lands on the heading before the choices
+   under it. Slower and softer than a UI transition on purpose — it belongs to
+   moments the app is INTRODUCING something (onboarding), not to a panel opening.
+
+   Four deviations from the source, each earning its keep:
+
+   · **It is an ANIMATION, not a transition** (solved bug). The reference
+     transitions `opacity`/`transform`/`filter` on the line itself — and the
+     `transition` property is a single slot: the moment a line is also a control
+     with its own transition (the survey's answers move a fill and a shadow on
+     hover), one shorthand overwrites the other and the reveal silently stops.
+     Measured in the running app: the two theme cards came out with
+     `transition-delay: 0s, 0s` and never staggered. An animation runs on its own
+     track beside whatever the element transitions.
+   · **`backwards`, never `both`.** A filled-forwards animation keeps applying
+     its last frame ABOVE the cascade, so `transform: none` would outrank the
+     app's press dip on those same buttons for the rest of the session. Backwards
+     only holds the FIRST frame during the delay, then gets out of the way.
+   · **The delay is an INDEX, not a class per line.** The reference enumerates
+     `--1`, `--2`, `--3`…; a screen here has five or six lines, and a ladder of
+     numbered classes is the kind of thing that ends up one short. `--stagger-i`
+     is set inline where the line is written, so the sequence is where the order
+     actually lives.
+   · **Reduced motion RESTS SHOWN.** Turning the animation off alone would leave
+     the pre-reveal `opacity: 0`, so anything that never received `.is-shown`
+     would be invisible rather than merely still. The preference is about
+     movement; the content is never the thing that gets withheld. */
+:root {
+  --stagger-dur: 500ms;
+  --stagger-distance: 12px;
+  --stagger-step: 40ms;
+  --stagger-blur: 3px;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Hidden only while the reveal is still armed — see `backwards` above: once the
+   animation has played, the line is governed by its own styles again. */
+.inc-stagger:not(.is-shown) .inc-stagger-line {
+  opacity: 0;
+}
+.inc-stagger.is-shown .inc-stagger-line {
+  animation: inc-stagger-in var(--stagger-dur) var(--stagger-ease) backwards;
+  animation-delay: calc(var(--stagger-step) * var(--stagger-i, 0));
+}
+@keyframes inc-stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--stagger-distance));
+    filter: blur(var(--stagger-blur));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+/* The exit decouples from the stagger — one quiet fade for every line at once,
+   no Y return and no blur, so leaving does not read as the reveal in reverse.
+   The app's own rule for the same thing: a thing that goes fades, it never
+   cuts (design.md §2). */
+.inc-stagger.is-hiding .inc-stagger-line {
+  animation: inc-stagger-out 200ms ease both;
+  animation-delay: 0s;
+}
+@keyframes inc-stagger-out {
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .inc-stagger:not(.is-shown) .inc-stagger-line {
+    opacity: 1;
+  }
+  .inc-stagger.is-shown .inc-stagger-line,
+  .inc-stagger.is-hiding .inc-stagger-line {
+    animation: none;
+  }
+}
+
+/* ── A vertical list fades into what is above it ──────────────────────────
+   A scroller with no scrollbar (design.md §2) that runs up under its own
+   heading stops on a hard cut — a row sliced in half with nothing to say why.
+   The conversation column already dissolves at both ends for this reason; this
+   is the same move for a panel list, and it is a MASK rather than an overlay so
+   the app's grain shows through unchanged.
+
+   Written by `useFadeTop`, never statically: a list sitting at its top has
+   nothing above it to fade into, and greying its first row anyway is the
+   "default applied everywhere" mistake §008 exists about. There is deliberately
+   NO bottom fade — the rail's footer draws a hairline there, and a fade into a
+   rule is two boundaries for one edge. */
+:root {
+  --fade-y: 24px;
+}
+.inc-fade-top[data-fade-top='true'] {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade-y));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade-y));
+}

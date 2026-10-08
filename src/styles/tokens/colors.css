@@ -1,0 +1,65 @@
+/* Copied verbatim from the design system (source of truth):
+   raw/.../\_ds/incipe-design-system-.../tokens/colors.css
+   Do not edit here — update the DS and re-copy. */
+/* ─────────────────────────────────────────────────────────────
+   INCIPE · COLOUR
+   The palette is a printed circuit board, materially.
+   Black is solder mask; bone is the silkscreen legend;
+   accents are real PCB finishes. Flat fills only — no gradients.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* ── Material palette (base) ── */
+  --mask: #0e0d0b; /* Solder Mask — primary ground            */
+  --panel: #141310; /* Raised mask — cards, panels             */
+  --panel-2: #1b1a16; /* Highest raised surface                  */
+  --silk: #e7e4dc; /* Silkscreen — text, strokes, light fill  */
+  --silk-dim: #c9c6bd; /* Silk, lowered emphasis                  */
+
+  --copper: #b0703a; /* Primary accent — copper finish          */
+  --gold: #c2922f; /* ENIG gold — premium / pads              */
+  --tin: #afb2b6; /* Tin solder — secondary metal mark       */
+  --green: #1c7d4d; /* Green mask — alt / data sub-brand        */
+  --blue: #2660a8; /* Epoxy blue — alt / data sub-brand        */
+
+  --ash: #8d8a80; /* FR4 Ash — secondary text                */
+  --ash-dim: #5f5d56; /* FR4 Ash, lowered — tertiary / hints     */
+  --line: #2a2926; /* FR4 Line — hairlines, grids, borders    */
+  --line-2: #3a3833; /* Stronger hairline / divider             */
+
+  /* ── Accent tints (hover / wash / surfaces) ── */
+  --copper-hi: #c2864e; /* Copper, lighter — hover                 */
+  --copper-lo: #95592b; /* Copper, darker — press                  */
+  --copper-wash: rgba(176, 112, 58, 0.12); /* Copper @ 12% — soft fill   */
+  --green-wash: rgba(28, 125, 77, 0.14);
+  --blue-wash: rgba(38, 96, 168, 0.14);
+
+  /* ── Status (mapped to material accents) ── */
+  --ok: #1c7d4d; /* Green mask   */
+  --warn: #c2922f; /* ENIG gold    */
+  --danger: #b0703a; /* Copper       */
+  --info: #2660a8; /* Epoxy blue   */
+
+  /* ── Semantic aliases ──────────────────────────────────────── */
+  --signal: var(--copper); /* the one primary accent      */
+  --signal-hi: var(--copper-hi);
+  --signal-lo: var(--copper-lo);
+  --signal-wash: var(--copper-wash);
+
+  --bg: var(--mask);
+  --surface: var(--panel);
+  --surface-raised: var(--panel-2);
+  --surface-card: var(--panel);
+
+  --text: var(--silk); /* default text                */
+  --text-strong: var(--silk);
+  --text-muted: var(--ash); /* secondary text              */
+  --text-faint: var(--ash-dim); /* tertiary / hints            */
+  --text-invert: var(--mask); /* text on silk surfaces       */
+  --text-accent: var(--copper);
+
+  --border: var(--line); /* default hairline            */
+  --border-strong: var(--line-2);
+  --border-accent: var(--copper);
+
+  --focus-ring: var(--copper);
+}
