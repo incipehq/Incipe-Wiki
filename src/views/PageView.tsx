@@ -58,8 +58,8 @@ export function PageView({ page }: { page: Page }) {
                 {asset.pages != null ? ` · ${asset.pages} ${pageUnit(page)}` : ''}
               </small>
             </div>
-            {asset.format === 'PDF' && (
-              <ButtonAnchor variant="secondary" href={asset.file} target="_blank" rel="noopener">
+            {(asset.viewer || asset.format === 'PDF') && (
+              <ButtonAnchor variant="secondary" href={asset.viewer ?? asset.file} target="_blank" rel="noopener">
                 <ExternalLink size={13} strokeWidth={1.75} aria-hidden="true" />
                 Open
               </ButtonAnchor>

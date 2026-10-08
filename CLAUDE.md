@@ -62,7 +62,8 @@ is static (Vite + React 18 + react-router), deployed on Vercel, with no backend.
   before writing new CSS; no raw hex in `wiki.css`.
 - **Content is data.** Add a sensor = add `wiki/<page>.md` (+ `npm run models` if it has
   a GLB). Add a lesson = add `content/<module>/<nn-page>.md` (+ `npm run ingest` if it
-  has a deck). Module curriculum text is cut from `curriculum/learning-curriculum.md` —
+  has a deck: `source:` is the .pptx download, `pdf:` the same deck as PDF, read on
+  the page without downloading). Module curriculum text is cut from `curriculum/learning-curriculum.md` —
   do not duplicate it into `content/`.
 - **User-owned files** (`curriculum/`, `lessons/`, `raw/`): edit only when asked.
 - Generated outputs are committed; Vercel runs only `npm run build`.

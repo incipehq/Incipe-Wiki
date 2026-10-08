@@ -8,6 +8,11 @@
  *   3. records size, slide/page count and paths in src/generated/assets.json
  *   4. deletes files and thumbnails no page names any more
  *
+ * A page may also name a `pdf:` — the same deck exported as PDF — which is copied
+ * to public/files/<course>--<page>.view.pdf and read in the page's own viewer, so a
+ * deck can be looked through without downloading the .pptx. A `source:` that is
+ * itself a PDF is its own viewer.
+ *
  * Thumbnails come from macOS Quick Look (`qlmanage`) and are recompressed with
  * `sips`, so this step runs on a Mac. Its outputs are committed; the Vercel build
  * only reads them and never needs raw/ or a Mac.
@@ -114,19 +119,34 @@ for (const page of walk(contentDir).sort()) {
     }
   }
 
+  let viewer = ext === '.pdf' ? `/files/${file}` : null;
+  if (meta.pdf) {
+    const pdf = join(root, meta.pdf);
+    if (!existsSync(pdf) || extname(pdf).toLowerCase() !== '.pdf') {
+      console.error(`✗ ${id}: pdf not found or not a .pdf — ${meta.pdf}`);
+      failures += 1;
+    } else {
+      copyFileSync(pdf, join(filesDir, `${key}.view.pdf`));
+      viewer = `/files/${key}.view.pdf`;
+    }
+  }
+
   assets[id] = {
     file: `/files/${file}`,
+    viewer,
     downloadName: basename(source).replace(/\s+\./, '.'),
     format: ext.slice(1).toUpperCase(),
     bytes: statSync(source).size,
     pages: countPages(source),
     thumbnail: existsSync(thumbPath) ? `/thumbs/${thumb}` : null,
   };
-  console.log(`✓ ${id}  ${assets[id].format}  ${assets[id].pages ?? '–'} pages`);
+  console.log(`✓ ${id}  ${assets[id].format}  ${assets[id].pages ?? '–'} pages${viewer ? '  + PDF viewer' : ''}`);
 }
 
 // Anything a page no longer names is stale: a removed deck must not stay downloadable.
-const keep = new Set(Object.values(assets).flatMap((a) => [basename(a.file), a.thumbnail && basename(a.thumbnail)]));
+const keep = new Set(
+  Object.values(assets).flatMap((a) => [basename(a.file), a.viewer && basename(a.viewer), a.thumbnail && basename(a.thumbnail)]),
+);
 for (const dir of [filesDir, thumbsDir]) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const name = entry.name;

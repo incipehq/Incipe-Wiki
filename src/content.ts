@@ -5,7 +5,8 @@
  *                                    summary, curriculum (which section of
  *                                    curriculum/learning-curriculum.md it is)
  *   content/<module>/<page>.md     — a page: title, lesson, type, summary,
- *                                    source (a deck under raw/), video (YouTube id),
+ *                                    source (a deck under raw/), pdf (the same deck
+ *                                    as PDF, read in the page), video (YouTube id),
  *                                    body (a Markdown file elsewhere in the repo —
  *                                    lessons/…, curriculum/… — used as the notes)
  *
@@ -22,6 +23,8 @@ export type PageType = 'slides' | 'video' | 'document' | 'notes';
 
 export interface Asset {
   file: string;
+  /** A PDF of the deck to read in the page, when there is one. */
+  viewer?: string | null;
   downloadName: string;
   format: string;
   bytes: number;
