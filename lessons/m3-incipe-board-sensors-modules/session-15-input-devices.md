@@ -1,4 +1,4 @@
-# Session 15: Input Devices — Joystick, IR & Buttons
+# Session 5: Input Devices — Joystick, IR & Buttons
 
 > **M3 INCIPE Board, Sensors & Modules** · Weeks 9–13
 > **Modules used:** [Joystick](/wiki/joystick), [Button](/wiki/button), [Temperature & humidity sensor](/wiki/temperature-humidity), [Light sensor](/wiki/light)
@@ -14,7 +14,7 @@
 | 03 | Practice: a joystick menu on the Serial Monitor | 12 min |
 | 04 | The IR receiver: what is coming | 3 min |
 
-Builds on: plotting the joystick in [Session 12](/academy/m3-incipe-board-sensors-modules/12-digital-sensors-protocols), arrays from [Lesson 4](/academy/m2-fundamentals-of-programming/04-arrays-for-loop), `switch` and counting on release from [Session 8](/academy/m2-fundamentals-of-programming/08-control-structures-functions).
+Builds on: plotting the joystick in [Session 2](/academy/m3-incipe-board-sensors-modules/12-digital-sensors-protocols), arrays from [Lesson 4](/academy/m2-fundamentals-of-programming/04-arrays-for-loop), `switch` and counting on release from [M2 Session 2](/academy/m2-fundamentals-of-programming/08-control-structures-functions).
 
 ### Key words
 
@@ -58,7 +58,7 @@ Full details: [Joystick](/wiki/joystick).
 
 ### Try it: find your limits
 
-1. Plot X in the Serial Plotter, as in [Session 12](/academy/m3-incipe-board-sensors-modules/12-digital-sensors-protocols).
+1. Plot X in the Serial Plotter, as in [Session 2](/academy/m3-incipe-board-sensors-modules/12-digital-sensors-protocols).
 2. Write down three numbers: X at **rest**, X pushed **fully one way**, X pushed **fully the other way**.
 3. Pick your **lower limit** halfway between the rest value and the smaller end, and your **upper limit** halfway between the rest value and the bigger end.
 
@@ -175,7 +175,7 @@ float pressed = incipe.getButtonResponse();
 | Not pressed | `0` |
 | Not detected | `-1` |
 
-Act when the button is **released** — the same edge idea as the stick, and the same trick as [Session 8](/academy/m2-fundamentals-of-programming/08-control-structures-functions). Say the menu is on "Light":
+Act when the button is **released** — the same edge idea as the stick, and the same trick as [M2 Session 2](/academy/m2-fundamentals-of-programming/08-control-structures-functions). Say the menu is on "Light":
 
 ```walkthrough
 float lastButton = 0;
@@ -224,7 +224,7 @@ lastButton = b;
 
 ## 4. The IR receiver: what is coming
 
-The curriculum also covers *decoding IR signals with the IR Receiver*: capturing what a TV remote sends. The [IR receiver](/wiki/ir-receiver) page says what the module does, but its `incipe.*` functions are not published yet. This part will be added once they are — Session 17 builds on it.
+The curriculum also covers *decoding IR signals with the IR Receiver*: capturing what a TV remote sends. The [IR receiver](/wiki/ir-receiver) page says what the module does, but its `incipe.*` functions are not published yet. This part will be added once they are — Session 7 builds on it.
 
 ## Checkpoints
 
@@ -264,4 +264,4 @@ The curriculum also covers *decoding IR signals with the IR Receiver*: capturing
 2. Act on the edge — just pushed, just released — so one push moves one item, however long you hold.
 3. A menu is an array plus a `choice` number that wraps around at both ends; the button's release edge selects.
 
-**Next — Session 16: Data logging with SD card.** Saving readings to a file instead of only printing them.
+**Next — Session 6: Data logging with SD card.** Saving readings to a file instead of only printing them.

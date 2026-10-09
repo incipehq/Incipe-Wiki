@@ -1,4 +1,4 @@
-# Session 9: Arrays, Pointers & Bitwise Operations
+# Session 3: Arrays, Pointers & Bitwise Operations
 
 > **M2 Fundamentals of Programming** · Weeks 5–8
 > **Module used:** [Light sensor](/wiki/light)
@@ -20,7 +20,7 @@
 | --- | --- |
 | Arrays: create, write, read, index from 0 | [Lesson 4 · Array & for loop](/academy/m2-fundamentals-of-programming/04-arrays-for-loop) |
 | Average and largest value with a `for` loop | [Lesson 4 · Array & for loop](/academy/m2-fundamentals-of-programming/04-arrays-for-loop) |
-| Writing functions with parameters and `return` | [Session 8 · Control structures & functions](/academy/m2-fundamentals-of-programming/08-control-structures-functions) |
+| Writing functions with parameters and `return` | [Session 2 · Control structures & functions](/academy/m2-fundamentals-of-programming/08-control-structures-functions) |
 
 ### Key words
 
@@ -39,7 +39,7 @@
 
 **Analogy: a nickname.** At school you are "Alex"; at home you are "Al". Two names, one person — if Al gets a haircut, so does Alex. A **reference** is a second name for a variable.
 
-In Session 8, a function got a **copy** of each value. Change the copy, and the original is untouched. Add `&` after the type, and the function gets the **real variable** instead:
+In Session 2, a function got a **copy** of each value. Change the copy, and the original is untouched. Add `&` after the type, and the function gets the **real variable** instead:
 
 ```walkthrough
 void addBonus(int &score) {
@@ -301,4 +301,4 @@ Put `average()` above `loop()`, add `setup()` with `Serial.begin(9600);`, Upload
 2. A pointer holds an address: `&` takes the address, `*` goes to it. An array's name works like a pointer to its first box.
 3. `|` sets a bit, `&` checks it, `^` flips it and `<<` picks which one — eight flags in one byte. A moving average keeps the last N readings in an array.
 
-**Next — Session 10: Structs & state machines.** Group related data with `struct`, and build a traffic light that moves from state to state.
+**Next — Session 4: Structs & state machines.** Group related data with `struct`, and build a traffic light that moves from state to state.

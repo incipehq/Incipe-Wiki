@@ -62,16 +62,16 @@ Upon completion, students will be able to:
 
 ### Part B - Hardware Fundamentals (55% of total time)
 
-####  M3: Fundamentals of Programming (C++) - Weeks 5-8 (8 Sessions)
+####  M2: Fundamentals of Programming (C++) - Weeks 5-8 (8 Sessions)
 
-**Session 7: Introduction to C++ for Embedded Systems**
+**Session 1: Introduction to C++ for Embedded Systems**
 
 - C++ syntax vs. C (differences and why C++ for modern embedded).
 - Variables, data types, constants, and memory management (RAM vs. Flash).
 - Practice: Blink an LED with the INCIPE board using digital outputs.
 - AI Integration: Ask AI to generate a function and explain its logic.
 
-**Session 8: Control Structures & Functions**
+**Session 2: Control Structures & Functions**
 
 - Conditional statements (`if`, `else`, `switch`) for decision logic.
 - Loops (`for`, `while`, `do-while`) for repetitive tasks.
@@ -79,79 +79,79 @@ Upon completion, students will be able to:
 - Practice: Build a "Digital Dice" using the Button and LED Strip (press button → display random number on LEDs).
 - AI Integration: Use AI to suggest error handling for button debouncing.
 
-**Session 9: Arrays, Pointers, and Bitwise Operations**
+**Session 3: Arrays, Pointers, and Bitwise Operations**
 
 - Working with arrays to store multiple sensor readings.
 - Understanding pointers and references (essential for hardware manipulation).
 - Bitwise operators (`&`, `|`, `^`, `<<`, `>>`) for register-level control.
 - Practice: Read 10 values from the Light Intensity Sensor and compute the moving average using an array.
 
-**Session 10: Structs & State Machines (FSM)**
+**Session 4: Structs & State Machines (FSM)**
 
 - Defining and using `struct` to group related data (e.g., `SensorData`).
 - Introduction to Finite State Machines (FSM) for complex logic.
 - Practice: Design an FSM for a traffic light system using the LED Strip (Red → Yellow → Green → Red).
 - AI Integration: Have AI review your FSM logic and suggest improvements.
 
-#### M4 INCIPE Board, Sensors, and Modules Introduction - Weeks 9-13 (10 Sessions)
+#### M3: INCIPE Board, Sensors, and Modules Introduction - Weeks 9-13 (10 Sessions)
 
-**Session 11: Analog Sensors & ADC**
+**Session 1: Analog Sensors & ADC**
 
 - Understanding Analog-to-Digital Converters (ADC).
 - Reading analog sensors: Soil Moisture, Light Intensity, Temperature & Humidity.
 - Practice: Create a real-time dashboard in the Serial Monitor showing all analog sensor values.
 
-**Session 12: Digital Sensors & Protocols (I2C, UART)**
+**Session 2: Digital Sensors & Protocols (I2C, UART)**
 
 - Introduction to I2C protocol for multi-sensor communication.
 - Interfacing with the Accelerometer & Gyroscope.
 - Practice: Read and interpret X, Y, Z acceleration data and print it to the Serial Plotter.
 
-**Session 13: Actuators - PWM & Motor Control**
+**Session 3: Actuators - PWM & Motor Control**
 
 - Pulse Width Modulation (PWM) for speed/dimming control.
 - Controlling the DC Motor and Servo Motor.
 - Practice: Write code to sweep the Servo motor from 0° to 180° and control DC motor speed with a potentiometer.
 
-**Session 14: Audio & Indicators**
+**Session 4: Audio & Indicators**
 
 - Generating tones and melodies with the Buzzer.
 - Using the LED Strip for visual feedback.
 - Using `millis()` for non-blocking timing.
 - Practice: Create a simple melody and a "disco" mode for the Light Sensor.
 
-**Session 15: Input Devices - Joystick, IR, and Buttons**
+**Session 5: Input Devices - Joystick, IR, and Buttons**
 
 - Reading analog joystick data (X, Y, and button press).
 - Decoding IR signals with the IR Receiver.
 - Practice: Build a simple menu system controlled by the Joystick and displayed on the Serial Monitor.
 
-**Session 16: Data Logging with SD Card**
+**Session 6: Data Logging with SD Card**
 
 - Writing to the SD Card module.
 - Creating CSV files for time-series data logging.
 - Practice: Log all sensor data (Temperature, Humidity, Light, Soil Moisture) to an SD card every 5 seconds.
 
-**Session 17: Communication - IR Transmitter & Receiver**
+**Session 7: Communication - IR Transmitter & Receiver**
 
 - Transmitting IR signals with the IR Transmitter.
 - Creating a universal remote clone project.
 - Practice: Record a remote control signal and replay it to control the LED Strip.
 
-**Session 18: Integration - Building the Smart Garden System**
+**Session 8: Integration - Building the Smart Garden System**
 
 - Combining multiple sensors (Soil Moisture, Temperature & Humidity, Light Intensity).
 - Actuators: Water Pump, Servo Motor (for opening windows), and LED Strip.
 - Practice: Automate watering based on moisture levels and turn on grow lights based on light intensity.
 - AI Integration: Use AI to design the automation logic and suggest optimal thresholds.
 
-**Session 19: Integration - Building the Game Console**
+**Session 9: Integration - Building the Game Console**
 
 - Combining the Joystick, IR Receiver, Button, and LED Strip.
 - Creating a "Snake" or "Pong" game using the LED Strip as a display.
 - Practice: Map joystick inputs to game movements and display game state on LEDs.
 
-**Session 20: System Integration & Debugging**
+**Session 10: System Integration & Debugging**
 
 - Final integration of all modules.
 - Debugging techniques: Serial print statements, logic analyzers, and AI-assisted debugging.
@@ -164,14 +164,14 @@ Upon completion, students will be able to:
 
 *Weeks 3-4 (2 Sessions)*
 
-**Session 5: Design Thinking & Problem Statement**
+**Session 1: Design Thinking & Problem Statement**
 
 - Empathy: Identifying user pain points in everyday life (e.g., plant care, home security, gaming).
 - Define: Crafting a clear problem statement using the "How Might We" framework.
 - Ideate: Brainstorming solutions using the INCIPE sensors and actuators.
 - Workshop: Group brainstorming session to ideate 5 potential IoT product ideas using the INCIPE ecosystem.
 
-**Session 6: Product-Market Fit & Solution Validation**
+**Session 2: Product-Market Fit & Solution Validation**
 
 - What is Product-Market Fit and why it matters for internships/portfolios.
 - Identifying your target audience (e.g., urban gardeners, elderly care, kids learning to code).
@@ -212,26 +212,26 @@ There are 3 segmented projects. Students must choose 2 over 3 options to do in o
 
 *Weeks 14-15 (4 Sessions)*
 
-**Session 21: Storytelling & Product Pitching**
+**Session 1: Storytelling & Product Pitching**
 
 - Structure of a compelling pitch: Problem → Solution → Technology → Impact.
 - Using the "Hero's Journey" framework for product storytelling.
 - Workshop: Draft a 5-minute pitch script for your Smart Garden or Game Console.
 
-**Session 22: Presentation Techniques**
+**Session 2: Presentation Techniques**
 
 - Visual aids: Creating effective slides with diagrams and demos.
 - Body language, voice modulation, and handling nerves.
 - Live demo best practices (always have a backup plan!).
 - Practice: Present your product to a small group for peer feedback.
 
-**Session 23: Technical Presentation Skills**
+**Session 3: Technical Presentation Skills**
 
 - Explaining complex technical concepts to non-technical audiences.
 - How to present your code architecture and system design.
 - Mock Presentation: Present your product architecture (sensors, actuators, firmware, AI usage) to the class.
 
-**Session 24: Final Pitch & Career Preparation**
+**Session 4: Final Pitch & Career Preparation**
 
 - Final polishing of the pitch deck and project documentation.
 - Creating a demo video for your portfolio.
@@ -239,26 +239,26 @@ There are 3 segmented projects. Students must choose 2 over 3 options to do in o
 
 *Week 16: Portfolio Build and Knowledge Revision*
 
-**Session 25: Portfolio & Project Showcase**
+**Session 5: Portfolio & Project Showcase**
 
 - Documenting the hardware and software projects (Schematics, Code, UI).
 - Recording demo videos and writing thorough project descriptions.
 - Practice: Create a dedicated "Projects" section on your portfolio.
 
-**Session 26: Technical Knowledge Prep**
+**Session 6: Technical Knowledge Prep**
 
 - Review of C/C++ knowledge, memory management, and interrupt handling.
 - Mock Interview: Simulated technical questions about sensors, protocols (I2C, UART, SPI), and motor control.
 
 *Week 17: How to make use of your technical Portfolio*
 
-**Session 27: Building a Technical CV & LinkedIn**
+**Session 7: Building a Technical CV & LinkedIn**
 
 - Highlighting hardware and IoT projects.
 - Optimizing for ATS (Applicant Tracking Systems) in the tech industry.
 - Workshop: Creating an impressive LinkedIn profile targeted at IoT/Robotics roles.
 
-**Session 28: Application Strategy & Networking**
+**Session 8: Application Strategy & Networking**
 
 - Effective job portals for embedded/IoT roles.
 - Professional email templates for applying to internships.

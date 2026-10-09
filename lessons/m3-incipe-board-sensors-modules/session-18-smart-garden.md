@@ -1,4 +1,4 @@
-# Session 18: Integration — Building the Smart Garden System
+# Session 8: Integration — Building the Smart Garden System
 
 > **M3 INCIPE Board, Sensors & Modules** · Weeks 9–13
 > **Modules used:** [Soil moisture sensor](/wiki/soil-moisture), [Temperature & humidity sensor](/wiki/temperature-humidity), [Light sensor](/wiki/light) · actuators: [Water pump](/wiki/pump), [Servo](/wiki/servo), [LED strip](/wiki/led-strip)
@@ -14,7 +14,7 @@
 | 03 | Practice: automatic watering with a gap | 10 min |
 | 04 | AI integration: design the logic, choose the thresholds | 7 min |
 
-Builds on: calibrating the soil probe in [Session 11](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc), states from [Session 10](/academy/m2-fundamentals-of-programming/10-structs-state-machines), and `if` from [Lesson 2](/academy/m2-fundamentals-of-programming/02-data-types-if-else).
+Builds on: calibrating the soil probe in [Session 1](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc), states from [M2 Session 4](/academy/m2-fundamentals-of-programming/10-structs-state-machines), and `if` from [Lesson 2](/academy/m2-fundamentals-of-programming/02-data-types-if-else).
 
 ### Key words
 
@@ -55,7 +55,7 @@ Don't assume "high = wet": calibrate your own soil probe. Full details: [Soil mo
 
 ## 2. From a raw number to "% wet"
 
-In [Session 11](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc) you wrote down two numbers: the probe in the air (`DRY_VALUE`) and the probe in water (`WET_VALUE`). With those two, any reading becomes a percentage: 0 % is bone dry, 100 % is in water.
+In [Session 1](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc) you wrote down two numbers: the probe in the air (`DRY_VALUE`) and the probe in water (`WET_VALUE`). With those two, any reading becomes a percentage: 0 % is bone dry, 100 % is in water.
 
 **Analogy: a progress bar.** If a download goes from 0 MB to 60 MB and you are at 30 MB, you are half-way: 30 ÷ 60. Here, "how far from dry" ÷ "the whole way from dry to wet".
 
@@ -100,7 +100,7 @@ The curriculum task: *automate watering based on moisture levels.*
 | Not watering | % wet **below 30** | Watering | `PUMP ON` |
 | Watering | % wet **above 60** | Not watering | `PUMP OFF` |
 
-That's a two-state machine, like the traffic light in [Session 10](/academy/m2-fundamentals-of-programming/10-structs-state-machines). A `bool` remembers which state you're in.
+That's a two-state machine, like the traffic light in [M2 Session 4](/academy/m2-fundamentals-of-programming/10-structs-state-machines). A `bool` remembers which state you're in.
 
 ```walkthrough
 const float START = 30;   // % wet: start watering below this
@@ -209,4 +209,4 @@ Check what comes back like a reviewer:
 2. Use two thresholds — start low, stop high — and a `bool` for the state, so the pump switches once instead of flickering.
 3. Fail safe: a −1 reading must never switch anything on. The AI can suggest thresholds, but only your calibration knows your sensor.
 
-**Next — Session 19: Building the Game Console.** Joystick, button and LED strip together.
+**Next — Session 9: Building the Game Console.** Joystick, button and LED strip together.

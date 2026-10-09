@@ -1,4 +1,4 @@
-# Session 10: Structs & State Machines
+# Session 4: Structs & State Machines
 
 > **M2 Fundamentals of Programming** · Weeks 5–8
 > **Modules used:** [Temperature & humidity sensor](/wiki/temperature-humidity), [Light sensor](/wiki/light)
@@ -14,7 +14,7 @@
 | 03 | Practice: a traffic light | 9 min |
 | 04 | AI integration: review your state machine | 5 min |
 
-Builds on: functions and `switch` from [Session 8](/academy/m2-fundamentals-of-programming/08-control-structures-functions), and the sensor readings from [Lesson 3](/academy/m2-fundamentals-of-programming/03-sensors).
+Builds on: functions and `switch` from [Session 2](/academy/m2-fundamentals-of-programming/08-control-structures-functions), and the sensor readings from [Lesson 3](/academy/m2-fundamentals-of-programming/03-sensors).
 
 ### Key words
 
@@ -102,7 +102,7 @@ Serial.println(now.light);   // prints 23.40 700.00 with the values above
 
 > Each member can still be **−1** if its sensor is not detected — check `now.temperature >= 0` before you use it, as always.
 
-**Why bother?** One name carries everything that belongs together. A function can return one `SensorData` instead of three separate numbers, and an array of `SensorData` keeps a whole log of readings in order. [Session 11](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc) builds its sensor dashboard on this idea.
+**Why bother?** One name carries everything that belongs together. A function can return one `SensorData` instead of three separate numbers, and an array of `SensorData` keeps a whole log of readings in order. [M3 Session 1](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc) builds its sensor dashboard on this idea.
 
 On the INCIPE Board this card takes **12 bytes**: three `float`s of 4 bytes each.
 
@@ -188,7 +188,7 @@ Check what comes back like a reviewer:
 | --- | --- |
 | Does every suggested change still match my state table? | The table is the plan. Change the table first, then the code. |
 | Did it add a `default:` case? | A good idea: if `state` ever holds something unexpected, go back to a safe state like `RED`. |
-| Did it suggest `millis()` instead of `delay()`? | Useful later: with `delay()` the board cannot read a button *during* a light. [Session 14](/academy/m3-incipe-board-sensors-modules) covers non-blocking timing. |
+| Did it suggest `millis()` instead of `delay()`? | Useful later: with `delay()` the board cannot read a button *during* a light. [M3 Session 4](/academy/m3-incipe-board-sensors-modules) covers non-blocking timing. |
 | Did it rename my `incipe.*` calls or invent new ones? | Never accept that — compare with the [Wiki](/wiki). |
 
 ## Checkpoints
@@ -229,4 +229,4 @@ Check what comes back like a reviewer:
 2. A state machine is always in exactly one state; plan the states and transitions as a table, then write one `case` per row.
 3. An `enum` gives states readable names — and the AI's review should improve your table, not replace it.
 
-**Next — Session 11: Analog sensors & ADC.** How the board turns a voltage into a number, and a live Serial Monitor dashboard.
+**Next — M3 Session 1: Analog sensors & ADC.** How the board turns a voltage into a number, and a live Serial Monitor dashboard.

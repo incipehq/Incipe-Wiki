@@ -1,4 +1,4 @@
-# Session 8: Control Structures & Functions
+# Session 2: Control Structures & Functions
 
 > **M2 Fundamentals of Programming** · Weeks 5–8
 > **Module used:** [Button](/wiki/button)
@@ -285,7 +285,7 @@ void loop() {
 | 7–10 | If it changed, note the time and remember the new reading. |
 | 11–13 | Only when it has been steady for more than 50 ms do we act on it — put the release logic from Part 4 there. |
 
-**Review it like Session 2:** does it use the exact Wiki name? What does −1 do here? (It is just another value, so an unplugged button settles at −1 and still rolls nothing.) Did the AI keep your release logic, or rewrite it?
+**Review it like M1 Session 2:** does it use the exact Wiki name? What does −1 do here? (It is just another value, so an unplugged button settles at −1 and still rolls nothing.) Did the AI keep your release logic, or rewrite it?
 
 ## Checkpoints
 
@@ -334,4 +334,4 @@ switch (value) {
 2. `while` checks first; `do-while` runs once, then checks; `for` counts.
 3. A function has a name, parameters in and a return value out — so `loop()` can read `showDice(rollDice(6));`.
 
-**Next — Session 9: Arrays, pointers & bitwise operations.** Store ten light readings, find a moving average, and look inside a byte.
+**Next — Session 3: Arrays, pointers & bitwise operations.** Store ten light readings, find a moving average, and look inside a byte.

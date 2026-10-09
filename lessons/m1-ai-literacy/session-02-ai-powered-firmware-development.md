@@ -157,7 +157,7 @@ void printClimate() {
 | 8–12 | Prints the sentence one piece at a time — nothing is stored. |
 | 13 | Ends the function. |
 
-To run it every 2 seconds, ask the AI to call `printClimate()` from a **user thread** paced at 2000 ms — the speed the Wiki gives for the DHT11. [Session 11](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc) explains threads in full.
+To run it every 2 seconds, ask the AI to call `printClimate()` from a **user thread** paced at 2000 ms — the speed the Wiki gives for the DHT11. [M3 Session 1](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc) explains threads in full.
 
 > These snippets were compiled for the ESP32 with Arduino; sizes are for the INCIPE Board's ESP32 (`float` 4 bytes, `double` 8 bytes).
 

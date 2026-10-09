@@ -7,33 +7,40 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 
 ## Queue
 
+> **Numbering (owner, 2026-10-09):** the curriculum now numbers sessions per module —
+> M1 Session 1–4, M2 Session 1–4, M3 Session 1–10, M4 Session 1–2, M5 Session 1–8.
+> The queue uses the new numbers; the log below keeps the old global ones it was written
+> with (old M2 8–10 = new M2 2–4; old 11–20 = M3 1–10; old 5–6 = M4 1–2; old 21–28 = M5 1–8).
+> Pages, notes and decks were relabelled; URLs and file names keep the old numbers so
+> links don't break.
+
 ### M1 AI Literacy → `content/m1-ai-literacy/`
 - [x] Session 2 — AI-powered firmware development · deck: https://claude.ai/artifact/BHG96UPKkgByGiPcGzgerR · **.pptx and .pdf pending** (see Pending)
 - [x] Session 3 — Terminal commands & environment setup · deck: https://claude.ai/artifact/WeMxkZxi3rjcN29Tf7uNAV · .pptx ingested · **.pdf pending**
 - [-] Session 4 — Command line for embedded development · **skipped for now** (owner, 2026-10-09): no public command-line compile/upload path to teach
 
-### Fundamentals of Programming (curriculum "M3") → `content/m2-fundamentals-of-programming/`
-- [-] Session 7 — Introduction to C++ for embedded systems · **already covered** by the existing M2 Lessons 1–5 decks (owner, 2026-10-09); their content is the standard. A draft page was set aside, not committed.
-- [x] Session 8 — Control structures & functions (gaps only) · deck: https://claude.ai/artifact/1iVoDUPtWW9MHdcp8iPhm3 · **.pptx and .pdf pending**
-- [x] Session 9 — Arrays, pointers & bitwise operations (gaps only) · deck: https://claude.ai/artifact/XWTrgHUxz6Myt7j681mfM3 · **.pptx and .pdf pending**
-- [x] Session 10 — Structs & state machines (FSM) · deck: https://claude.ai/artifact/J9nYPccoVnefmod11t4Ji4 · **.pptx and .pdf pending**
+### M2 Fundamentals of Programming → `content/m2-fundamentals-of-programming/`
+- [-] Session 1 — Introduction to C++ for embedded systems · **already covered** by the existing M2 Lessons 1–5 decks (owner, 2026-10-09); their content is the standard. A draft page was set aside, not committed.
+- [x] Session 2 — Control structures & functions (gaps only) · deck: https://claude.ai/artifact/1iVoDUPtWW9MHdcp8iPhm3 · **.pptx and .pdf pending**
+- [x] Session 3 — Arrays, pointers & bitwise operations (gaps only) · deck: https://claude.ai/artifact/XWTrgHUxz6Myt7j681mfM3 · **.pptx and .pdf pending**
+- [x] Session 4 — Structs & state machines (FSM) · deck: https://claude.ai/artifact/J9nYPccoVnefmod11t4Ji4 · **.pptx and .pdf pending**
 
-### INCIPE Board, Sensors & Modules → `content/m3-incipe-board-sensors-modules/`
-- [-] Session 13 — Actuators: PWM & motor control · **waiting on Question 8** (servo/motor arguments, potentiometer)
-- [-] Session 14 — Audio & indicators · **waiting on Question 8** (buzzer and LED-strip arguments)
-- [x] Session 15 — Input devices: joystick, IR & buttons · deck: https://claude.ai/artifact/GsYUWtugSMCYyt2sRSrc5s · **.pptx and .pdf pending** · IR part waits on Question 8
-- [-] Session 16 — Data logging with SD card · **waiting on Question 8** (no SD-card functions on the Wiki)
-- [-] Session 17 — Communication: IR transmitter & receiver · **waiting on Question 8** (IR receiver has no functions; `sendIRRawSignal(signal, brand)` has no argument details)
-- [x] Session 18 — Integration: Smart Garden · deck: https://claude.ai/artifact/7iYBBA6gmgnSRtyasXKe6N · **.pptx and .pdf pending** · pump, servo and LED strip are stand-ins until Question 8
-- [ ] Session 19 — Integration: Game Console
-- [ ] Session 20 — System integration & debugging
+### M3 INCIPE Board, Sensors & Modules → `content/m3-incipe-board-sensors-modules/`
+- [-] Session 3 — Actuators: PWM & motor control · **waiting on Question 8** (servo/motor arguments, potentiometer)
+- [-] Session 4 — Audio & indicators · **waiting on Question 8** (buzzer and LED-strip arguments)
+- [x] Session 5 — Input devices: joystick, IR & buttons · deck: https://claude.ai/artifact/GsYUWtugSMCYyt2sRSrc5s · **.pptx and .pdf pending** · IR part waits on Question 8
+- [-] Session 6 — Data logging with SD card · **waiting on Question 8** (no SD-card functions on the Wiki)
+- [-] Session 7 — Communication: IR transmitter & receiver · **waiting on Question 8** (IR receiver has no functions; `sendIRRawSignal(signal, brand)` has no argument details)
+- [x] Session 8 — Integration: Smart Garden · deck: https://claude.ai/artifact/7iYBBA6gmgnSRtyasXKe6N · **.pptx and .pdf pending** · pump, servo and LED strip are stand-ins until Question 8
+- [ ] Session 9 — Integration: Game Console
+- [ ] Session 10 — System integration & debugging
 
-### Ideation → `content/m4-ideation/`
-- [ ] Session 5 — Design thinking & problem statement
-- [ ] Session 6 — Product-market fit & solution validation
+### M4 Ideation → `content/m4-ideation/`
+- [ ] Session 1 — Design thinking & problem statement
+- [ ] Session 2 — Product-market fit & solution validation
 
-### Presentation & Portfolio → `content/m5-presentation-portfolio/`
-- [ ] Sessions 21–28
+### M5 Presentation & Portfolio → `content/m5-presentation-portfolio/`
+- [ ] Sessions 1–8
 
 ## Log
 
@@ -196,13 +203,13 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   decks cannot be exported from this session. For each deck: open it, Share › Export ›
   PowerPoint and › PDF, save both into `raw/LMS/<module>/`; the loop then sets `source:`
   and `pdf:` and runs `npm run ingest`.
-  - Session 2 → .pptx and .pdf
-  - Session 3 → .pdf (the .pptx is in)
-  - Session 8 → .pptx and .pdf
-  - Session 9 → .pptx and .pdf
-  - Session 10 → .pptx and .pdf
-  - Session 15 → .pptx and .pdf
-  - Session 18 → .pptx and .pdf
+  - M1 Session 2 → .pptx and .pdf
+  - M1 Session 3 → .pdf (the .pptx is in)
+  - M2 Session 2 → .pptx and .pdf
+  - M2 Session 3 → .pptx and .pdf
+  - M2 Session 4 → .pptx and .pdf
+  - M3 Session 5 → .pptx and .pdf
+  - M3 Session 8 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
@@ -241,12 +248,12 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
    whether students may touch ESP32 registers on the INCIPE Board (or whether that would
    interfere with the runtime), so the lesson keeps both on students' own data. Is a
    register example wanted, and is it safe alongside the runtime?
-8. **Sessions 13–19 need the actuator and module pages.** What do `setMotorSpeed(speed)`
+8. **M3 Sessions 3–9 (old 13–19) need the actuator and module pages.** What do `setMotorSpeed(speed)`
    (range, and how to reverse), `writeMicroseconds(value)` (the µs for 0° and 180°),
    the buzzer, LED strip, SD card, IR and pump functions take? And the curriculum's
-   potentiometer has no Wiki page — is there a potentiometer module, or should Session 13
+   potentiometer has no Wiki page — is there a potentiometer module, or should M3 Session 3
    use the joystick X axis as the dial? Until then: wait, write the teachable parts only,
-   or move on to Ideation (5–6) and Presentation (21–28)?
+   or move on to M4 Ideation and M5 Presentation?
 5. **Session 4 needs the build path.** The curriculum says "use the terminal to compile and
    upload firmware" and "automate the process using INCIPE Board". The public Wiki says
    compilation happens on Incipe's build service, and the dev build's local compile fails
