@@ -1,0 +1,9 @@
+---
+lesson: Session 15
+type: notes
+duration: 30 min
+summary: Read the joystick, find your own limits, sort each reading into a zone and act on the edge — then build the curriculum's joystick menu on the Serial Monitor, with the push button to select.
+body: lessons/m3-incipe-board-sensors-modules/session-15-input-devices.md
+---
+
+**Slides:** [Session 15 deck](https://claude.ai/artifact/GsYUWtugSMCYyt2sRSrc5s) — 52 slides; every walkthrough is one slide per step.

@@ -19,9 +19,9 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - [x] Session 10 — Structs & state machines (FSM) · deck: https://claude.ai/artifact/J9nYPccoVnefmod11t4Ji4 · **.pptx and .pdf pending**
 
 ### INCIPE Board, Sensors & Modules → `content/m3-incipe-board-sensors-modules/`
-- [ ] Session 13 — Actuators: PWM & motor control · **stopped: needs the owner** (Question 8)
-- [ ] Session 14 — Audio & indicators
-- [ ] Session 15 — Input devices: joystick, IR & buttons
+- [-] Session 13 — Actuators: PWM & motor control · **waiting on Question 8** (servo/motor arguments, potentiometer)
+- [-] Session 14 — Audio & indicators · **waiting on Question 8** (buzzer and LED-strip arguments)
+- [x] Session 15 — Input devices: joystick, IR & buttons · deck: https://claude.ai/artifact/GsYUWtugSMCYyt2sRSrc5s · **.pptx and .pdf pending** · IR part waits on Question 8
 - [ ] Session 16 — Data logging with SD card
 - [ ] Session 17 — Communication: IR transmitter & receiver
 - [ ] Session 18 — Integration: Smart Garden
@@ -152,6 +152,25 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   Session 15's joystick half and Session 20's debugging half are teachable today.
 - Nothing written for Session 13. The loop stops here (STOP AND ASK) — Question 8.
 
+### Iteration 8 — Session 15: Input devices (joystick and button; IR waits)
+
+- The owner said "continue with the loop" after the Session 13 stop. Sessions 13 and 14
+  stay parked on Question 8; the loop moved to the next session it can teach accurately.
+- Notes: `lessons/m3-incipe-board-sensors-modules/session-15-input-devices.md`; page:
+  `content/m3-incipe-board-sensors-modules/15-input-devices.md`.
+- Joystick introduced Wiki-style; students find their own limits in the Plotter (linking
+  Session 12's worksheet). The code uses 25 and 75 as stand-in limits, labelled as such,
+  because the Wiki gives no range. `zone()` treats -1 as resting. The edge idea (just
+  pushed / just released) drives the curriculum's joystick menu on the Serial Monitor;
+  the push button (`1` / `0` / `-1`, from the Wiki) selects on release.
+- IR receiver: its page has no functions, so the lesson only says the part is coming.
+- Three walkthroughs; deck 52 slides, one per step.
+- Checked: `zone()` results, the menu sequence (Humidity, Temperature, Light), the wrap,
+  one line per held push and one `showChoice()` per release run on the host; the full
+  sketch compiled for `esp32:esp32:esp32`; build clean; dark, light and 375px; every
+  walkthrough stepped; no console errors; privacy grep clean.
+- Not captured: a Workspace Serial Monitor screenshot (the dev build is not running).
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -163,6 +182,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   - Session 8 → .pptx and .pdf
   - Session 9 → .pptx and .pdf
   - Session 10 → .pptx and .pdf
+  - Session 15 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
@@ -226,3 +246,4 @@ kept in the session scratchpad, never in this repo) for the ESP32 Dev Module tar
 | 8 | `showDice`, the countdown, `do-while`, `addDice` and the fall-through checkpoint run on the host with the printed results in the notes; the Digital Dice sketch (with `rollDice`, `showDice`, release logic and the debounce) compiles for `esp32:esp32:esp32`. |
 | 2 | Both `readClimate()` (AI draft) and `printClimate()` plus a thread that calls it every 2000 ms compile for `esp32:esp32:esp32`; `static_assert` confirms `float` = 4 and `double` = 8 bytes. Printed values (`23.40`, `51.00`) follow Arduino's two-decimal `print(float)`. |
 | 10 | `sizeof(SensorData)` = 12 (static_assert), `21.50`, `23.40 700.00`, the first four states RED, YELLOW, GREEN, RED and the 7000 ms cycle run on the host; the full sketch compiles for `esp32:esp32:esp32`. |
+| 15 | `zone(90)`=1, `zone(-1)`=0, `zone(10)`=-1; the menu prints `Humidity`, `Temperature`, `Light` for readings 50, 90, 90, 50, 10, 50, 10; `choice` 2 + 1 wraps to `Temperature`; a 10-pass hold prints once; a 3-pass button hold calls `showChoice()` once; run on the host. The full sketch compiles for `esp32:esp32:esp32`. |
