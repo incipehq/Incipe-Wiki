@@ -18,8 +18,8 @@
 
 | Idea | Where |
 | --- | --- |
-| Arrays: create, write, read, index from 0 | [Lesson 4 · Array & for loop](/academy/m2-fundamentals-of-programming/04-arrays-for-loop) |
-| Average and largest value with a `for` loop | [Lesson 4 · Array & for loop](/academy/m2-fundamentals-of-programming/04-arrays-for-loop) |
+| Arrays: create, write, read, index from 0 | [Taster Workshop Lesson 4 · Array & for loop](/academy/taster-workshop/04-arrays-for-loop) |
+| Average and largest value with a `for` loop | [Taster Workshop Lesson 4 · Array & for loop](/academy/taster-workshop/04-arrays-for-loop) |
 | Writing functions with parameters and `return` | [Session 2 · Control structures & functions](/academy/m2-fundamentals-of-programming/08-control-structures-functions) |
 
 ### Key words
@@ -123,7 +123,7 @@ So binary `101` is switch 2 and switch 0 on: 4 + 1 = **5**.
 | `<<` | shift left | — every bit moves left | `1 << 3` → `0001` → `1000` | 8 |
 | `>>` | shift right | — every bit moves right | `8 >> 2` → `1000` → `0010` | 2 |
 
-> Not to be confused with `&&`, `||` from [Lesson 2](/academy/m2-fundamentals-of-programming/02-data-types-if-else): those compare whole true/false values. `&`, `|` work on every bit.
+> Not to be confused with `&&`, `||` from [Taster Workshop Lesson 2](/academy/taster-workshop/02-data-types-if-else): those compare whole true/false values. `&`, `|` work on every bit.
 
 `1 << n` makes a number with only switch `n` on. Combine it with `|`, `&` and `^` to switch one bit at a time:
 
@@ -242,7 +242,7 @@ void loop() {
 | Line | What it does |
 | --- | --- |
 | 1 | A constant for how many readings to keep. |
-| 2 | An array of 10 readings ([Lesson 4](/academy/m2-fundamentals-of-programming/04-arrays-for-loop)). |
+| 2 | An array of 10 readings ([Taster Workshop Lesson 4](/academy/taster-workshop/04-arrays-for-loop)). |
 | 3 | Which box to write next. |
 | 6–7 | Read the light and skip −1 (not detected). |
 | 8 | Overwrite the oldest box with the newest reading. |

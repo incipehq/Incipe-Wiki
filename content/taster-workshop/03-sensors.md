@@ -3,7 +3,8 @@ title: Programming sensors
 lesson: Lesson 3
 type: slides
 summary: Build a mini calculator and a grade classifier, then read every sensor on the kit, clean its data with if-else, and count button presses correctly.
-source: raw/LMS/M2 Fundamentals of Programming/Lesson 3 Sensors.pptx
+source: raw/LMS/Taster Workshop/Lesson 3 Sensors.pptx
+pdf: raw/LMS/Taster Workshop/Lesson 3 Sensors.pdf
 ---
 ## Lesson overview
 

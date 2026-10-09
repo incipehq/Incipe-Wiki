@@ -14,7 +14,7 @@
 | 03 | Practice: automatic watering with a gap | 10 min |
 | 04 | AI integration: design the logic, choose the thresholds | 7 min |
 
-Builds on: calibrating the soil probe in [Session 1](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc), states from [M2 Session 4](/academy/m2-fundamentals-of-programming/10-structs-state-machines), and `if` from [Lesson 2](/academy/m2-fundamentals-of-programming/02-data-types-if-else).
+Builds on: calibrating the soil probe in [Session 1](/academy/m3-incipe-board-sensors-modules/11-analog-sensors-adc), states from [M2 Session 4](/academy/m2-fundamentals-of-programming/10-structs-state-machines), and `if` from [Taster Workshop Lesson 2](/academy/taster-workshop/02-data-types-if-else).
 
 ### Key words
 

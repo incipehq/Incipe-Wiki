@@ -21,4 +21,4 @@ float pressed = incipe.getButtonResponse();
 | Not pressed | `0` |
 | Not detected | `-1` |
 
-The button needs no data cleaning — it already answers yes or no. To count presses, count when the button is *released*, or one long press counts many times. [Programming sensors](/academy/m2-fundamentals-of-programming/03-sensors) shows how.
+The button needs no data cleaning — it already answers yes or no. To count presses, count when the button is *released*, or one long press counts many times. [Programming sensors](/academy/taster-workshop/03-sensors) shows how.

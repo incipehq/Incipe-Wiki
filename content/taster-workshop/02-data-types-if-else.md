@@ -3,7 +3,8 @@ title: More about programming
 lesson: Lesson 2
 type: slides
 summary: Input-process-output, comments and the compiler, comparison operators, and making decisions with if, else if, else and && || !.
-source: raw/LMS/M2 Fundamentals of Programming/Lesson 2 Data Type If-else.pptx
+source: raw/LMS/Taster Workshop/Lesson 2 Data Type If-else.pptx
+pdf: raw/LMS/Taster Workshop/Lesson 2 Data Type If-else.pdf
 ---
 ## Lesson overview
 

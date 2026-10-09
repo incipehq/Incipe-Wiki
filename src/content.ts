@@ -1,8 +1,10 @@
 /**
  * The wiki's content model, read at build time from content/.
  *
- *   content/<module>/index.md      — a module: title, label (M1…), order, meta,
- *                                    summary, curriculum (which section of
+ *   content/<module>/index.md      — a module: title, label (M1…), track (the
+ *                                    Academy course it belongs to — Incipe 101,
+ *                                    Taster Workshop), order, meta, summary,
+ *                                    curriculum (which section of
  *                                    curriculum/learning-curriculum.md it is)
  *   content/<module>/<page>.md     — a page: title, lesson, type, summary,
  *                                    source (a deck under raw/), pdf (the same deck
@@ -52,6 +54,8 @@ export interface Course {
   path: string;
   title: string;
   label: string;
+  /** The Academy course this module belongs to: `Incipe 101`, `Taster Workshop`. */
+  track: string;
   meta: string;
   summary: string;
   order: number;
@@ -188,6 +192,7 @@ function build(): Course[] {
         path: `/academy/${courseId}`,
         title: data.title ?? courseId,
         label: data.label ?? '',
+        track: data.track ?? '',
         meta: data.meta ?? '',
         summary: data.summary ?? '',
         order: Number(data.order ?? 99),
@@ -237,6 +242,18 @@ export const modules = courses.filter((course) => course.kind === 'module');
 export const programPages = courses.filter((course) => course.kind === 'program').flatMap((c) => c.pages);
 export const allPages = courses.flatMap((course) => course.pages);
 
+/** The Academy's courses, each with its modules, in module order. */
+export interface Track {
+  name: string;
+  modules: Course[];
+}
+export const tracks: Track[] = modules.reduce<Track[]>((list, module) => {
+  const track = list.find((t) => t.name === module.track);
+  if (track) track.modules.push(module);
+  else list.push({ name: module.track, modules: [module] });
+  return list;
+}, []);
+
 export function findCourse(id: string | undefined): Course | undefined {
   return courses.find((course) => course.id === id);
 }
@@ -249,9 +266,10 @@ export function findPageByPath(path: string): Page | undefined {
   return allPages.find((page) => page.path === path);
 }
 
-/** The page before and after, in reading order across the modules. */
+/** The page before and after, in reading order across the modules of its course. */
 export function neighbours(page: Page): { prev: Page | null; next: Page | null } {
-  const order = modules.flatMap((m) => m.pages);
+  const track = findCourse(page.courseId)?.track;
+  const order = modules.filter((m) => m.track === track).flatMap((m) => m.pages);
   const index = order.indexOf(page);
   if (index < 0) return { prev: null, next: order[0] ?? null };
   return {

@@ -5,7 +5,8 @@
  *
  * Two tabs head it, one per half of the site:
  *   Wiki     — the board, the guides, every sensor and module
- *   Academy  — the curriculum: a module switcher, then that module's pages
+ *   Academy  — the courses: a module switcher (grouped by course — Incipe 101,
+ *              Taster Workshop), then that module's pages
  * Under them is the section you are in. On the landing page, which belongs to
  * neither, the rail keeps the section you were last in. The search box searches
  * the section it sits in.
@@ -13,7 +14,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Check, ChevronsUpDown, GraduationCap, LayoutList, Library, Search, X } from 'lucide-react';
-import { modules } from '../content';
+import { modules, tracks } from '../content';
 import type { Course, Page } from '../content';
 import { WIKI_GROUPS, searchWiki, wikiPages } from '../wikiContent';
 import type { WikiPage } from '../wikiContent';
@@ -314,7 +315,7 @@ function ModuleSwitcher({ current, onNavigate }: { current: Course; onNavigate?:
 
   return (
     <div ref={wrap} className="wk-switch-wrap">
-      <span className="wk-label wk-switch-label">Module</span>
+      <span className="wk-label wk-switch-label">{current.track || 'Module'}</span>
       <button
         type="button"
         className="wk-switch"
@@ -336,17 +337,26 @@ function ModuleSwitcher({ current, onNavigate }: { current: Course; onNavigate?:
 
       {open && (
         <div className="inc-pop wk-switch-menu" role="menu" aria-label="Modules" data-closing={closing || undefined}>
-          {modules.map((module) => (
-            <button key={module.id} type="button" role="menuitem" className="inc-mi wk-switch-item" onClick={() => choose(module)}>
-              <span className="wk-tag">{module.label}</span>
-              <span className="wk-switch-item-title">{module.title}</span>
-              <span className="wk-switch-item-count">{module.pages.length || ''}</span>
-              {module.id === current.id ? (
-                <Check className="inc-mi-check" size={13} strokeWidth={2} aria-hidden="true" />
-              ) : (
-                <span className="wk-switch-item-gap" />
+          {tracks.map((track) => (
+            <div key={track.name} role="group" aria-label={track.name}>
+              {tracks.length > 1 && (
+                <span className="wk-group-head" aria-hidden="true">
+                  <span className="wk-group-title">{track.name}</span>
+                </span>
               )}
-            </button>
+              {track.modules.map((module) => (
+                <button key={module.id} type="button" role="menuitem" className="inc-mi wk-switch-item" onClick={() => choose(module)}>
+                  <span className="wk-tag">{module.label}</span>
+                  <span className="wk-switch-item-title">{module.title}</span>
+                  <span className="wk-switch-item-count">{module.pages.length || ''}</span>
+                  {module.id === current.id ? (
+                    <Check className="inc-mi-check" size={13} strokeWidth={2} aria-hidden="true" />
+                  ) : (
+                    <span className="wk-switch-item-gap" />
+                  )}
+                </button>
+              ))}
+            </div>
           ))}
         </div>
       )}

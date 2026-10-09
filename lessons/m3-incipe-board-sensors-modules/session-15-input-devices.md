@@ -14,7 +14,7 @@
 | 03 | Practice: a joystick menu on the Serial Monitor | 12 min |
 | 04 | The IR receiver: what is coming | 3 min |
 
-Builds on: plotting the joystick in [Session 2](/academy/m3-incipe-board-sensors-modules/12-digital-sensors-protocols), arrays from [Lesson 4](/academy/m2-fundamentals-of-programming/04-arrays-for-loop), `switch` and counting on release from [M2 Session 2](/academy/m2-fundamentals-of-programming/08-control-structures-functions).
+Builds on: plotting the joystick in [Session 2](/academy/m3-incipe-board-sensors-modules/12-digital-sensors-protocols), arrays from [Taster Workshop Lesson 4](/academy/taster-workshop/04-arrays-for-loop), `switch` and counting on release from [M2 Session 2](/academy/m2-fundamentals-of-programming/08-control-structures-functions).
 
 ### Key words
 

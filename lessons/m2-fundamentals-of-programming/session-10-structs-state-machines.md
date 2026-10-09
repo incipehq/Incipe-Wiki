@@ -14,7 +14,7 @@
 | 03 | Practice: a traffic light | 9 min |
 | 04 | AI integration: review your state machine | 5 min |
 
-Builds on: functions and `switch` from [Session 2](/academy/m2-fundamentals-of-programming/08-control-structures-functions), and the sensor readings from [Lesson 3](/academy/m2-fundamentals-of-programming/03-sensors).
+Builds on: functions and `switch` from [Session 2](/academy/m2-fundamentals-of-programming/08-control-structures-functions), and the sensor readings from [Taster Workshop Lesson 3](/academy/taster-workshop/03-sensors).
 
 ### Key words
 

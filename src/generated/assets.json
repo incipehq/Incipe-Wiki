@@ -1,10 +1,10 @@
 {
   "m1-ai-literacy/01-ai-development-workflows": {
-    "file": "/files/m1-ai-literacy--01-ai-development-workflows.pptx",
-    "viewer": null,
-    "downloadName": "Lesson 1_ Introduction to AI Development Workflows.pptx",
-    "format": "PPTX",
-    "bytes": 888650,
+    "file": "/files/m1-ai-literacy--01-ai-development-workflows.pdf",
+    "viewer": "/files/m1-ai-literacy--01-ai-development-workflows.pdf",
+    "downloadName": "Session 1 · Introduction to AI Development Workflows.pdf",
+    "format": "PDF",
+    "bytes": 804018,
     "pages": 14,
     "thumbnail": "/thumbs/m1-ai-literacy--01-ai-development-workflows.jpg"
   },
@@ -26,66 +26,21 @@
     "pages": 25,
     "thumbnail": "/thumbs/m1-ai-literacy--03-terminal-commands-environment-setup.jpg"
   },
-  "m2-fundamentals-of-programming/01-coding-basics": {
-    "file": "/files/m2-fundamentals-of-programming--01-coding-basics.pptx",
-    "viewer": null,
-    "downloadName": "Lesson 1 Coding Basics.pptx",
-    "format": "PPTX",
-    "bytes": 7463258,
-    "pages": 25,
-    "thumbnail": "/thumbs/m2-fundamentals-of-programming--01-coding-basics.jpg"
-  },
-  "m2-fundamentals-of-programming/02-data-types-if-else": {
-    "file": "/files/m2-fundamentals-of-programming--02-data-types-if-else.pptx",
-    "viewer": null,
-    "downloadName": "Lesson 2 Data Type If-else.pptx",
-    "format": "PPTX",
-    "bytes": 227770,
-    "pages": 22,
-    "thumbnail": "/thumbs/m2-fundamentals-of-programming--02-data-types-if-else.jpg"
-  },
-  "m2-fundamentals-of-programming/03-sensors": {
-    "file": "/files/m2-fundamentals-of-programming--03-sensors.pptx",
-    "viewer": null,
-    "downloadName": "Lesson 3 Sensors.pptx",
-    "format": "PPTX",
-    "bytes": 207263,
-    "pages": 16,
-    "thumbnail": "/thumbs/m2-fundamentals-of-programming--03-sensors.jpg"
-  },
-  "m2-fundamentals-of-programming/04-arrays-for-loop": {
-    "file": "/files/m2-fundamentals-of-programming--04-arrays-for-loop.pptx",
-    "viewer": null,
-    "downloadName": "Lesson 4 Arrays and for Loop.pptx",
-    "format": "PPTX",
-    "bytes": 205694,
-    "pages": 17,
-    "thumbnail": "/thumbs/m2-fundamentals-of-programming--04-arrays-for-loop.jpg"
-  },
-  "m2-fundamentals-of-programming/05-recap": {
-    "file": "/files/m2-fundamentals-of-programming--05-recap.pptx",
-    "viewer": null,
-    "downloadName": "Lesson 5 Recap.pptx",
-    "format": "PPTX",
-    "bytes": 210321,
-    "pages": 18,
-    "thumbnail": "/thumbs/m2-fundamentals-of-programming--05-recap.jpg"
-  },
   "m2-fundamentals-of-programming/08-control-structures-functions": {
-    "file": "/files/m2-fundamentals-of-programming--08-control-structures-functions.pdf",
-    "viewer": "/files/m2-fundamentals-of-programming--08-control-structures-functions.pdf",
-    "downloadName": "Session 2 · Control Structures & Functions.pdf",
-    "format": "PDF",
-    "bytes": 10245081,
+    "file": "/files/m2-fundamentals-of-programming--08-control-structures-functions.pptx",
+    "viewer": "/files/m2-fundamentals-of-programming--08-control-structures-functions.view.pdf",
+    "downloadName": "Session 2 · Control Structures & Functions.pptx",
+    "format": "PPTX",
+    "bytes": 3017209,
     "pages": 52,
     "thumbnail": "/thumbs/m2-fundamentals-of-programming--08-control-structures-functions.jpg"
   },
   "m2-fundamentals-of-programming/09-arrays-pointers-bitwise": {
-    "file": "/files/m2-fundamentals-of-programming--09-arrays-pointers-bitwise.pdf",
-    "viewer": "/files/m2-fundamentals-of-programming--09-arrays-pointers-bitwise.pdf",
-    "downloadName": "Session 3 · Arrays, Pointers & Bitwise Operations.pdf",
-    "format": "PDF",
-    "bytes": 11728961,
+    "file": "/files/m2-fundamentals-of-programming--09-arrays-pointers-bitwise.pptx",
+    "viewer": "/files/m2-fundamentals-of-programming--09-arrays-pointers-bitwise.view.pdf",
+    "downloadName": "Session 3 · Arrays, Pointers & Bitwise Operations.pptx",
+    "format": "PPTX",
+    "bytes": 3408872,
     "pages": 59,
     "thumbnail": "/thumbs/m2-fundamentals-of-programming--09-arrays-pointers-bitwise.jpg"
   },
@@ -124,5 +79,59 @@
     "bytes": 8142092,
     "pages": 37,
     "thumbnail": "/thumbs/m3-incipe-board-sensors-modules--19-game-console.jpg"
+  },
+  "taster-workshop/01-coding-basics": {
+    "file": "/files/taster-workshop--01-coding-basics.pptx",
+    "viewer": "/files/taster-workshop--01-coding-basics.view.pdf",
+    "downloadName": "Lesson 1 Coding Basics.pptx",
+    "format": "PPTX",
+    "bytes": 7463250,
+    "pages": 25,
+    "thumbnail": "/thumbs/taster-workshop--01-coding-basics.jpg"
+  },
+  "taster-workshop/02-data-types-if-else": {
+    "file": "/files/taster-workshop--02-data-types-if-else.pptx",
+    "viewer": "/files/taster-workshop--02-data-types-if-else.view.pdf",
+    "downloadName": "Lesson 2 Data Type If-else.pptx",
+    "format": "PPTX",
+    "bytes": 227761,
+    "pages": 22,
+    "thumbnail": "/thumbs/taster-workshop--02-data-types-if-else.jpg"
+  },
+  "taster-workshop/03-sensors": {
+    "file": "/files/taster-workshop--03-sensors.pptx",
+    "viewer": "/files/taster-workshop--03-sensors.view.pdf",
+    "downloadName": "Lesson 3 Sensors.pptx",
+    "format": "PPTX",
+    "bytes": 207259,
+    "pages": 16,
+    "thumbnail": "/thumbs/taster-workshop--03-sensors.jpg"
+  },
+  "taster-workshop/04-arrays-for-loop": {
+    "file": "/files/taster-workshop--04-arrays-for-loop.pptx",
+    "viewer": "/files/taster-workshop--04-arrays-for-loop.view.pdf",
+    "downloadName": "Lesson 4 Arrays & For Loop.pptx",
+    "format": "PPTX",
+    "bytes": 205692,
+    "pages": 17,
+    "thumbnail": "/thumbs/taster-workshop--04-arrays-for-loop.jpg"
+  },
+  "taster-workshop/05-recap": {
+    "file": "/files/taster-workshop--05-recap.pptx",
+    "viewer": "/files/taster-workshop--05-recap.view.pdf",
+    "downloadName": "Lesson 5 Recap.pptx",
+    "format": "PPTX",
+    "bytes": 210317,
+    "pages": 18,
+    "thumbnail": "/thumbs/taster-workshop--05-recap.jpg"
+  },
+  "taster-workshop/06-advanced-programming": {
+    "file": "/files/taster-workshop--06-advanced-programming.pptx",
+    "viewer": "/files/taster-workshop--06-advanced-programming.view.pdf",
+    "downloadName": "Lesson 6 Advanced Programming.pptx",
+    "format": "PPTX",
+    "bytes": 244990,
+    "pages": 16,
+    "thumbnail": "/thumbs/taster-workshop--06-advanced-programming.jpg"
   }
 }

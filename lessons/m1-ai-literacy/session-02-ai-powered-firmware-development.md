@@ -192,7 +192,7 @@ The curriculum task — *use AI to generate a function that reads from the Tempe
 
 | Step | Do this | Hand in |
 | --- | --- | --- |
-| 1 | Prompt the Workspace AI for a temperature & humidity read function (use Role, Goal, Context from [Lesson 1](/academy/m1-ai-literacy/01-ai-development-workflows)). | Your prompt |
+| 1 | Prompt the Workspace AI for a temperature & humidity read function (use Role, Goal, Context from [Session 1](/academy/m1-ai-literacy/01-ai-development-workflows)). | Your prompt |
 | 2 | Copy the AI's first draft, unchanged. | Draft A |
 | 3 | Mark every line that uses more memory than it needs, and say why in one sentence. | Your notes |
 | 4 | Rewrite it by hand so it uses `float`, stores no `String`, and handles −1. | Draft B |

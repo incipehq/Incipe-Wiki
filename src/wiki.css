@@ -897,17 +897,29 @@ a.inc-btn {
   display: table;
   width: 100%;
 }
+/* A quote's padding is its only inset: the paragraph inside keeps no margin of
+   its own at the ends, or the quote grows a blank line at the bottom. */
+.wk-prose blockquote > :first-child {
+  margin-top: 0;
+}
+.wk-prose blockquote > :last-child {
+  margin-bottom: 0;
+}
 .wk-prose details {
+  /* Where the question's text starts: past the chevron. The answer starts there too. */
+  --wk-details-indent: calc(var(--space-3) + 6px + var(--space-2));
   margin: 0 0 var(--space-2);
   border-radius: var(--radius-2);
   background: var(--bg);
   box-shadow: var(--edge-soft);
 }
+/* The question reads as one sentence: a block, not a flex row — a flex row made
+   every text run and inline `code` its own column, each wrapping on its own. The
+   chevron hangs in the left padding, level with the first line. */
 .wk-prose details > summary {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  position: relative;
+  display: block;
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--wk-details-indent);
   border-radius: var(--radius-2);
   cursor: pointer;
   list-style: none;
@@ -919,7 +931,10 @@ a.inc-btn {
 }
 .wk-prose details > summary::before {
   content: '';
-  flex: none;
+  position: absolute;
+  left: var(--space-3);
+  top: calc(var(--space-2) + 0.75em - 4px);
+  top: calc(var(--space-2) + 0.5lh - 4px);
   width: 6px;
   height: 6px;
   border-right: 1.5px solid var(--text-faint);
@@ -936,15 +951,18 @@ a.inc-btn {
 .wk-prose details > summary:active {
   transform: scale(0.99);
 }
-.wk-prose details > :not(summary) {
-  margin-left: var(--space-3);
-  margin-right: var(--space-3);
-}
-.wk-prose details > :last-child {
-  margin-bottom: var(--space-3);
+/* The answer sits in the box's own padding, its left edge in line with the
+   question's text. Margins on the answer collapsed out through the box (it has no
+   border to stop them), so the last line touched the edge. The question spans the
+   full width above it. */
+.wk-prose details[open] {
+  padding: 0 var(--space-3) var(--space-3) var(--wk-details-indent);
 }
 .wk-prose details[open] > summary {
-  margin-bottom: var(--space-2);
+  margin: 0 calc(-1 * var(--space-3)) var(--space-2) calc(-1 * var(--wk-details-indent));
+}
+.wk-prose details > :last-child {
+  margin-bottom: 0;
 }
 
 /* ── Previous / next ── */
@@ -1129,6 +1147,15 @@ a.inc-btn {
   font-size: 14px;
   letter-spacing: 0;
   color: var(--text-faint);
+}
+/* A course's one-line intro, under its section title (Academy home). */
+.wk-section-lede {
+  max-width: 64ch;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
 }
 .wk-placeholder code,
 .wk-placeholder em {

@@ -14,7 +14,7 @@
 | 03 | Practice: Strip Catcher — move, catch, score | 12 min |
 | 04 | Make it a console: restart, speed, and what's coming | 4 min |
 
-Builds on: the joystick zones and edges from [Session 5](/academy/m3-incipe-board-sensors-modules/15-input-devices), the `for` loop from [Lesson 4](/academy/m2-fundamentals-of-programming/04-arrays-for-loop), and states from [M2 Session 4](/academy/m2-fundamentals-of-programming/10-structs-state-machines).
+Builds on: the joystick zones and edges from [Session 5](/academy/m3-incipe-board-sensors-modules/15-input-devices), the `for` loop from [Taster Workshop Lesson 4](/academy/taster-workshop/04-arrays-for-loop), and states from [M2 Session 4](/academy/m2-fundamentals-of-programming/10-structs-state-machines).
 
 ### Key words
 

@@ -3,7 +3,8 @@ title: Array & for loop
 lesson: Lesson 4
 type: slides
 summary: Store many values under one name, loop through them with for, and combine the two to average and find the largest of 100 readings.
-source: raw/LMS/M2 Fundamentals of Programming/Lesson 4 Arrays and for Loop.pptx
+source: raw/LMS/Taster Workshop/Lesson 4 Arrays & For Loop.pptx
+pdf: raw/LMS/Taster Workshop/Lesson 4 Arrays & For Loop.pdf
 ---
 ## Lesson overview
 

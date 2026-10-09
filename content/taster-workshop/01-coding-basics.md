@@ -3,7 +3,8 @@ title: Course overview & programming basics
 lesson: Lesson 1
 type: slides
 summary: Find your way around the INCIPE Workspace, write your first sketch, meet the data types and the three kinds of error, then install the INCIPE library.
-source: raw/LMS/M2 Fundamentals of Programming/Lesson 1 Coding Basics.pptx
+source: raw/LMS/Taster Workshop/Lesson 1 Coding Basics.pptx
+pdf: raw/LMS/Taster Workshop/Lesson 1 Coding Basics.pdf
 ---
 ## Lesson overview
 

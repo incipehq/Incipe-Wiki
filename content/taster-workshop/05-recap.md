@@ -3,7 +3,8 @@ title: Recap
 lesson: Lesson 5
 type: slides
 summary: Everything from Lessons 1 to 4 in one deck — data types, errors, onscreen, input and decisions, sensors, arrays and for loops — with fresh checkpoints.
-source: raw/LMS/M2 Fundamentals of Programming/Lesson 5 Recap.pptx
+source: raw/LMS/Taster Workshop/Lesson 5 Recap.pptx
+pdf: raw/LMS/Taster Workshop/Lesson 5 Recap.pdf
 ---
 ## Lesson overview
 

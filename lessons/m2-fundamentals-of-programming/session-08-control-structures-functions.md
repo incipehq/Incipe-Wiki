@@ -19,9 +19,9 @@
 
 | Idea | Where |
 | --- | --- |
-| `if`, `else if`, `else`, `&&`, `\|\|`, `!` | [Lesson 2 · More about programming](/academy/m2-fundamentals-of-programming/02-data-types-if-else) |
-| Reading the button and counting a press on release | [Lesson 3 · Programming sensors](/academy/m2-fundamentals-of-programming/03-sensors) |
-| `for` loops | [Lesson 4 · Array & for loop](/academy/m2-fundamentals-of-programming/04-arrays-for-loop) |
+| `if`, `else if`, `else`, `&&`, `\|\|`, `!` | [Taster Workshop Lesson 2 · More about programming](/academy/taster-workshop/02-data-types-if-else) |
+| Reading the button and counting a press on release | [Taster Workshop Lesson 3 · Programming sensors](/academy/taster-workshop/03-sensors) |
+| `for` loops | [Taster Workshop Lesson 4 · Array & for loop](/academy/taster-workshop/04-arrays-for-loop) |
 
 ### Key words
 
@@ -133,7 +133,7 @@ The same loop written with `while` would print **nothing**, because `10 < 5` is 
 
 | Loop | Checks | Runs at least once? | Best for |
 | --- | --- | --- | --- |
-| `for` | Before each pass | No | Counting a known number of times ([Lesson 4](/academy/m2-fundamentals-of-programming/04-arrays-for-loop)) |
+| `for` | Before each pass | No | Counting a known number of times ([Taster Workshop Lesson 4](/academy/taster-workshop/04-arrays-for-loop)) |
 | `while` | Before each pass | No | "Keep going until something happens" |
 | `do-while` | After each pass | **Yes** | "Do it once, then repeat if needed" |
 
@@ -213,7 +213,7 @@ int rollDice(int sides) {
 
 ### Piece 3 — the button
 
-Count a roll when the button is **released**, exactly as [Lesson 3](/academy/m2-fundamentals-of-programming/03-sensors) counted presses:
+Count a roll when the button is **released**, exactly as [Taster Workshop Lesson 3](/academy/taster-workshop/03-sensors) counted presses:
 
 ```walkthrough
 bool pressed = false;

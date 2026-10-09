@@ -7,6 +7,12 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 
 ## Queue
 
+> **Two courses (owner, 2026-10-09):** the Academy is now **Incipe 101** (M1–M5, below) and
+> the **Taster Workshop** (`content/taster-workshop/`, Lessons 1–6). The old M2 Lessons 1–5
+> moved there (old URLs redirect in `vercel.json`); Lesson 6 *Advanced programming* is new.
+> Decks now live in `raw/LMS/Incipe 101/<module>/` and `raw/LMS/Taster Workshop/`. Where a
+> session below says "Lesson N", it now means Taster Workshop Lesson N.
+
 > **Numbering (owner, 2026-10-09):** the curriculum now numbers sessions per module —
 > M1 Session 1–4, M2 Session 1–4, M3 Session 1–10, M4 Session 1–2, M5 Session 1–8.
 > The queue uses the new numbers; the log below keeps the old global ones it was written
@@ -21,8 +27,8 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 
 ### M2 Fundamentals of Programming → `content/m2-fundamentals-of-programming/`
 - [-] Session 1 — Introduction to C++ for embedded systems · **already covered** by the existing M2 Lessons 1–5 decks (owner, 2026-10-09); their content is the standard. A draft page was set aside, not committed.
-- [x] Session 2 — Control structures & functions (gaps only) · deck: https://claude.ai/artifact/1iVoDUPtWW9MHdcp8iPhm3 · .pdf ingested · **.pptx pending**
-- [x] Session 3 — Arrays, pointers & bitwise operations (gaps only) · deck: https://claude.ai/artifact/XWTrgHUxz6Myt7j681mfM3 · .pdf ingested · **.pptx pending**
+- [x] Session 2 — Control structures & functions (gaps only) · deck: https://claude.ai/artifact/1iVoDUPtWW9MHdcp8iPhm3 · .pptx + .pdf ingested
+- [x] Session 3 — Arrays, pointers & bitwise operations (gaps only) · deck: https://claude.ai/artifact/XWTrgHUxz6Myt7j681mfM3 · .pptx + .pdf ingested
 - [x] Session 4 — Structs & state machines (FSM) · deck: https://claude.ai/artifact/J9nYPccoVnefmod11t4Ji4 · .pptx + .pdf ingested
 
 ### M3 INCIPE Board, Sensors & Modules → `content/m3-incipe-board-sensors-modules/`

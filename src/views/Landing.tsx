@@ -6,7 +6,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, GraduationCap, Library } from 'lucide-react';
-import { allPages, modules } from '../content';
+import { allPages, modules, tracks } from '../content';
 import { wikiPages } from '../wikiContent';
 
 export function Landing() {
@@ -64,11 +64,11 @@ export function Landing() {
               <span className="wk-door-title">Academy</span>
             </span>
             <span className="wk-door-text">
-              The learning curriculum for schools, M1 to M5 — slides to download, lesson notes, and the
-              real-life projects.
+              Two courses for schools — Incipe 101, the full curriculum from M1 to M5, and the Taster
+              Workshop — with slides to download, lesson notes and the real-life projects.
             </span>
             <span className="wk-door-meta">
-              {modules.length} modules · {lessons} lessons & notes
+              {tracks.length} courses · {lessons} lessons & notes
               <ArrowRight size={13} strokeWidth={1.75} aria-hidden="true" />
             </span>
           </span>

@@ -143,7 +143,7 @@ incipe-projects/
 | --- | --- |
 | Lowercase words joined with `-` | A name with spaces needs quotes in the terminal: `cd "climate reader"` |
 | One project per folder | Git looks after one folder at a time (Part 5) |
-| Keep a `prompts.md` beside the code | The prompts that worked are worth reusing — see [Lesson 1](/academy/m1-ai-literacy/01-ai-development-workflows) |
+| Keep a `prompts.md` beside the code | The prompts that worked are worth reusing — see [Session 1](/academy/m1-ai-literacy/01-ai-development-workflows) |
 
 ## 5. Git and GitHub: save points for your code
 
@@ -248,7 +248,7 @@ Hand in a screenshot of your Terminal showing:
 | 1 | `pwd` inside `climate-reader` | You can find where you are |
 | 2 | `ls` with `notes.md` and `prompts.md` | You can make files and folders |
 | 3 | `git log --oneline` with at least two commits | You can save versions |
-| 4 | Your `prompts.md` holding one prompt from Lesson 1 or Session 2 | You keep what works |
+| 4 | Your `prompts.md` holding one prompt from Session 1 or 2 | You keep what works |
 
 ## Checkpoints
 

@@ -38,7 +38,8 @@ Upon completion, students will be able to:
 **Session 1: Introduction to AI Development Workflows**
 
 - Overview of AI in embedded systems development.
-- Understanding the role of AI agents (Copilot, ChatGPT, INCIPE Workspace AI).
+- Understanding the role of AI agents, and that each has a different strength: Google Gemini for daily tasks, Claude Code and Codex as coding agents, Seedance for video, and INCIPE Workspace AI for hardware context.
+- MCP: letting an AI agent use your other tools.
 - How to prompt AI effectively for coding, debugging, and documentation.
 
 **Session 2: AI-Powered Firmware Development**

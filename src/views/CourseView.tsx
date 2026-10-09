@@ -32,8 +32,7 @@ export function CourseView({ course }: { course: Course }) {
     <div className="wk-catalog wk-enter">
       <header className="wk-catalog-head">
         <span className="wk-label wk-label--accent">
-          {course.label}
-          {course.meta ? ` · ${course.meta}` : ''}
+          {[course.track, course.label, course.meta].filter(Boolean).join(' · ')}
         </span>
         <h1>{course.title}</h1>
         <p>{course.summary}</p>
