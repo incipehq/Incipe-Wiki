@@ -32,7 +32,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - [-] Session 6 — Data logging with SD card · **waiting on Question 8** (no SD-card functions on the Wiki)
 - [-] Session 7 — Communication: IR transmitter & receiver · **waiting on Question 8** (IR receiver has no functions; `sendIRRawSignal(signal, brand)` has no argument details)
 - [x] Session 8 — Integration: Smart Garden · deck: https://claude.ai/artifact/7iYBBA6gmgnSRtyasXKe6N · **.pptx and .pdf pending** · pump, servo and LED strip are stand-ins until Question 8
-- [ ] Session 9 — Integration: Game Console
+- [x] Session 9 — Integration: Game Console · deck: https://claude.ai/artifact/QQCAomhxZDStqkqksk6C96 · **.pptx and .pdf pending** · Serial Monitor stands in for the LED strip; IR waits on Question 8
 - [ ] Session 10 — System integration & debugging
 
 ### M4 Ideation → `content/m4-ideation/`
@@ -197,6 +197,24 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   the full sketch compiled for `esp32:esp32:esp32`; build clean; dark, light and 375px;
   every walkthrough stepped; no console errors; privacy grep clean.
 
+### Iteration 10 — M3 Session 9: Game Console (logic in full, Serial as the screen)
+
+- Files keep the old global number so the module stays in order:
+  `content/m3-incipe-board-sensors-modules/19-game-console.md`,
+  `lessons/m3-incipe-board-sensors-modules/session-19-game-console.md`.
+- The LED strip is the curriculum's display, but `setLEDcolour(...)` has no published
+  arguments, so the Serial Monitor is the screen: one character per pixel, one line per
+  frame. The notes map `print` → `setLEDcolour` and `println` → `showLED()`, the two names
+  the Wiki gives, and say only `draw()` changes when the arguments are published.
+- Practice "Strip Catcher": the joystick edge from Session 5 moves you, `constrain`
+  keeps you on a 6-pixel strip, `%` wraps the fruit; the push button restarts (task).
+  The IR remote waits for Session 7.
+- Two walkthroughs; deck 37 slides, one per step.
+- Checked: `draw()` prints `P...*.  score 0`; a catch from 3 → `.*..P.  score 1`; the
+  wall → `.*...P  score 1`; `constrain(-1,0,5)`=0; `(4+3)%6`=1, `(5+3)%6`=2; run on the host.
+  The full sketch compiles for `esp32:esp32:esp32`; build clean; dark, light and the
+  narrow layout; both walkthroughs stepped; no console errors; privacy grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -210,6 +228,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   - M2 Session 4 → .pptx and .pdf
   - M3 Session 5 → .pptx and .pdf
   - M3 Session 8 → .pptx and .pdf
+  - M3 Session 9 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
@@ -275,3 +294,4 @@ kept in the session scratchpad, never in this repo) for the ESP32 Dev Module tar
 | 10 | `sizeof(SensorData)` = 12 (static_assert), `21.50`, `23.40 700.00`, the first four states RED, YELLOW, GREEN, RED and the 7000 ms cycle run on the host; the full sketch compiles for `esp32:esp32:esp32`. |
 | 15 | `zone(90)`=1, `zone(-1)`=0, `zone(10)`=-1; the menu prints `Humidity`, `Temperature`, `Light` for readings 50, 90, 90, 50, 10, 50, 10; `choice` 2 + 1 wraps to `Temperature`; a 10-pass hold prints once; a 3-pass button hold calls `showChoice()` once; run on the host. The full sketch compiles for `esp32:esp32:esp32`. |
 | 18 | `wetPercent` 70→50, 100→0 (Arduino prints `0.00`), 40→100, −1→168.33; watering rounds 70, 85, 73, 61, −1 print `PUMP ON` then `PUMP OFF` once each and nothing on −1; run on the host. The full sketch compiles for `esp32:esp32:esp32`. |
+| M3 9 (old 19) | `draw()` → `P...*.  score 0`; catch from 3 → `.*..P.  score 1`, fruit 1; push at the wall → `.*...P  score 1`; `constrain(-1, 0, 5)`=0; `(5+3)%6`=2; run on the host. The full sketch compiles for `esp32:esp32:esp32`. |

@@ -1,0 +1,9 @@
+---
+lesson: Session 9
+type: notes
+duration: 30 min
+summary: Treat the LED strip as a one-row screen, draw each frame from the game state, and build Strip Catcher — the joystick moves you, constrain keeps you on the strip, % wraps the fruit — with the Serial Monitor standing in for the strip.
+body: lessons/m3-incipe-board-sensors-modules/session-19-game-console.md
+---
+
+**Slides:** [Session 9 deck](https://claude.ai/artifact/QQCAomhxZDStqkqksk6C96) — 37 slides; every walkthrough is one slide per step.
