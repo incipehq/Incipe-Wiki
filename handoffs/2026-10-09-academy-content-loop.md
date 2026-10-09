@@ -33,7 +33,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - [-] Session 7 — Communication: IR transmitter & receiver · **waiting on Question 8** (IR receiver has no functions; `sendIRRawSignal(signal, brand)` has no argument details)
 - [x] Session 8 — Integration: Smart Garden · deck: https://claude.ai/artifact/7iYBBA6gmgnSRtyasXKe6N · **.pptx and .pdf pending** · pump, servo and LED strip are stand-ins until Question 8
 - [x] Session 9 — Integration: Game Console · deck: https://claude.ai/artifact/QQCAomhxZDStqkqksk6C96 · **.pptx and .pdf pending** · Serial Monitor stands in for the LED strip; IR waits on Question 8
-- [ ] Session 10 — System integration & debugging
+- [x] Session 10 — System integration & debugging · deck: https://claude.ai/artifact/GmjhTWBmxy7yWvcnQDSGWR · **.pptx and .pdf pending**
 
 ### M4 Ideation → `content/m4-ideation/`
 - [ ] Session 1 — Design thinking & problem statement
@@ -215,6 +215,25 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   The full sketch compiles for `esp32:esp32:esp32`; build clean; dark, light and the
   narrow layout; both walkthroughs stepped; no console errors; privacy grep clean.
 
+### Iteration 11 — M3 Session 10: System integration & debugging
+
+- Files: `content/m3-incipe-board-sensors-modules/20-system-integration-debugging.md`,
+  `lessons/m3-incipe-board-sensors-modules/session-20-system-integration-debugging.md`.
+- The method (symptom → clue → hypothesis → one change → retest) and integrating one
+  module at a time. A real bug hunt: the Smart Garden with `if (raw = -1)`, found with
+  labelled `[debug]` prints. Logic analyzers explained as a concept only (no pins or
+  board internals). Practice: two test plans (Smart Garden, Game Console) whose expected
+  results come from the Session 8 and 9 code. AI prompt to predict edge cases, checked on
+  the board.
+- One walkthrough; deck 28 slides.
+- Checked: the buggy round prints `[debug] raw=-1.00 wet=100.00`; fixed with 85 →
+  `[debug] raw=85.00 wet=25.00` + `PUMP ON`; fixed with −1 → the same line as the bug;
+  −1 while watering → `PUMP OFF`; run on the host. The buggy sketch compiles for
+  `esp32:esp32:esp32` silently by default and warns ("suggest parentheses around
+  assignment used as truth value") only with all warnings on — the notes say exactly
+  that. Build clean; dark, light, narrow; walkthrough stepped; no console errors;
+  privacy grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -229,6 +248,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   - M3 Session 5 → .pptx and .pdf
   - M3 Session 8 → .pptx and .pdf
   - M3 Session 9 → .pptx and .pdf
+  - M3 Session 10 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
@@ -295,3 +315,4 @@ kept in the session scratchpad, never in this repo) for the ESP32 Dev Module tar
 | 15 | `zone(90)`=1, `zone(-1)`=0, `zone(10)`=-1; the menu prints `Humidity`, `Temperature`, `Light` for readings 50, 90, 90, 50, 10, 50, 10; `choice` 2 + 1 wraps to `Temperature`; a 10-pass hold prints once; a 3-pass button hold calls `showChoice()` once; run on the host. The full sketch compiles for `esp32:esp32:esp32`. |
 | 18 | `wetPercent` 70→50, 100→0 (Arduino prints `0.00`), 40→100, −1→168.33; watering rounds 70, 85, 73, 61, −1 print `PUMP ON` then `PUMP OFF` once each and nothing on −1; run on the host. The full sketch compiles for `esp32:esp32:esp32`. |
 | M3 9 (old 19) | `draw()` → `P...*.  score 0`; catch from 3 → `.*..P.  score 1`, fruit 1; push at the wall → `.*...P  score 1`; `constrain(-1, 0, 5)`=0; `(5+3)%6`=2; run on the host. The full sketch compiles for `esp32:esp32:esp32`. |
+| M3 10 (old 20) | Buggy `if (raw = -1)` with 85 → `[debug] raw=-1.00 wet=100.00`, no pump; fixed → `[debug] raw=85.00 wet=25.00`, `PUMP ON`; −1 → `[debug] raw=-1.00 wet=100.00`; −1 while watering → `PUMP OFF`; run on the host. Compiles for `esp32:esp32:esp32`; `-Wparentheses` warning only with `--warnings all`. |
