@@ -1,8 +1,10 @@
 ---
 lesson: Session 2
-type: notes
+type: slides
 duration: 30 min
 summary: What product-market fit is and why it matters for a portfolio, narrowing your target audience and checking it with five real people, sketches and flowcharts as paper prototypes, a Lean Canvas, and a 3-minute problem-statement pitch.
+source: raw/LMS/Incipe 101/M4 Ideation/Session 2 · Product-Market Fit & Solution Validation.pptx
+pdf: raw/LMS/Incipe 101/M4 Ideation/Session 2 · Product-Market Fit & Solution Validation.pdf
 body: lessons/m4-ideation/session-02-product-market-fit-validation.md
 ---
 

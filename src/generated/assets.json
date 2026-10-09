@@ -55,7 +55,7 @@
   },
   "m3-incipe-board-sensors-modules/15-input-devices": {
     "file": "/files/m3-incipe-board-sensors-modules--15-input-devices.pptx",
-    "viewer": null,
+    "viewer": "/files/m3-incipe-board-sensors-modules--15-input-devices.view.pdf",
     "downloadName": "Session 5 · Input Devices Joystick, IR & Buttons.pptx",
     "format": "PPTX",
     "bytes": 3018086,
@@ -63,22 +63,85 @@
     "thumbnail": "/thumbs/m3-incipe-board-sensors-modules--15-input-devices.jpg"
   },
   "m3-incipe-board-sensors-modules/18-smart-garden": {
-    "file": "/files/m3-incipe-board-sensors-modules--18-smart-garden.pdf",
-    "viewer": "/files/m3-incipe-board-sensors-modules--18-smart-garden.pdf",
-    "downloadName": "Session 8 · Integration The Smart Garden.pdf",
-    "format": "PDF",
-    "bytes": 8722064,
+    "file": "/files/m3-incipe-board-sensors-modules--18-smart-garden.pptx",
+    "viewer": "/files/m3-incipe-board-sensors-modules--18-smart-garden.view.pdf",
+    "downloadName": "Session 8 · Integration The Smart Garden.pptx",
+    "format": "PPTX",
+    "bytes": 2230580,
     "pages": 38,
     "thumbnail": "/thumbs/m3-incipe-board-sensors-modules--18-smart-garden.jpg"
   },
   "m3-incipe-board-sensors-modules/19-game-console": {
-    "file": "/files/m3-incipe-board-sensors-modules--19-game-console.pdf",
-    "viewer": "/files/m3-incipe-board-sensors-modules--19-game-console.pdf",
-    "downloadName": "Session 9 · Integration The Game Console.pdf",
-    "format": "PDF",
-    "bytes": 8142092,
+    "file": "/files/m3-incipe-board-sensors-modules--19-game-console.pptx",
+    "viewer": "/files/m3-incipe-board-sensors-modules--19-game-console.view.pdf",
+    "downloadName": "Session 9 · Integration The Game Console.pptx",
+    "format": "PPTX",
+    "bytes": 2176355,
     "pages": 37,
     "thumbnail": "/thumbs/m3-incipe-board-sensors-modules--19-game-console.jpg"
+  },
+  "m3-incipe-board-sensors-modules/20-system-integration-debugging": {
+    "file": "/files/m3-incipe-board-sensors-modules--20-system-integration-debugging.pptx",
+    "viewer": "/files/m3-incipe-board-sensors-modules--20-system-integration-debugging.view.pdf",
+    "downloadName": "Session 10 · System Integration & Debugging.pptx",
+    "format": "PPTX",
+    "bytes": 1669256,
+    "pages": 28,
+    "thumbnail": "/thumbs/m3-incipe-board-sensors-modules--20-system-integration-debugging.jpg"
+  },
+  "m4-ideation/01-design-thinking-problem-statement": {
+    "file": "/files/m4-ideation--01-design-thinking-problem-statement.pptx",
+    "viewer": "/files/m4-ideation--01-design-thinking-problem-statement.view.pdf",
+    "downloadName": "Session 1 · Design Thinking & Problem Statement.pptx",
+    "format": "PPTX",
+    "bytes": 1389370,
+    "pages": 23,
+    "thumbnail": "/thumbs/m4-ideation--01-design-thinking-problem-statement.jpg"
+  },
+  "m4-ideation/02-product-market-fit-validation": {
+    "file": "/files/m4-ideation--02-product-market-fit-validation.pptx",
+    "viewer": "/files/m4-ideation--02-product-market-fit-validation.view.pdf",
+    "downloadName": "Session 2 · Product-Market Fit & Solution Validation.pptx",
+    "format": "PPTX",
+    "bytes": 1333413,
+    "pages": 21,
+    "thumbnail": "/thumbs/m4-ideation--02-product-market-fit-validation.jpg"
+  },
+  "m5-presentation-portfolio/01-storytelling-product-pitching": {
+    "file": "/files/m5-presentation-portfolio--01-storytelling-product-pitching.pptx",
+    "viewer": "/files/m5-presentation-portfolio--01-storytelling-product-pitching.view.pdf",
+    "downloadName": "Session 1 · Storytelling & Product Pitching.pptx",
+    "format": "PPTX",
+    "bytes": 1106439,
+    "pages": 18,
+    "thumbnail": "/thumbs/m5-presentation-portfolio--01-storytelling-product-pitching.jpg"
+  },
+  "m5-presentation-portfolio/02-presentation-techniques": {
+    "file": "/files/m5-presentation-portfolio--02-presentation-techniques.pptx",
+    "viewer": "/files/m5-presentation-portfolio--02-presentation-techniques.view.pdf",
+    "downloadName": "Session 2 · Presentation Techniques.pptx",
+    "format": "PPTX",
+    "bytes": 1236984,
+    "pages": 20,
+    "thumbnail": "/thumbs/m5-presentation-portfolio--02-presentation-techniques.jpg"
+  },
+  "m5-presentation-portfolio/03-technical-presentation-skills": {
+    "file": "/files/m5-presentation-portfolio--03-technical-presentation-skills.pptx",
+    "viewer": "/files/m5-presentation-portfolio--03-technical-presentation-skills.view.pdf",
+    "downloadName": "Session 3 · Technical Presentation Skills.pptx",
+    "format": "PPTX",
+    "bytes": 1443552,
+    "pages": 24,
+    "thumbnail": "/thumbs/m5-presentation-portfolio--03-technical-presentation-skills.jpg"
+  },
+  "m5-presentation-portfolio/04-final-pitch-career-preparation": {
+    "file": "/files/m5-presentation-portfolio--04-final-pitch-career-preparation.pptx",
+    "viewer": "/files/m5-presentation-portfolio--04-final-pitch-career-preparation.view.pdf",
+    "downloadName": "Session 4 · Final Pitch & Career Preparation.pptx",
+    "format": "PPTX",
+    "bytes": 1163578,
+    "pages": 19,
+    "thumbnail": "/thumbs/m5-presentation-portfolio--04-final-pitch-career-preparation.jpg"
   },
   "taster-workshop/01-coding-basics": {
     "file": "/files/taster-workshop--01-coding-basics.pptx",
