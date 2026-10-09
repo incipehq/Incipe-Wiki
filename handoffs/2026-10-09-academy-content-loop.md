@@ -15,24 +15,24 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 > links don't break.
 
 ### M1 AI Literacy → `content/m1-ai-literacy/`
-- [x] Session 2 — AI-powered firmware development · deck: https://claude.ai/artifact/BHG96UPKkgByGiPcGzgerR · **.pptx and .pdf pending** (see Pending)
-- [x] Session 3 — Terminal commands & environment setup · deck: https://claude.ai/artifact/WeMxkZxi3rjcN29Tf7uNAV · .pptx ingested · **.pdf pending**
+- [x] Session 2 — AI-powered firmware development · deck: https://claude.ai/artifact/BHG96UPKkgByGiPcGzgerR · .pptx + .pdf ingested
+- [x] Session 3 — Terminal commands & environment setup · deck: https://claude.ai/artifact/WeMxkZxi3rjcN29Tf7uNAV · .pptx + .pdf ingested
 - [-] Session 4 — Command line for embedded development · **skipped for now** (owner, 2026-10-09): no public command-line compile/upload path to teach
 
 ### M2 Fundamentals of Programming → `content/m2-fundamentals-of-programming/`
 - [-] Session 1 — Introduction to C++ for embedded systems · **already covered** by the existing M2 Lessons 1–5 decks (owner, 2026-10-09); their content is the standard. A draft page was set aside, not committed.
-- [x] Session 2 — Control structures & functions (gaps only) · deck: https://claude.ai/artifact/1iVoDUPtWW9MHdcp8iPhm3 · **.pptx and .pdf pending**
-- [x] Session 3 — Arrays, pointers & bitwise operations (gaps only) · deck: https://claude.ai/artifact/XWTrgHUxz6Myt7j681mfM3 · **.pptx and .pdf pending**
-- [x] Session 4 — Structs & state machines (FSM) · deck: https://claude.ai/artifact/J9nYPccoVnefmod11t4Ji4 · **.pptx and .pdf pending**
+- [x] Session 2 — Control structures & functions (gaps only) · deck: https://claude.ai/artifact/1iVoDUPtWW9MHdcp8iPhm3 · .pdf ingested · **.pptx pending**
+- [x] Session 3 — Arrays, pointers & bitwise operations (gaps only) · deck: https://claude.ai/artifact/XWTrgHUxz6Myt7j681mfM3 · .pdf ingested · **.pptx pending**
+- [x] Session 4 — Structs & state machines (FSM) · deck: https://claude.ai/artifact/J9nYPccoVnefmod11t4Ji4 · .pptx + .pdf ingested
 
 ### M3 INCIPE Board, Sensors & Modules → `content/m3-incipe-board-sensors-modules/`
 - [-] Session 3 — Actuators: PWM & motor control · **waiting on Question 8** (servo/motor arguments, potentiometer)
 - [-] Session 4 — Audio & indicators · **waiting on Question 8** (buzzer and LED-strip arguments)
-- [x] Session 5 — Input devices: joystick, IR & buttons · deck: https://claude.ai/artifact/GsYUWtugSMCYyt2sRSrc5s · **.pptx and .pdf pending** · IR part waits on Question 8
+- [x] Session 5 — Input devices: joystick, IR & buttons · deck: https://claude.ai/artifact/GsYUWtugSMCYyt2sRSrc5s · .pptx ingested · **.pdf pending** · IR part waits on Question 8
 - [-] Session 6 — Data logging with SD card · **waiting on Question 8** (no SD-card functions on the Wiki)
 - [-] Session 7 — Communication: IR transmitter & receiver · **waiting on Question 8** (IR receiver has no functions; `sendIRRawSignal(signal, brand)` has no argument details)
-- [x] Session 8 — Integration: Smart Garden · deck: https://claude.ai/artifact/7iYBBA6gmgnSRtyasXKe6N · **.pptx and .pdf pending** · pump, servo and LED strip are stand-ins until Question 8
-- [x] Session 9 — Integration: Game Console · deck: https://claude.ai/artifact/QQCAomhxZDStqkqksk6C96 · **.pptx and .pdf pending** · Serial Monitor stands in for the LED strip; IR waits on Question 8
+- [x] Session 8 — Integration: Smart Garden · deck: https://claude.ai/artifact/7iYBBA6gmgnSRtyasXKe6N · .pdf ingested · **.pptx pending** · pump, servo and LED strip are stand-ins until Question 8
+- [x] Session 9 — Integration: Game Console · deck: https://claude.ai/artifact/QQCAomhxZDStqkqksk6C96 · .pdf ingested · **.pptx pending** · Serial Monitor stands in for the LED strip; IR waits on Question 8
 - [x] Session 10 — System integration & debugging · deck: https://claude.ai/artifact/GmjhTWBmxy7yWvcnQDSGWR · **.pptx and .pdf pending**
 
 ### M4 Ideation → `content/m4-ideation/`
@@ -240,15 +240,11 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   decks cannot be exported from this session. For each deck: open it, Share › Export ›
   PowerPoint and › PDF, save both into `raw/LMS/<module>/`; the loop then sets `source:`
   and `pdf:` and runs `npm run ingest`.
-  - M1 Session 2 → .pptx and .pdf
-  - M1 Session 3 → .pdf (the .pptx is in)
-  - M2 Session 2 → .pptx and .pdf
-  - M2 Session 3 → .pptx and .pdf
-  - M2 Session 4 → .pptx and .pdf
-  - M3 Session 5 → .pptx and .pdf
-  - M3 Session 8 → .pptx and .pdf
-  - M3 Session 9 → .pptx and .pdf
-  - M3 Session 10 → .pptx and .pdf
+  - Ingested 2026-10-09 (owner's exports): M1 S2 (.pptx + .pdf), M1 S3 (+ .pdf),
+    M2 S2 (.pdf), M2 S3 (.pdf), M2 S4 (.pptx + .pdf), M3 S5 (.pptx), M3 S8 (.pdf),
+    M3 S9 (.pdf). A page with only a .pdf serves it as the download and the viewer.
+  - Still to export: M2 Session 2 → .pptx · M2 Session 3 → .pptx · M3 Session 5 → .pdf ·
+    M3 Session 8 → .pptx · M3 Session 9 → .pptx · M3 Session 10 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev

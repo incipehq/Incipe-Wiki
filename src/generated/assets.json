@@ -8,9 +8,18 @@
     "pages": 14,
     "thumbnail": "/thumbs/m1-ai-literacy--01-ai-development-workflows.jpg"
   },
+  "m1-ai-literacy/02-ai-powered-firmware-development": {
+    "file": "/files/m1-ai-literacy--02-ai-powered-firmware-development.pptx",
+    "viewer": "/files/m1-ai-literacy--02-ai-powered-firmware-development.view.pdf",
+    "downloadName": "Session 2 · AI-Powered Firmware Development.pptx",
+    "format": "PPTX",
+    "bytes": 1774548,
+    "pages": 29,
+    "thumbnail": "/thumbs/m1-ai-literacy--02-ai-powered-firmware-development.jpg"
+  },
   "m1-ai-literacy/03-terminal-commands-environment-setup": {
     "file": "/files/m1-ai-literacy--03-terminal-commands-environment-setup.pptx",
-    "viewer": null,
+    "viewer": "/files/m1-ai-literacy--03-terminal-commands-environment-setup.view.pdf",
     "downloadName": "Session 3 · Terminal Commands & Environment Setup.pptx",
     "format": "PPTX",
     "bytes": 1501608,
@@ -61,5 +70,59 @@
     "bytes": 210321,
     "pages": 18,
     "thumbnail": "/thumbs/m2-fundamentals-of-programming--05-recap.jpg"
+  },
+  "m2-fundamentals-of-programming/08-control-structures-functions": {
+    "file": "/files/m2-fundamentals-of-programming--08-control-structures-functions.pdf",
+    "viewer": "/files/m2-fundamentals-of-programming--08-control-structures-functions.pdf",
+    "downloadName": "Session 2 · Control Structures & Functions.pdf",
+    "format": "PDF",
+    "bytes": 10245081,
+    "pages": 52,
+    "thumbnail": "/thumbs/m2-fundamentals-of-programming--08-control-structures-functions.jpg"
+  },
+  "m2-fundamentals-of-programming/09-arrays-pointers-bitwise": {
+    "file": "/files/m2-fundamentals-of-programming--09-arrays-pointers-bitwise.pdf",
+    "viewer": "/files/m2-fundamentals-of-programming--09-arrays-pointers-bitwise.pdf",
+    "downloadName": "Session 3 · Arrays, Pointers & Bitwise Operations.pdf",
+    "format": "PDF",
+    "bytes": 11728961,
+    "pages": 59,
+    "thumbnail": "/thumbs/m2-fundamentals-of-programming--09-arrays-pointers-bitwise.jpg"
+  },
+  "m2-fundamentals-of-programming/10-structs-state-machines": {
+    "file": "/files/m2-fundamentals-of-programming--10-structs-state-machines.pptx",
+    "viewer": "/files/m2-fundamentals-of-programming--10-structs-state-machines.view.pdf",
+    "downloadName": "Session 4 · Structs & State Machines.pptx",
+    "format": "PPTX",
+    "bytes": 2061430,
+    "pages": 35,
+    "thumbnail": "/thumbs/m2-fundamentals-of-programming--10-structs-state-machines.jpg"
+  },
+  "m3-incipe-board-sensors-modules/15-input-devices": {
+    "file": "/files/m3-incipe-board-sensors-modules--15-input-devices.pptx",
+    "viewer": null,
+    "downloadName": "Session 5 · Input Devices Joystick, IR & Buttons.pptx",
+    "format": "PPTX",
+    "bytes": 3018086,
+    "pages": 52,
+    "thumbnail": "/thumbs/m3-incipe-board-sensors-modules--15-input-devices.jpg"
+  },
+  "m3-incipe-board-sensors-modules/18-smart-garden": {
+    "file": "/files/m3-incipe-board-sensors-modules--18-smart-garden.pdf",
+    "viewer": "/files/m3-incipe-board-sensors-modules--18-smart-garden.pdf",
+    "downloadName": "Session 8 · Integration The Smart Garden.pdf",
+    "format": "PDF",
+    "bytes": 8722064,
+    "pages": 38,
+    "thumbnail": "/thumbs/m3-incipe-board-sensors-modules--18-smart-garden.jpg"
+  },
+  "m3-incipe-board-sensors-modules/19-game-console": {
+    "file": "/files/m3-incipe-board-sensors-modules--19-game-console.pdf",
+    "viewer": "/files/m3-incipe-board-sensors-modules--19-game-console.pdf",
+    "downloadName": "Session 9 · Integration The Game Console.pdf",
+    "format": "PDF",
+    "bytes": 8142092,
+    "pages": 37,
+    "thumbnail": "/thumbs/m3-incipe-board-sensors-modules--19-game-console.jpg"
   }
 }
