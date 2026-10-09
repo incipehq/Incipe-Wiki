@@ -41,7 +41,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 
 ### M5 Presentation & Portfolio → `content/m5-presentation-portfolio/`
 - [x] Session 1 — Storytelling & product pitching · deck: https://claude.ai/artifact/P94BFvvKkN2RSv4v3ZTVmt · **.pptx and .pdf pending**
-- [ ] Session 2 — Presentation techniques
+- [x] Session 2 — Presentation techniques · deck: https://claude.ai/artifact/VCzmzzKhuTL9pWBdTcreQ4 · **.pptx and .pdf pending**
 - [ ] Session 3 — Technical presentation skills
 - [ ] Session 4 — Final pitch & career preparation
 - [ ] Session 5 — Portfolio & project showcase
@@ -284,6 +284,19 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - Deck 18 slides. Checked: build clean; dark, light, narrow; no console errors; privacy
   grep clean.
 
+### Iteration 15 — M5 Session 2: Presentation techniques
+
+- Files: `content/m5-presentation-portfolio/02-presentation-techniques.md`,
+  `lessons/m5-presentation-portfolio/session-02-presentation-techniques.md`.
+- Slide rules and a block diagram of the Smart Garden (inputs → board → outputs); body
+  language, voice (pace, pause, volume, variety, fillers) and nerves (rehearsal,
+  breathing, the first 30 seconds); INCIPE-specific demo risks (a −1 reading, connection,
+  an old sketch, conditions) with a checklist and a backup video; small-group practice
+  with roles and a glow-and-grow form.
+- Deck 20 slides; the block diagram is drawn with boxes and elbow connectors. Checked:
+  build clean; dark, light, narrow (the text diagram fits); no console errors; privacy
+  grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -296,7 +309,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   - Still to export: M2 Session 2 → .pptx · M2 Session 3 → .pptx · M3 Session 5 → .pdf ·
     M3 Session 8 → .pptx · M3 Session 9 → .pptx · M3 Session 10 → .pptx and .pdf ·
     M4 Session 1 → .pptx and .pdf · M4 Session 2 → .pptx and .pdf ·
-    M5 Session 1 → .pptx and .pdf
+    M5 Session 1 → .pptx and .pdf · M5 Session 2 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
