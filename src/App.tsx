@@ -8,8 +8,9 @@
  * Under 820px the rail leaves the row and becomes the workspace's PEEKED rail:
  * laid over the stage with the pop shadow, fading in and leaning out.
  */
-import { useEffect, useRef, useState } from 'react';
-import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { RefObject } from 'react';
+import { Link, Route, Routes, useLocation, useNavigationType, useParams } from 'react-router-dom';
 import { Menu, Moon, Sun, X } from 'lucide-react';
 import { findCourse, findPage, findPageByPath } from './content';
 import { findWikiPage } from './wikiContent';
@@ -24,6 +25,81 @@ import { CourseView } from './views/CourseView';
 import { PageView } from './views/PageView';
 
 const THEME_KEY = 'incipe-wiki-theme';
+const SCROLL_KEY = 'incipe-wiki-scroll';
+
+/** Where you were on each page, by path + query. Per browser tab; survives a reload. */
+function readScrolls(): Record<string, number> {
+  try {
+    return JSON.parse(sessionStorage.getItem(SCROLL_KEY) ?? '{}') as Record<string, number>;
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * The stage keeps each page's scroll position. A link to a new page starts at its
+ * top, like any other document; coming back — a rail tab, Back / Forward, a
+ * reload — returns to where you were. A query change in place (the Wiki search
+ * typing into the URL) leaves the scroll alone.
+ */
+function useScrollMemory(stage: RefObject<HTMLElement>) {
+  const location = useLocation();
+  const navigation = useNavigationType();
+  const positions = useRef<Record<string, number>>(readScrolls());
+  const path = location.pathname + location.search;
+  const current = useRef(path);
+
+  useEffect(() => {
+    const el = stage.current;
+    if (!el) return;
+    let timer = 0;
+    const onScroll = () => {
+      positions.current[current.current] = el.scrollTop;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        try {
+          sessionStorage.setItem(SCROLL_KEY, JSON.stringify(positions.current));
+        } catch {
+          /* Not persisting is fine; this tab still remembers. */
+        }
+      }, 250);
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      window.clearTimeout(timer);
+    };
+  }, [stage]);
+
+  useLayoutEffect(() => {
+    const el = stage.current;
+    current.current = path;
+    if (!el || navigation === 'REPLACE') return;
+    const restore = navigation === 'POP' || (location.state as { restoreScroll?: boolean } | null)?.restoreScroll === true;
+    const target = restore ? positions.current[path] ?? 0 : 0;
+    el.scrollTop = target;
+    if (el.scrollTop >= target - 1) return;
+    // Images and models arrive late; keep trying for about a second until the
+    // page is tall enough, unless the reader starts scrolling first.
+    let frame = 0;
+    let tries = 0;
+    const stop = () => window.cancelAnimationFrame(frame);
+    const again = () => {
+      el.scrollTop = target;
+      if (el.scrollTop < target - 1 && ++tries < 60) frame = window.requestAnimationFrame(again);
+    };
+    frame = window.requestAnimationFrame(again);
+    el.addEventListener('wheel', stop, { once: true, passive: true });
+    el.addEventListener('touchstart', stop, { once: true, passive: true });
+    return () => {
+      stop();
+      el.removeEventListener('wheel', stop);
+      el.removeEventListener('touchstart', stop);
+    };
+    // The location's key changes on every navigation, even to the same path.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.key]);
+}
 
 function useTheme() {
   const [light, setLight] = useState(() => document.documentElement.getAttribute('data-theme') === 'beginner');
@@ -46,11 +122,7 @@ export function App() {
   const [closing, setClosing] = useState(false);
   const stage = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
-
-  // A new page starts at its top, like any other document.
-  useEffect(() => {
-    stage.current?.scrollTo({ top: 0 });
-  }, [pathname]);
+  useScrollMemory(stage);
 
   const closeNav = () => {
     if (!navOpen) return;

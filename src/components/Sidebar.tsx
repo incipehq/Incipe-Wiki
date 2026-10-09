@@ -24,6 +24,7 @@ import { WIKI_GROUPS, searchWiki, wikiPages } from '../wikiContent';
 import type { WikiPage } from '../wikiContent';
 import { PAGE_GLYPH, WIKI_GLYPH } from './glyphs';
 import { ClipText } from './ui';
+import { RESTORE_SCROLL } from '../scroll';
 
 type Section = 'wiki' | 'academy';
 
@@ -197,6 +198,8 @@ function SectionTab({
       end
       role="tab"
       aria-selected={active}
+      // Back to the page you left, at the place you left it (App.tsx useScrollMemory).
+      state={active ? undefined : RESTORE_SCROLL}
       onClick={onNavigate}
       className={() => `wk-row wk-tab inc-row${active ? ' inc-row--on' : ''}`}
     >
