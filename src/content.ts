@@ -6,7 +6,8 @@
  *                                    Taster Workshop), order, meta, summary,
  *                                    curriculum (which section of
  *                                    curriculum/learning-curriculum.md it is)
- *   content/<module>/<page>.md     — a page: title, lesson, type, summary,
+ *   content/<module>/<page>.md     — a page: title, lesson, type (slides, video,
+ *                                    document, notes, project), summary,
  *                                    source (a deck under raw/), pdf (the same deck
  *                                    as PDF, read in the page), video (YouTube id),
  *                                    body (a Markdown file elsewhere in the repo —
@@ -21,7 +22,7 @@
  */
 import assetIndex from './generated/assets.json';
 
-export type PageType = 'slides' | 'video' | 'document' | 'notes';
+export type PageType = 'slides' | 'video' | 'document' | 'notes' | 'project';
 
 export interface Asset {
   file: string;

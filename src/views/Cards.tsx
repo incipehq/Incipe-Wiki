@@ -5,7 +5,7 @@ import { pageUnit, thumbnailOf } from '../content';
 import type { Page } from '../content';
 import { PAGE_GLYPH } from '../components/glyphs';
 
-const KIND = { slides: 'Slides', video: 'Video', document: 'Document', notes: 'Notes' } as const;
+const KIND = { slides: 'Slides', video: 'Video', document: 'Document', notes: 'Notes', project: 'Project' } as const;
 
 export function PageCard({ page }: { page: Page }) {
   const thumb = thumbnailOf(page);

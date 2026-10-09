@@ -17,11 +17,14 @@ run. **Incipe Wiki is the public website that documents both halves:**
    sensor search is the centre of it. It also holds the **Workspace app guide**
    (`wiki/app-*.md`, `kind: app`): 15 steps that teach the desktop app by building a
    classroom climate monitor, each step one level up, the last a finished build.
-2. **Academy** (`/academy`) — *the courses.* Two of them, set by each module's
+2. **Academy** (`/academy`) — *the courses.* Three of them, set by each module's
    `track:`: **Incipe 101**, the learning curriculum — modules M1–M5 with slide decks
    (view + download), lesson notes, and the real-life projects; the full curriculum at
-   `/academy/curriculum` — and the **Taster Workshop** (`content/taster-workshop/`),
-   a short C++ course of six lessons.
+   `/academy/curriculum` — the **Taster Workshop** (`content/taster-workshop/`),
+   a short C++ course of six lessons — and **Sample Projects**
+   (`content/sample-projects/`, `type: project`): four IA Kit builds from the old
+   Incipe Academy docs, each a starter sketch with blanks, hints and answers. Their
+   `incipe.*` calls come only from those starters and the public IA Kit API pages.
 
 Audience: students and teachers at customer schools, and prospective customers. It
 is static (Vite + React 18 + react-router), deployed on Vercel, with no backend.

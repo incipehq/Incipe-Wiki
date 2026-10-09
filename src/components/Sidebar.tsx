@@ -365,8 +365,8 @@ function ModuleSwitcher({ current, onNavigate }: { current: Course; onNavigate?:
   );
 }
 
-/** `Lesson 3` → `L3`, `Session 11` → `S11`; anything else is kept as written. */
+/** `Lesson 3` → `L3`, `Session 11` → `S11`, `Project 2` → `P2`; anything else is kept as written. */
 function shortLesson(lesson: string): string {
-  const m = /^(Lesson|Session)\s+(\d+)$/i.exec(lesson);
+  const m = /^(Lesson|Session|Project)\s+(\d+)$/i.exec(lesson);
   return m ? `${m[1][0].toUpperCase()}${m[2]}` : lesson;
 }

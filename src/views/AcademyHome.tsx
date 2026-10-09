@@ -12,6 +12,8 @@ const ABOUT: Record<string, string> = {
     'The full program for schools, module by module — AI literacy, programming, the INCIPE Board’s sensors and modules, ideation, and presenting the project.',
   'Taster Workshop':
     'A short introduction to C++ on the INCIPE Board — from your first sketch to sensors, arrays, states and Wi-Fi.',
+  'Sample Projects':
+    'Four complete builds for the IA Kit, easiest first — a plant that asks for help, a universal remote, a quiz alarm and a two-board air purifier. Starter code, hints for every blank, tests and challenges.',
 };
 
 export function AcademyHome() {
@@ -62,6 +64,7 @@ function TrackSection({ track }: { track: Track }) {
   const start = track.modules.flatMap((m) => m.pages)[0];
   const curriculum = courses.find((c) => c.kind === 'program' && c.track === track.name)?.pages[0];
   const lessons = track.modules.reduce((n, m) => n + m.pages.length, 0);
+  const unit = track.modules.every((m) => m.pages.every((p) => p.type === 'project')) ? 'project' : 'lesson';
 
   return (
     <section className="wk-section" aria-labelledby={id}>
@@ -69,7 +72,7 @@ function TrackSection({ track }: { track: Track }) {
         {track.name}
         <span className="wk-section-sub">
           {' '}
-          · {single ? `${lessons} ${lessons === 1 ? 'lesson' : 'lessons'}` : `${track.modules.length} modules`}
+          · {single ? `${lessons} ${unit}${lessons === 1 ? '' : 's'}` : `${track.modules.length} modules`}
         </span>
       </h2>
       {ABOUT[track.name] && <p className="wk-section-lede">{ABOUT[track.name]}</p>}

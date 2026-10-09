@@ -1,4 +1,4 @@
-import { AppWindow, BookOpen, Cog, Cpu, FileText, HardDrive, MonitorPlay, NotebookText, Presentation, Radar } from 'lucide-react';
+import { AppWindow, BookOpen, Cog, Cpu, FileText, Hammer, HardDrive, MonitorPlay, NotebookText, Presentation, Radar } from 'lucide-react';
 import type { WikiKind } from '../wikiContent';
 
 /** One glyph per Academy page type. */
@@ -7,6 +7,7 @@ export const PAGE_GLYPH = {
   video: MonitorPlay,
   document: FileText,
   notes: NotebookText,
+  project: Hammer,
 } as const;
 
 /** One glyph per Wiki kind. */

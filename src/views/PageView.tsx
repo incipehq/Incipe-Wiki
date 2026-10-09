@@ -101,5 +101,5 @@ export function PageView({ page }: { page: Page }) {
 }
 
 function typeLabel(page: Page): string {
-  return { video: 'Video', document: 'Document', notes: 'Lesson notes', slides: 'Slides' }[page.type];
+  return { video: 'Video', document: 'Document', notes: 'Lesson notes', slides: 'Slides', project: 'Sample project' }[page.type];
 }
