@@ -40,7 +40,14 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - [x] Session 2 — Product-market fit & solution validation · deck: https://claude.ai/artifact/TqDZsjkCKen8hGR5jU8Rav · **.pptx and .pdf pending**
 
 ### M5 Presentation & Portfolio → `content/m5-presentation-portfolio/`
-- [ ] Sessions 1–8
+- [x] Session 1 — Storytelling & product pitching · deck: https://claude.ai/artifact/P94BFvvKkN2RSv4v3ZTVmt · **.pptx and .pdf pending**
+- [ ] Session 2 — Presentation techniques
+- [ ] Session 3 — Technical presentation skills
+- [ ] Session 4 — Final pitch & career preparation
+- [ ] Session 5 — Portfolio & project showcase
+- [ ] Session 6 — Technical knowledge prep
+- [ ] Session 7 — Building a technical CV & LinkedIn
+- [ ] Session 8 — Application strategy & networking
 
 ## Log
 
@@ -265,6 +272,18 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   dark, light, narrow (the text flowchart fits and scrolls inside its block); no console
   errors; privacy grep clean.
 
+### Iteration 14 — M5 Session 1: Storytelling & product pitching
+
+- Files: `content/m5-presentation-portfolio/01-storytelling-product-pitching.md`,
+  `lessons/m5-presentation-portfolio/session-01-storytelling-product-pitching.md`.
+- Stories vs feature lists; the curriculum's Problem → Solution → Technology → Impact with
+  a Smart Garden example; impact backed only by the students' own numbers (`[ ]`
+  placeholders, never invented); the Hero's Journey in six beats with the user as hero and
+  the product as guide (Mei is labelled a made-up example); a 5-minute script template
+  (30/60/60/75/45/30 s) and a partner check. AI used as an editor that must not add facts.
+- Deck 18 slides. Checked: build clean; dark, light, narrow; no console errors; privacy
+  grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -276,7 +295,8 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
     M3 S9 (.pdf). A page with only a .pdf serves it as the download and the viewer.
   - Still to export: M2 Session 2 → .pptx · M2 Session 3 → .pptx · M3 Session 5 → .pdf ·
     M3 Session 8 → .pptx · M3 Session 9 → .pptx · M3 Session 10 → .pptx and .pdf ·
-    M4 Session 1 → .pptx and .pdf · M4 Session 2 → .pptx and .pdf
+    M4 Session 1 → .pptx and .pdf · M4 Session 2 → .pptx and .pdf ·
+    M5 Session 1 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
