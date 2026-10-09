@@ -1,7 +1,7 @@
 ---
 title: Servo
-kind: actuator
-order: 30
+kind: module
+order: 32
 model: servo
 reads: Takes a pulse width in microseconds
 keywords: servo sg90 angle rotate pwm microseconds arm

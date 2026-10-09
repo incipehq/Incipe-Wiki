@@ -1,7 +1,7 @@
 ---
 title: LED strip
-kind: actuator
-order: 34
+kind: module
+order: 36
 model: led
 reads: Takes a colour per pixel
 keywords: led strip neopixel ws2812 rgb pixels light colour

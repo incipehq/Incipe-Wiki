@@ -1,7 +1,7 @@
 ---
 title: Button
-kind: sensor
-order: 14
+kind: module
+order: 30
 model: button
 reads: Button state
 keywords: button push press switch click input

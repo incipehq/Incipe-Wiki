@@ -1,7 +1,7 @@
 ---
 title: Motor
-kind: actuator
-order: 31
+kind: module
+order: 33
 model: motor
 reads: Takes a speed
 keywords: motor dc motor speed fan wheel drive

@@ -9,7 +9,7 @@
  * add a glob over a references folder — `import.meta.glob` bundles every file it
  * matches, whether or not a page uses it. See CLAUDE.md.
  */
-export type WikiKind = 'board' | 'guide' | 'app' | 'sensor' | 'actuator' | 'module';
+export type WikiKind = 'board' | 'guide' | 'app' | 'sensor' | 'module';
 
 export interface WikiFunction {
   /** As written in the reference heading: `incipe.setBuzzer(frequency, duration_ms)`. */
@@ -47,7 +47,6 @@ export const KIND_LABEL: Record<WikiKind, string> = {
   guide: 'Guide',
   app: 'Workspace app',
   sensor: 'Sensor',
-  actuator: 'Actuator',
   module: 'Module',
 };
 
@@ -105,7 +104,6 @@ export const WIKI_GROUPS: { title: string; kinds: WikiKind[] }[] = [
   { title: 'Get started', kinds: ['board', 'guide'] },
   { title: 'Workspace app', kinds: ['app'] },
   { title: 'Sensors', kinds: ['sensor'] },
-  { title: 'Actuators', kinds: ['actuator'] },
   { title: 'Modules', kinds: ['module'] },
 ];
 

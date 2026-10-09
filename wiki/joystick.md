@@ -1,7 +1,7 @@
 ---
 title: Joystick
-kind: sensor
-order: 15
+kind: module
+order: 31
 model: joystick
 reads: Raw X and Y position and the stick button
 keywords: joystick thumbstick analog stick game x y axis controller

@@ -1,7 +1,7 @@
 ---
 title: Buzzer
-kind: actuator
-order: 33
+kind: module
+order: 35
 model: buzzer
 reads: Plays on/off or a tone at a frequency
 keywords: buzzer sound tone beep melody speaker alarm frequency

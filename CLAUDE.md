@@ -12,7 +12,7 @@ app students code it in (sibling repo `../Incipe-Workspace`), and a curriculum t
 run. **Incipe Wiki is the public website that documents both halves:**
 
 1. **Wiki** (`/wiki`) — *how to work with the devices.* Connecting the board, setting up
-   Wi-Fi and wireless uploads, and every sensor, actuator and module: the exact
+   Wi-Fi and wireless uploads, and every sensor and module: the exact
    `incipe.*` functions, what data each returns, and a 3D model of the part. The
    sensor search is the centre of it. It also holds the **Workspace app guide**
    (`wiki/app-*.md`, `kind: app`): 15 steps that teach the desktop app by building a

@@ -14,7 +14,7 @@ export function Landing() {
     document.title = 'Incipe Wiki';
   }, []);
   const sensors = wikiPages.filter((p) => p.kind === 'sensor').length;
-  const others = wikiPages.filter((p) => p.kind === 'actuator' || p.kind === 'module').length;
+  const others = wikiPages.filter((p) => p.kind === 'module').length;
   const lessons = modules.reduce((n, m) => n + m.pages.length, 0);
   const board = wikiPages.find((p) => p.kind === 'board');
 
@@ -44,7 +44,7 @@ export function Landing() {
               the data each one returns.
             </span>
             <span className="wk-door-meta">
-              {sensors} sensors · {others} actuators & modules
+              {sensors} sensors · {others} modules
               <ArrowRight size={13} strokeWidth={1.75} aria-hidden="true" />
             </span>
           </span>

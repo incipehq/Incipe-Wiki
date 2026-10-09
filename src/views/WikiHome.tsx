@@ -14,7 +14,6 @@ import { WikiCard } from './WikiCards';
 const FILTERS: { value: string; label: string; kinds: WikiKind[] | null }[] = [
   { value: 'all', label: 'All', kinds: null },
   { value: 'sensor', label: 'Sensors', kinds: ['sensor'] },
-  { value: 'actuator', label: 'Actuators', kinds: ['actuator'] },
   { value: 'module', label: 'Modules', kinds: ['module'] },
   { value: 'guide', label: 'Guides', kinds: ['board', 'guide'] },
   { value: 'app', label: 'App', kinds: ['app'] },
