@@ -43,7 +43,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - [x] Session 1 — Storytelling & product pitching · deck: https://claude.ai/artifact/P94BFvvKkN2RSv4v3ZTVmt · **.pptx and .pdf pending**
 - [x] Session 2 — Presentation techniques · deck: https://claude.ai/artifact/VCzmzzKhuTL9pWBdTcreQ4 · **.pptx and .pdf pending**
 - [x] Session 3 — Technical presentation skills · deck: https://claude.ai/artifact/1aWhicnoqqrU6zWPS2DB7k · **.pptx and .pdf pending**
-- [ ] Session 4 — Final pitch & career preparation
+- [x] Session 4 — Final pitch & career preparation · deck: https://claude.ai/artifact/Fo1h24NLqrnjFENmaR7oFi · **.pptx and .pdf pending**
 - [ ] Session 5 — Portfolio & project showcase
 - [ ] Session 6 — Technical knowledge prep
 - [ ] Session 7 — Building a technical CV & LinkedIn
@@ -311,6 +311,19 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - Deck 24 slides. Checked: build clean; dark, light, narrow; walkthrough stepped (PUMP ON,
   PUMP OFF); no console errors; privacy grep clean.
 
+### Iteration 17 — M5 Session 4: Final pitch & career preparation
+
+- Files: `content/m5-presentation-portfolio/04-final-pitch-career-preparation.md`,
+  `lessons/m5-presentation-portfolio/session-04-final-pitch-career-preparation.md`.
+- An eight-point deck polish check (no `[ ]` placeholders or invented numbers left); a
+  README template for an INCIPE project ("How to run it" points to the Wiki's Connect the
+  board page and says "upload", the Wiki's word); a 60–90 s demo-video storyboard, filming
+  tips and a privacy check before publishing (no paths, emails, passwords, keys; consent to
+  film classmates); the showcase run of show with a code freeze, and what a panel often
+  looks for — framed so the instructors' own rubric takes priority.
+- Deck 19 slides. Checked: build clean; dark, light, narrow; no console errors; privacy
+  grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -324,7 +337,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
     M3 Session 8 → .pptx · M3 Session 9 → .pptx · M3 Session 10 → .pptx and .pdf ·
     M4 Session 1 → .pptx and .pdf · M4 Session 2 → .pptx and .pdf ·
     M5 Session 1 → .pptx and .pdf · M5 Session 2 → .pptx and .pdf ·
-    M5 Session 3 → .pptx and .pdf
+    M5 Session 3 → .pptx and .pdf · M5 Session 4 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
