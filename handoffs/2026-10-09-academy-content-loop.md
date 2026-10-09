@@ -36,7 +36,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - [x] Session 10 — System integration & debugging · deck: https://claude.ai/artifact/GmjhTWBmxy7yWvcnQDSGWR · **.pptx and .pdf pending**
 
 ### M4 Ideation → `content/m4-ideation/`
-- [ ] Session 1 — Design thinking & problem statement
+- [x] Session 1 — Design thinking & problem statement · deck: https://claude.ai/artifact/5Ymhf282z3sFX7AfFFdmJS · **.pptx and .pdf pending**
 - [ ] Session 2 — Product-market fit & solution validation
 
 ### M5 Presentation & Portfolio → `content/m5-presentation-portfolio/`
@@ -234,6 +234,23 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   that. Build clean; dark, light, narrow; walkthrough stepped; no console errors;
   privacy grep clean.
 
+### Iteration 12 — owner's deck exports ingested; M4 Session 1: Design thinking
+
+- The owner exported nine decks into `raw/LMS/`. Pages now name them (`source:` and, where
+  there is one, `pdf:`; a page with only a .pdf uses it as `source:`, which the ingest
+  serves as both download and viewer) and `npm run ingest` ran: page counts match every
+  deck. "View slides" checked for a PDF-only page, a .pptx-only page and a page with both.
+- M4 Session 1 files: `content/m4-ideation/01-design-thinking-problem-statement.md`,
+  `lessons/m4-ideation/session-01-design-thinking-problem-statement.md` (M4 has no older
+  pages, so its file numbers match the new session numbers).
+- Empathy methods, pain point vs solution, the problem statement template and
+  "How might we" (too broad / too narrow / just right), brainstorm rules, and the INCIPE
+  building blocks taken from each Wiki page's own one-line description (IMU coming soon,
+  colour sensor unpublished). Workshop: five IoT ideas with a template. No code, so no
+  walkthrough; checkpoints are reasoning questions.
+- Deck 23 slides. Checked: every `/wiki/` link resolves; build clean; dark, light,
+  narrow; no console errors; privacy grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -244,7 +261,8 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
     M2 S2 (.pdf), M2 S3 (.pdf), M2 S4 (.pptx + .pdf), M3 S5 (.pptx), M3 S8 (.pdf),
     M3 S9 (.pdf). A page with only a .pdf serves it as the download and the viewer.
   - Still to export: M2 Session 2 → .pptx · M2 Session 3 → .pptx · M3 Session 5 → .pdf ·
-    M3 Session 8 → .pptx · M3 Session 9 → .pptx · M3 Session 10 → .pptx and .pdf
+    M3 Session 8 → .pptx · M3 Session 9 → .pptx · M3 Session 10 → .pptx and .pdf ·
+    M4 Session 1 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
