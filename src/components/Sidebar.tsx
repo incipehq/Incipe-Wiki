@@ -10,6 +10,10 @@
  * Under them is the section you are in. On the landing page, which belongs to
  * neither, the rail keeps the section you were last in. The search box searches
  * the section it sits in.
+ *
+ * Each tab remembers the last page you read in its section, so switching Wiki →
+ * Academy → Wiki lands where you left off. Pressing the tab you are already in
+ * goes to that section's home.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
@@ -25,6 +29,8 @@ type Section = 'wiki' | 'academy';
 
 const LAST_MODULE_KEY = 'incipe-wiki-module';
 const LAST_SECTION_KEY = 'incipe-wiki-section';
+const LAST_PATH_KEY: Record<Section, string> = { wiki: 'incipe-wiki-path-wiki', academy: 'incipe-wiki-path-academy' };
+const SECTION_ROOT: Record<Section, string> = { wiki: '/wiki', academy: '/academy' };
 /** Matches `.inc-pop[data-closing]`'s fade (`--dur-1`). */
 const EXIT_MS = 90;
 
@@ -52,9 +58,33 @@ function matches(page: Page, query: string): boolean {
     .every((word) => haystack.includes(word));
 }
 
+function sectionOf(pathname: string): Section | null {
+  return pathname.startsWith('/wiki') ? 'wiki' : pathname.startsWith('/academy') ? 'academy' : null;
+}
+
+/** A stored path, if it still belongs to its section; else the section's home. */
+function readPath(section: Section): string {
+  const stored = readStore(LAST_PATH_KEY[section]);
+  return stored && sectionOf(stored) === section ? stored : SECTION_ROOT[section];
+}
+
+/** The last page read in each section (path + query, so a Wiki search comes back too). */
+function useLastPaths(): Record<Section, string> {
+  const { pathname, search } = useLocation();
+  const [paths, setPaths] = useState<Record<Section, string>>(() => ({ wiki: readPath('wiki'), academy: readPath('academy') }));
+  useEffect(() => {
+    const section = sectionOf(pathname);
+    if (!section) return;
+    const path = pathname + search;
+    setPaths((current) => (current[section] === path ? current : { ...current, [section]: path }));
+    writeStore(LAST_PATH_KEY[section], path);
+  }, [pathname, search]);
+  return paths;
+}
+
 function useSection(): Section {
   const { pathname } = useLocation();
-  const routed: Section | null = pathname.startsWith('/wiki') ? 'wiki' : pathname.startsWith('/academy') ? 'academy' : null;
+  const routed = sectionOf(pathname);
   const [last, setLast] = useState<Section>(() => (readStore(LAST_SECTION_KEY) === 'academy' ? 'academy' : 'wiki'));
   useEffect(() => {
     if (routed && routed !== last) {
@@ -80,6 +110,7 @@ function useCurrentModule(): Course {
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const section = useSection();
+  const lastPaths = useLastPaths();
   const [query, setQuery] = useState('');
   const input = useRef<HTMLInputElement>(null);
   const q = query.trim();
@@ -97,8 +128,20 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
     <nav className="wk-pane" aria-label="Wiki">
       <div className="wk-pane-inner">
         <div className="wk-tabs" role="tablist" aria-label="Section">
-          <SectionTab to="/wiki" active={section === 'wiki'} icon={Library} label="Wiki" onNavigate={onNavigate} />
-          <SectionTab to="/academy" active={section === 'academy'} icon={GraduationCap} label="Academy" onNavigate={onNavigate} />
+          <SectionTab
+            to={section === 'wiki' ? SECTION_ROOT.wiki : lastPaths.wiki}
+            active={section === 'wiki'}
+            icon={Library}
+            label="Wiki"
+            onNavigate={onNavigate}
+          />
+          <SectionTab
+            to={section === 'academy' ? SECTION_ROOT.academy : lastPaths.academy}
+            active={section === 'academy'}
+            icon={GraduationCap}
+            label="Academy"
+            onNavigate={onNavigate}
+          />
         </div>
 
         <div className="wk-search">
