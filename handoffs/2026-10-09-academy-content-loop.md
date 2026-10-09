@@ -42,7 +42,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 ### M5 Presentation & Portfolio → `content/m5-presentation-portfolio/`
 - [x] Session 1 — Storytelling & product pitching · deck: https://claude.ai/artifact/P94BFvvKkN2RSv4v3ZTVmt · **.pptx and .pdf pending**
 - [x] Session 2 — Presentation techniques · deck: https://claude.ai/artifact/VCzmzzKhuTL9pWBdTcreQ4 · **.pptx and .pdf pending**
-- [ ] Session 3 — Technical presentation skills
+- [x] Session 3 — Technical presentation skills · deck: https://claude.ai/artifact/1aWhicnoqqrU6zWPS2DB7k · **.pptx and .pdf pending**
 - [ ] Session 4 — Final pitch & career preparation
 - [ ] Session 5 — Portfolio & project showcase
 - [ ] Session 6 — Technical knowledge prep
@@ -297,6 +297,20 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   build clean; dark, light, narrow (the text diagram fits); no console errors; privacy
   grep clean.
 
+### Iteration 16 — M5 Session 3: Technical presentation skills
+
+- Files: `content/m5-presentation-portfolio/03-technical-presentation-skills.md`,
+  `lessons/m5-presentation-portfolio/session-03-technical-presentation-skills.md`.
+- Three levels of detail (map-app analogy) and a jargon-to-analogy table; architecture in
+  three views (system, data flow sense → clean → decide → act, code map); a walkthrough
+  that narrates the two hysteresis lines from M3 Session 8 in plain words (values 25 → 65,
+  the same as the Session 8 trace); honesty about AI (did / checked / changed); handling
+  questions without inventing answers; a six-slide mock architecture talk with three
+  audience roles. "Firmware" is defined as the student's own code; the board's runtime is
+  mentioned only as the Wiki describes it (it detects modules on its own).
+- Deck 24 slides. Checked: build clean; dark, light, narrow; walkthrough stepped (PUMP ON,
+  PUMP OFF); no console errors; privacy grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -309,7 +323,8 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   - Still to export: M2 Session 2 → .pptx · M2 Session 3 → .pptx · M3 Session 5 → .pdf ·
     M3 Session 8 → .pptx · M3 Session 9 → .pptx · M3 Session 10 → .pptx and .pdf ·
     M4 Session 1 → .pptx and .pdf · M4 Session 2 → .pptx and .pdf ·
-    M5 Session 1 → .pptx and .pdf · M5 Session 2 → .pptx and .pdf
+    M5 Session 1 → .pptx and .pdf · M5 Session 2 → .pptx and .pdf ·
+    M5 Session 3 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
