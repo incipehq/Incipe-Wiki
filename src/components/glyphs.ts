@@ -1,4 +1,4 @@
-import { BookOpen, Cog, Cpu, FileText, HardDrive, MonitorPlay, NotebookText, Presentation, Radar } from 'lucide-react';
+import { AppWindow, BookOpen, Cog, Cpu, FileText, HardDrive, MonitorPlay, NotebookText, Presentation, Radar } from 'lucide-react';
 import type { WikiKind } from '../wikiContent';
 
 /** One glyph per Academy page type. */
@@ -13,6 +13,7 @@ export const PAGE_GLYPH = {
 export const WIKI_GLYPH: Record<WikiKind, typeof Cpu> = {
   board: Cpu,
   guide: BookOpen,
+  app: AppWindow,
   sensor: Radar,
   actuator: Cog,
   module: HardDrive,

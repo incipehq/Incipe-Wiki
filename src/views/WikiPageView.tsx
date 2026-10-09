@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { marked } from 'marked';
-import { KIND_LABEL, wikiNeighbours } from '../wikiContent';
+import { APP_STEPS, KIND_LABEL, wikiNeighbours } from '../wikiContent';
 import type { WikiPage } from '../wikiContent';
 import { Markdown } from '../components/Markdown';
 import { ModelViewer } from '../components/ModelViewer';
@@ -20,7 +20,7 @@ export function WikiPageView({ page }: { page: WikiPage }) {
   }, [page]);
 
   return (
-    <article className="wk-page wk-enter">
+    <article className="wk-page wk-enter" data-kind={page.kind}>
       <header className="wk-page-head">
         <Link to="/wiki" className="wk-crumb">
           <ArrowLeft size={12} strokeWidth={1.75} aria-hidden="true" />
@@ -30,6 +30,11 @@ export function WikiPageView({ page }: { page: WikiPage }) {
         <h1>{page.title}</h1>
         {page.summary && <p>{page.summary}</p>}
         <div className="wk-facts">
+          {page.step != null && (
+            <span>
+              Step {page.step} of {APP_STEPS}
+            </span>
+          )}
           {page.identifier && (
             <span>
               Firmware ID <code className="wk-card-id">{page.identifier}</code>

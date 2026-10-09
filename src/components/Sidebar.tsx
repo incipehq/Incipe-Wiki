@@ -4,7 +4,7 @@
  * its one row recipe, `inc-row` / `inc-row--on`.
  *
  * Two tabs head it, one per half of the site:
- *   Wiki     — the board, the guides, every sensor and module
+ *   Wiki     — the board, the guides, the Workspace app guide, every sensor and module
  *   Academy  — the courses: a module switcher (grouped by course — Incipe 101,
  *              Taster Workshop), then that module's pages
  * Under them is the section you are in. On the landing page, which belongs to
@@ -204,6 +204,7 @@ function WikiRow({ page, onNavigate }: { page: WikiPage; onNavigate?: () => void
         <Glyph size={13} strokeWidth={1.75} />
       </span>
       <ClipText className="wk-row-title">{page.title}</ClipText>
+      {page.step != null && <span className="wk-row-meta">{page.step}</span>}
       {page.identifier && page.identifier.length <= 14 && <span className="wk-row-meta">{page.identifier}</span>}
     </NavLink>
   );

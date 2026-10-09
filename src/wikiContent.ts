@@ -1,6 +1,7 @@
 /**
- * The Wiki — how to connect and set up the INCIPE Board, and every sensor and
- * module — read at build time from wiki/*.md (frontmatter + Markdown body).
+ * The Wiki — how to connect and set up the INCIPE Board, how to use the INCIPE
+ * Workspace app (the `app` pages, a 15-step guide), and every sensor and module —
+ * read at build time from wiki/*.md (frontmatter + Markdown body).
  *
  * PRIVATE FIRMWARE STAYS OUT. The Incipe firmware references (the Workspace's
  * `incipe-firmware` skill) are private, and this repository and site are public.
@@ -8,7 +9,7 @@
  * add a glob over a references folder — `import.meta.glob` bundles every file it
  * matches, whether or not a page uses it. See CLAUDE.md.
  */
-export type WikiKind = 'board' | 'guide' | 'sensor' | 'actuator' | 'module';
+export type WikiKind = 'board' | 'guide' | 'app' | 'sensor' | 'actuator' | 'module';
 
 export interface WikiFunction {
   /** As written in the reference heading: `incipe.setBuzzer(frequency, duration_ms)`. */
@@ -27,6 +28,8 @@ export interface WikiPage {
   title: string;
   kind: WikiKind;
   order: number;
+  /** The app guide's staircase: this page's step (1-based), or null. */
+  step: number | null;
   reads: string;
   keywords: string;
   summary: string;
@@ -42,6 +45,7 @@ const pageFiles = import.meta.glob('/wiki/*.md', { query: '?raw', import: 'defau
 export const KIND_LABEL: Record<WikiKind, string> = {
   board: 'Board',
   guide: 'Guide',
+  app: 'Workspace app',
   sensor: 'Sensor',
   actuator: 'Actuator',
   module: 'Module',
@@ -79,6 +83,7 @@ function build(): WikiPage[] {
         title: data.title ?? id,
         kind: (data.kind as WikiKind) ?? 'module',
         order: Number(data.order ?? 99),
+        step: data.step ? Number(data.step) : null,
         reads: data.reads ?? '',
         keywords: data.keywords ?? '',
         summary: data.summary ?? '',
@@ -98,6 +103,7 @@ export const wikiPages = build();
 /** The rail's and the Wiki home's grouping, in reading order. */
 export const WIKI_GROUPS: { title: string; kinds: WikiKind[] }[] = [
   { title: 'Get started', kinds: ['board', 'guide'] },
+  { title: 'Workspace app', kinds: ['app'] },
   { title: 'Sensors', kinds: ['sensor'] },
   { title: 'Actuators', kinds: ['actuator'] },
   { title: 'Modules', kinds: ['module'] },
@@ -107,10 +113,15 @@ export function findWikiPage(id: string | undefined): WikiPage | undefined {
   return wikiPages.find((page) => page.id === id);
 }
 
+/** The app guide is a staircase: its Previous / Next stay inside it, and the rest skip it. */
 export function wikiNeighbours(page: WikiPage): { prev: WikiPage | null; next: WikiPage | null } {
-  const i = wikiPages.indexOf(page);
-  return { prev: wikiPages[i - 1] ?? null, next: wikiPages[i + 1] ?? null };
+  const run = wikiPages.filter((p) => (p.kind === 'app') === (page.kind === 'app'));
+  const i = run.indexOf(page);
+  return { prev: run[i - 1] ?? null, next: run[i + 1] ?? null };
 }
+
+/** How many steps the app guide has. */
+export const APP_STEPS = wikiPages.filter((p) => p.kind === 'app').length;
 
 /**
  * Sensor search. Every word must match somewhere; where it matches sets the

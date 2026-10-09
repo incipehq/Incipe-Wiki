@@ -1,5 +1,6 @@
 /**
- * The Wiki home: getting the board running, then every sensor and module —
+ * The Wiki home: getting the board running, the Workspace app guide, then every
+ * sensor and module —
  * searchable by name, firmware identifier, function or what it measures.
  * The query and the filter live in the URL, so a search can be shared.
  */
@@ -16,6 +17,7 @@ const FILTERS: { value: string; label: string; kinds: WikiKind[] | null }[] = [
   { value: 'actuator', label: 'Actuators', kinds: ['actuator'] },
   { value: 'module', label: 'Modules', kinds: ['module'] },
   { value: 'guide', label: 'Guides', kinds: ['board', 'guide'] },
+  { value: 'app', label: 'App', kinds: ['app'] },
 ];
 
 const SUGGESTIONS = ['temperature', 'distance', 'DHT11', 'getPPM', 'motor', 'infrared'];
@@ -62,8 +64,9 @@ export function WikiHome() {
         <span className="wk-label wk-label--accent">INCIPE Board & modules</span>
         <h1>Wiki</h1>
         <p>
-          How to connect and set up the INCIPE Board, and every sensor and module it takes — the exact
-          firmware functions to call and the data each one returns.
+          How to connect and set up the INCIPE Board, how to use the INCIPE Workspace app, and every
+          sensor and module the board takes — the exact firmware functions to call and the data each
+          one returns.
         </p>
 
         <div className="wk-finder">

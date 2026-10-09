@@ -1,6 +1,7 @@
 # Incipe Wiki — agent guide
 
-Read this first, then the newest file in [`handoffs/`](handoffs/).
+Read this first, then the newest file in [`handoffs/`](handoffs/). For anything
+visual, read [`design.md`](design.md) (design elements, directory, specs).
 
 ## What this app is for
 
@@ -13,7 +14,9 @@ run. **Incipe Wiki is the public website that documents both halves:**
 1. **Wiki** (`/wiki`) — *how to work with the devices.* Connecting the board, setting up
    Wi-Fi and wireless uploads, and every sensor, actuator and module: the exact
    `incipe.*` functions, what data each returns, and a 3D model of the part. The
-   sensor search is the centre of it.
+   sensor search is the centre of it. It also holds the **Workspace app guide**
+   (`wiki/app-*.md`, `kind: app`): 15 steps that teach the desktop app by building a
+   classroom climate monitor, each step one level up, the last a finished build.
 2. **Academy** (`/academy`) — *the courses.* Two of them, set by each module's
    `track:`: **Incipe 101**, the learning curriculum — modules M1–M5 with slide decks
    (view + download), lesson notes, and the real-life projects; the full curriculum at
@@ -35,7 +38,10 @@ is static (Vite + React 18 + react-router), deployed on Vercel, with no backend.
 | `src/views/*` | Landing, WikiHome, WikiPageView, AcademyHome, CourseView, PageView |
 | `src/styles/` | **Verbatim** Incipe Workspace design system — never edit, re-copy |
 | `src/wiki.css` | This site's layout; tokens and workspace recipes only |
-| `wiki/` | Wiki pages (frontmatter + Markdown body) |
+| `wiki/` | Wiki pages (frontmatter + Markdown body); `app-*.md` is the Workspace app guide |
+| `src/components/AppScreen.tsx` | ```` ```screen ```` blocks: annotated app screenshots (design.md §4.1) |
+| `public/app-guide/` | App guide screenshots — **interim** until retaken on the release build (its README) |
+| `design.md`, `design/` | Design elements and specs; the Workspace UI inventory (labels as on screen) |
 | `content/` | Academy modules and pages (frontmatter) |
 | `curriculum/learning-curriculum.md` | The curriculum — **owned by the user**, the source for every module's curriculum section |
 | `lessons/` | Session notes — **owned by the user**, pulled in via a page's `body:` |

@@ -4,9 +4,10 @@ import { marked } from 'marked';
 import { useNavigate } from 'react-router-dom';
 import { headingId } from '../wikiContent';
 import { Walkthrough } from './Walkthrough';
+import { AppScreen } from './AppScreen';
 
-/** A fenced ```walkthrough block; the capture is its body. */
-const WALKTHROUGH = /^```walkthrough[ \t]*\r?\n([\s\S]*?)^```[ \t]*$/m;
+/** A fenced ```walkthrough or ```screen block; the captures are its kind and body. */
+const BLOCK = /^```(walkthrough|screen)[ \t]*\r?\n([\s\S]*?)^```[ \t]*$/m;
 
 // Headings get ids (`headingId`) so a page's tables can link to its sections.
 function render(source: string): string {
@@ -21,15 +22,21 @@ function render(source: string): string {
  * user-submitted — so it is rendered as written, `<details>` blocks included.
  * Links to other wiki pages stay inside the app instead of reloading it.
  *
- * ```walkthrough blocks become <Walkthrough>s; the Markdown between them is
- * rendered as usual. A page without one stays a single block of HTML.
+ * ```walkthrough blocks become <Walkthrough>s and ```screen blocks <AppScreen>s;
+ * the Markdown between them is rendered as usual. A page without one stays a
+ * single block of HTML.
  */
 export function Markdown({ source }: { source: string }) {
   const parts = useMemo(() => {
-    const split = source.split(new RegExp(WALKTHROUGH.source, 'gm'));
-    return split.length === 1
-      ? null
-      : split.map((part, i) => (i % 2 ? { kind: 'walkthrough' as const, text: part } : { kind: 'html' as const, text: render(part) }));
+    // split() with two capture groups yields [html, kind, body, html, kind, body, …].
+    const split = source.split(new RegExp(BLOCK.source, 'gm'));
+    if (split.length === 1) return null;
+    const out: { kind: 'html' | 'walkthrough' | 'screen'; text: string }[] = [];
+    for (let i = 0; i < split.length; i += 3) {
+      if (split[i].trim()) out.push({ kind: 'html', text: render(split[i]) });
+      if (i + 2 < split.length) out.push({ kind: split[i + 1] as 'walkthrough' | 'screen', text: split[i + 2] });
+    }
+    return out;
   }, [source]);
   const html = useMemo(() => (parts ? '' : render(source)), [parts, source]);
   const navigate = useNavigate();
@@ -56,6 +63,8 @@ export function Markdown({ source }: { source: string }) {
       {parts.map((part, i) =>
         part.kind === 'walkthrough' ? (
           <Walkthrough key={i} source={part.text} />
+        ) : part.kind === 'screen' ? (
+          <AppScreen key={i} source={part.text} />
         ) : (
           <div key={i} className="wk-md-run" dangerouslySetInnerHTML={{ __html: part.text }} />
         ),

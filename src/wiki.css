@@ -1514,3 +1514,158 @@ a.inc-btn {
     transform: none;
   }
 }
+
+/* ── Annotated app screenshot (```screen blocks, components/AppScreen.tsx) ──
+   design.md §4.1. The pin is the Workspace guided tip's ring: an accent dot with
+   the step number, ringed when it is the one being read. The key under the image
+   is the row recipe, so the lit row is `inc-row--on`, never a coloured bar. */
+.wk-prose .wk-screen {
+  margin: 0 0 var(--space-4);
+  border: var(--border-hair);
+  border-radius: var(--radius-2);
+  background: var(--panel-2);
+}
+.wk-screen-frame {
+  position: relative;
+  line-height: 0;
+  border-bottom: var(--border-hair);
+}
+.wk-prose .wk-screen-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  border: 0;
+  /* The figure does not clip (a pin's badge may cross its edge), so the image
+     takes the figure's top corners itself. */
+  border-radius: var(--radius-2) var(--radius-2) 0 0;
+}
+.wk-screen-frame[data-missing] {
+  line-height: normal;
+}
+.wk-screen-missing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: 160px;
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}
+.wk-screen-pin {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  padding: 0;
+  border: 1.5px solid var(--signal);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+.wk-screen-pin[data-on] {
+  border-width: 2px;
+  background: var(--signal-wash);
+  box-shadow: 0 0 0 4px var(--signal-wash);
+}
+.wk-screen-pin:active {
+  transform: scale(0.98);
+}
+.wk-screen-pin:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 2px;
+}
+.wk-screen-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: var(--radius-pill);
+  background: var(--signal);
+  color: var(--text-invert);
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-mono);
+  font-size: 9.5px;
+  line-height: 15px;
+  text-align: center;
+  box-shadow: var(--shadow-pop);
+}
+.wk-prose .wk-screen-key {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px var(--space-2);
+  margin: 0;
+  padding: var(--space-2);
+  list-style: none;
+}
+.wk-prose .wk-screen-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+}
+.wk-screen-num {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--signal-wash);
+  color: var(--text-accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 18px;
+  text-align: center;
+}
+.wk-screen-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  color: var(--text-muted);
+}
+.wk-screen-text strong {
+  color: var(--text);
+  font-weight: var(--weight-semi);
+}
+.wk-screen-cap {
+  padding: 0 var(--space-3) var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}
+@media (max-width: 820px) {
+  .wk-prose .wk-screen-key {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .wk-screen-pin {
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wk-screen-pin {
+    transition: none;
+  }
+}
+
+/* App guide (kind: app): each page opens with a line of story — where the
+   classroom climate monitor is now. The design system sets <em> upright, so the
+   line is told apart by ink, not slant (design.md §4.2). */
+.wk-page[data-kind='app'] .wk-prose > p:first-child,
+.wk-page[data-kind='app'] .wk-prose > .wk-md-run:first-child > p:first-child {
+  color: var(--text-muted);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-hair);
+}
