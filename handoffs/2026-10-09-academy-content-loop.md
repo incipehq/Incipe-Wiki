@@ -22,9 +22,9 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - [-] Session 13 — Actuators: PWM & motor control · **waiting on Question 8** (servo/motor arguments, potentiometer)
 - [-] Session 14 — Audio & indicators · **waiting on Question 8** (buzzer and LED-strip arguments)
 - [x] Session 15 — Input devices: joystick, IR & buttons · deck: https://claude.ai/artifact/GsYUWtugSMCYyt2sRSrc5s · **.pptx and .pdf pending** · IR part waits on Question 8
-- [ ] Session 16 — Data logging with SD card
-- [ ] Session 17 — Communication: IR transmitter & receiver
-- [ ] Session 18 — Integration: Smart Garden
+- [-] Session 16 — Data logging with SD card · **waiting on Question 8** (no SD-card functions on the Wiki)
+- [-] Session 17 — Communication: IR transmitter & receiver · **waiting on Question 8** (IR receiver has no functions; `sendIRRawSignal(signal, brand)` has no argument details)
+- [x] Session 18 — Integration: Smart Garden · deck: https://claude.ai/artifact/7iYBBA6gmgnSRtyasXKe6N · **.pptx and .pdf pending** · pump, servo and LED strip are stand-ins until Question 8
 - [ ] Session 19 — Integration: Game Console
 - [ ] Session 20 — System integration & debugging
 
@@ -171,6 +171,25 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   walkthrough stepped; no console errors; privacy grep clean.
 - Not captured: a Workspace Serial Monitor screenshot (the dev build is not running).
 
+### Iteration 9 — Session 18: Smart Garden (logic in full, actuators as stand-ins)
+
+- Sessions 16 (SD card) and 17 (IR) have no published functions to teach, so they are
+  parked on Question 8 with 13 and 14. Session 18's sensors are all documented and its
+  hard part is the decision logic, so it is written in full, with `Serial.println`
+  stand-ins (`PUMP ON` / `PUMP OFF`) where the pump, servo and LED-strip calls will go —
+  the same approach as the LED strip in Session 10.
+- Notes: `lessons/m3-incipe-board-sensors-modules/session-18-smart-garden.md`; page:
+  `content/m3-incipe-board-sensors-modules/18-smart-garden.md`.
+- New: `wetPercent()` from the Session 11 calibration (works for either probe
+  direction; stand-in values 100 dry / 40 wet, labelled), hysteresis with `START` 30 and
+  `STOP` 60 as a two-state machine with a `bool`, and the −1 fail-safe. Grow light and
+  window are task steps. AI prompt for thresholds plus a reviewer checklist.
+- Two walkthroughs; deck 38 slides, one per step.
+- Checked: `wetPercent` 70→50, 100→0, 40→100, −1→168.33, and the watering rounds
+  (70, 85, 73, 61, −1 → PUMP ON once, PUMP OFF once, nothing on −1) run on the host;
+  the full sketch compiled for `esp32:esp32:esp32`; build clean; dark, light and 375px;
+  every walkthrough stepped; no console errors; privacy grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -183,6 +202,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
   - Session 9 → .pptx and .pdf
   - Session 10 → .pptx and .pdf
   - Session 15 → .pptx and .pdf
+  - Session 18 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
@@ -247,3 +267,4 @@ kept in the session scratchpad, never in this repo) for the ESP32 Dev Module tar
 | 2 | Both `readClimate()` (AI draft) and `printClimate()` plus a thread that calls it every 2000 ms compile for `esp32:esp32:esp32`; `static_assert` confirms `float` = 4 and `double` = 8 bytes. Printed values (`23.40`, `51.00`) follow Arduino's two-decimal `print(float)`. |
 | 10 | `sizeof(SensorData)` = 12 (static_assert), `21.50`, `23.40 700.00`, the first four states RED, YELLOW, GREEN, RED and the 7000 ms cycle run on the host; the full sketch compiles for `esp32:esp32:esp32`. |
 | 15 | `zone(90)`=1, `zone(-1)`=0, `zone(10)`=-1; the menu prints `Humidity`, `Temperature`, `Light` for readings 50, 90, 90, 50, 10, 50, 10; `choice` 2 + 1 wraps to `Temperature`; a 10-pass hold prints once; a 3-pass button hold calls `showChoice()` once; run on the host. The full sketch compiles for `esp32:esp32:esp32`. |
+| 18 | `wetPercent` 70→50, 100→0 (Arduino prints `0.00`), 40→100, −1→168.33; watering rounds 70, 85, 73, 61, −1 print `PUMP ON` then `PUMP OFF` once each and nothing on −1; run on the host. The full sketch compiles for `esp32:esp32:esp32`. |
