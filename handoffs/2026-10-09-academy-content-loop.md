@@ -37,7 +37,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 
 ### M4 Ideation → `content/m4-ideation/`
 - [x] Session 1 — Design thinking & problem statement · deck: https://claude.ai/artifact/5Ymhf282z3sFX7AfFFdmJS · **.pptx and .pdf pending**
-- [ ] Session 2 — Product-market fit & solution validation
+- [x] Session 2 — Product-market fit & solution validation · deck: https://claude.ai/artifact/TqDZsjkCKen8hGR5jU8Rav · **.pptx and .pdf pending**
 
 ### M5 Presentation & Portfolio → `content/m5-presentation-portfolio/`
 - [ ] Sessions 1–8
@@ -251,6 +251,20 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
 - Deck 23 slides. Checked: every `/wiki/` link resolves; build clean; dark, light,
   narrow; no console errors; privacy grep clean.
 
+### Iteration 13 — M4 Session 2: Product-market fit & solution validation
+
+- Files: `content/m4-ideation/02-product-market-fit-validation.md`,
+  `lessons/m4-ideation/session-02-product-market-fit-validation.md`.
+- Product-market fit (key-and-lock analogy, three signals, why it matters for a
+  portfolio); narrowing the curriculum's three audiences; validation questions about past
+  behaviour; sketches and flowcharts, with the M3 Session 8 watering logic drawn as a
+  flowchart that matches the code (the −1 branch counts as 100 % wet); the nine Lean Canvas
+  boxes with a worked Smart Garden example whose prices are `[ ]` placeholders; the
+  3-minute problem-statement pitch (20/60/40/40/20 s).
+- Deck 21 slides; the flowchart is drawn with shapes and connectors. Checked: build clean;
+  dark, light, narrow (the text flowchart fits and scrolls inside its block); no console
+  errors; privacy grep clean.
+
 ## Pending
 
 - **Deck exports (.pptx + .pdf).** The browser pane here is not signed in to claude.ai, so
@@ -262,7 +276,7 @@ made as a Slides artifact (Incipe Academy Slides design system), exported to
     M3 S9 (.pdf). A page with only a .pdf serves it as the download and the viewer.
   - Still to export: M2 Session 2 → .pptx · M2 Session 3 → .pptx · M3 Session 5 → .pdf ·
     M3 Session 8 → .pptx · M3 Session 9 → .pptx · M3 Session 10 → .pptx and .pdf ·
-    M4 Session 1 → .pptx and .pdf
+    M4 Session 1 → .pptx and .pdf · M4 Session 2 → .pptx and .pdf
 - Stray files in `raw/` (a throwaway test PDF and a copy of the M2 Lesson 2 deck in the M1
   folder) were deleted with the owner's OK on 2026-10-09.
 - **More Workspace screenshots for Session 2** (owner approved capturing from the dev
