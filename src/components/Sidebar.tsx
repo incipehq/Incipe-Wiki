@@ -3,12 +3,13 @@
  * ground, one hairline on the side it divides, the `inc-nav-in` entrance) and
  * its one row recipe, `inc-row` / `inc-row--on`.
  *
- * Two tabs head it, one per half of the site:
- *   Wiki     — the board, the guides, the Workspace app guide, every sensor and module
- *   Academy  — the courses: a module switcher (grouped by course — Incipe 101,
- *              Taster Workshop), then that module's pages
+ * Three tabs head it, one per section of the site:
+ *   Wiki       — the board, the guides, the Workspace app guide, every sensor and module
+ *   Academy    — the courses: a module switcher (grouped by course — Incipe 101,
+ *                Taster Workshop), then that module's pages
+ *   What's new — the update posts, newest first
  * Under them is the section you are in. On the landing page, which belongs to
- * neither, the rail keeps the section you were last in. The search box searches
+ * none, the rail keeps the section you were last in. The search box searches
  * the section it sits in.
  *
  * Each tab remembers the last page you read in its section, so switching Wiki →
@@ -17,21 +18,30 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Check, ChevronsUpDown, GraduationCap, LayoutList, Library, Search, X } from 'lucide-react';
+import { Check, ChevronsUpDown, GraduationCap, LayoutList, Library, Newspaper, Search, Sparkles, X } from 'lucide-react';
 import { modules, tracks } from '../content';
 import type { Course, Page } from '../content';
 import { WIKI_GROUPS, searchWiki, wikiPages } from '../wikiContent';
 import type { WikiPage } from '../wikiContent';
+import { posts, searchPosts, shortDate } from '../whatsNew';
+import type { Post } from '../whatsNew';
 import { PAGE_GLYPH, WIKI_GLYPH } from './glyphs';
 import { ClipText } from './ui';
 import { RESTORE_SCROLL } from '../scroll';
 
-type Section = 'wiki' | 'academy';
+type Section = 'wiki' | 'academy' | 'news';
+const SECTIONS: Section[] = ['wiki', 'academy', 'news'];
 
 const LAST_MODULE_KEY = 'incipe-wiki-module';
 const LAST_SECTION_KEY = 'incipe-wiki-section';
-const LAST_PATH_KEY: Record<Section, string> = { wiki: 'incipe-wiki-path-wiki', academy: 'incipe-wiki-path-academy' };
-const SECTION_ROOT: Record<Section, string> = { wiki: '/wiki', academy: '/academy' };
+const LAST_PATH_KEY: Record<Section, string> = {
+  wiki: 'incipe-wiki-path-wiki',
+  academy: 'incipe-wiki-path-academy',
+  news: 'incipe-wiki-path-news',
+};
+const SECTION_ROOT: Record<Section, string> = { wiki: '/wiki', academy: '/academy', news: '/whats-new' };
+const PLACEHOLDER: Record<Section, string> = { wiki: 'Search sensors', academy: 'Search lessons', news: 'Search updates' };
+const SEARCH_LABEL: Record<Section, string> = { wiki: 'Search sensors and modules', academy: 'Search all modules', news: 'Search updates' };
 /** Matches `.inc-pop[data-closing]`'s fade (`--dur-1`). */
 const EXIT_MS = 90;
 
@@ -60,7 +70,7 @@ function matches(page: Page, query: string): boolean {
 }
 
 function sectionOf(pathname: string): Section | null {
-  return pathname.startsWith('/wiki') ? 'wiki' : pathname.startsWith('/academy') ? 'academy' : null;
+  return SECTIONS.find((section) => pathname === SECTION_ROOT[section] || pathname.startsWith(`${SECTION_ROOT[section]}/`)) ?? null;
 }
 
 /** A stored path, if it still belongs to its section; else the section's home. */
@@ -72,7 +82,7 @@ function readPath(section: Section): string {
 /** The last page read in each section (path + query, so a Wiki search comes back too). */
 function useLastPaths(): Record<Section, string> {
   const { pathname, search } = useLocation();
-  const [paths, setPaths] = useState<Record<Section, string>>(() => ({ wiki: readPath('wiki'), academy: readPath('academy') }));
+  const [paths, setPaths] = useState<Record<Section, string>>(() => ({ wiki: readPath('wiki'), academy: readPath('academy'), news: readPath('news') }));
   useEffect(() => {
     const section = sectionOf(pathname);
     if (!section) return;
@@ -86,7 +96,7 @@ function useLastPaths(): Record<Section, string> {
 function useSection(): Section {
   const { pathname } = useLocation();
   const routed = sectionOf(pathname);
-  const [last, setLast] = useState<Section>(() => (readStore(LAST_SECTION_KEY) === 'academy' ? 'academy' : 'wiki'));
+  const [last, setLast] = useState<Section>(() => SECTIONS.find((s) => s === readStore(LAST_SECTION_KEY)) ?? 'wiki');
   useEffect(() => {
     if (routed && routed !== last) {
       setLast(routed);
@@ -143,6 +153,13 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             label="Academy"
             onNavigate={onNavigate}
           />
+          <SectionTab
+            to={section === 'news' ? SECTION_ROOT.news : lastPaths.news}
+            active={section === 'news'}
+            icon={Sparkles}
+            label="What's new"
+            onNavigate={onNavigate}
+          />
         </div>
 
         <div className="wk-search">
@@ -159,8 +176,8 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
               enterKeyHint="search"
               autoComplete="off"
               spellCheck={false}
-              placeholder={section === 'wiki' ? 'Search sensors' : 'Search lessons'}
-              aria-label={section === 'wiki' ? 'Search sensors and modules' : 'Search all modules'}
+              placeholder={PLACEHOLDER[section]}
+              aria-label={SEARCH_LABEL[section]}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Escape' && clear()}
@@ -173,7 +190,13 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           </div>
         </div>
 
-        {section === 'wiki' ? <WikiRail query={q} onNavigate={onNavigate} /> : <AcademyRail query={q} onNavigate={onNavigate} />}
+        {section === 'wiki' ? (
+          <WikiRail query={q} onNavigate={onNavigate} />
+        ) : section === 'academy' ? (
+          <AcademyRail query={q} onNavigate={onNavigate} />
+        ) : (
+          <NewsRail query={q} onNavigate={onNavigate} />
+        )}
       </div>
     </nav>
   );
@@ -252,6 +275,41 @@ function WikiRow({ page, onNavigate }: { page: WikiPage; onNavigate?: () => void
       <ClipText className="wk-row-title">{page.title}</ClipText>
       {page.step != null && <span className="wk-row-meta">{page.step}</span>}
       {page.identifier && page.identifier.length <= 14 && <span className="wk-row-meta">{page.identifier}</span>}
+    </NavLink>
+  );
+}
+
+/* ── What's new ── */
+
+function NewsRail({ query, onNavigate }: { query: string; onNavigate?: () => void }) {
+  const results = useMemo(() => (query ? searchPosts(query) : posts), [query]);
+  return (
+    <div className="wk-list" role="list" aria-label="Updates">
+      {query ? (
+        results.length === 0 && <div className="wk-empty">Nothing matches “{query}”.</div>
+      ) : (
+        <NavLink to={SECTION_ROOT.news} end onClick={onNavigate} className={({ isActive }) => `wk-row inc-row${isActive ? ' inc-row--on' : ''}`}>
+          <span className="wk-row-glyph" aria-hidden="true">
+            <LayoutList size={13} strokeWidth={1.75} />
+          </span>
+          <span className="wk-row-title">All updates</span>
+        </NavLink>
+      )}
+      {results.map((post) => (
+        <PostRow key={post.id} post={post} onNavigate={onNavigate} />
+      ))}
+    </div>
+  );
+}
+
+function PostRow({ post, onNavigate }: { post: Post; onNavigate?: () => void }) {
+  return (
+    <NavLink to={post.path} end onClick={onNavigate} className={({ isActive }) => `wk-row inc-row${isActive ? ' inc-row--on' : ''}`}>
+      <span className="wk-row-glyph" aria-hidden="true">
+        <Newspaper size={13} strokeWidth={1.75} />
+      </span>
+      <ClipText className="wk-row-title">{post.title}</ClipText>
+      <span className="wk-row-meta">{shortDate(post.date)}</span>
     </NavLink>
   );
 }

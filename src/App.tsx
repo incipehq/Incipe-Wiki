@@ -14,6 +14,7 @@ import { Link, Route, Routes, useLocation, useNavigationType, useParams } from '
 import { Menu, Moon, Sun, X } from 'lucide-react';
 import { findCourse, findPage, findPageByPath } from './content';
 import { findWikiPage } from './wikiContent';
+import { findPost } from './whatsNew';
 import { Sidebar } from './components/Sidebar';
 import { Logo } from './components/Logo';
 import { Button, GrainOverlay, Tooltip } from './components/ui';
@@ -23,6 +24,7 @@ import { WikiHome } from './views/WikiHome';
 import { WikiPageView } from './views/WikiPageView';
 import { CourseView } from './views/CourseView';
 import { PageView } from './views/PageView';
+import { PostView, WhatsNewHome } from './views/WhatsNew';
 
 const THEME_KEY = 'incipe-wiki-theme';
 const SCROLL_KEY = 'incipe-wiki-scroll';
@@ -185,6 +187,8 @@ export function App() {
             <Route path="/academy" element={<AcademyHome />} />
             <Route path="/academy/:courseId" element={<CourseRoute />} />
             <Route path="/academy/:courseId/:pageId" element={<PageRoute />} />
+            <Route path="/whats-new" element={<WhatsNewHome />} />
+            <Route path="/whats-new/:postId" element={<PostRoute />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
@@ -199,6 +203,12 @@ function WikiRoute() {
   const { pageId } = useParams();
   const page = findWikiPage(pageId);
   return page ? <WikiPageView key={page.id} page={page} /> : <NotFound />;
+}
+
+function PostRoute() {
+  const { postId } = useParams();
+  const post = findPost(postId);
+  return post ? <PostView key={post.id} post={post} /> : <NotFound />;
 }
 
 /** `/academy/<module>`, or a program page that sits at the Academy's top level (`/academy/curriculum`). */
@@ -229,6 +239,14 @@ function Crumb() {
     return page ? (
       <span className="wk-crumbbar">
         <b>{page.title}</b>
+      </span>
+    ) : null;
+  }
+  if (section === 'whats-new') {
+    const post = findPost(first);
+    return post ? (
+      <span className="wk-crumbbar">
+        <b>{post.title}</b>
       </span>
     ) : null;
   }

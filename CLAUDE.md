@@ -25,6 +25,9 @@ run. **Incipe Wiki is the public website that documents both halves:**
    (`content/sample-projects/`, `type: project`): four IA Kit builds from the old
    Incipe Academy docs, each a starter sketch with blanks, hints and answers. Their
    `incipe.*` calls come only from those starters and the public IA Kit API pages.
+3. **What's new** (`/whats-new`) — *the update posts*, newest first, the same posts as
+   site.incipeacademy.com/whats-new: a feed of cards (date, heading, description,
+   picture, tags), each opening to the full notes with its video or picture.
 
 Audience: students and teachers at customer schools, and prospective customers. It
 is static (Vite + React 18 + react-router), deployed on Vercel, with no backend.
@@ -34,8 +37,9 @@ is static (Vite + React 18 + react-router), deployed on Vercel, with no backend.
 | Path | What |
 | --- | --- |
 | `src/App.tsx` | Shell (top bar, rail, stage) and all routes |
-| `src/components/Sidebar.tsx` | The rail: Wiki / Academy tabs, search, module switcher |
+| `src/components/Sidebar.tsx` | The rail: Wiki / Academy / What's new tabs, search, module switcher |
 | `src/wikiContent.ts` | Wiki loader: parses `wiki/*.md` (only); sensor search |
+| `src/whatsNew.ts`, `whats-new/` | What's new posts: `whats-new/<yyyy-mm-dd>-<slug>.md`, pictures in `public/whats-new/` |
 | `src/content.ts` | Academy loader: `content/**`, `curriculum/`, `lessons/`; curriculum sectioning, project cards |
 | `src/three/scene.ts` | three.js model scene — used by the viewer **and** the thumbnail renderer |
 | `src/views/*` | Landing, WikiHome, WikiPageView, AcademyHome, CourseView, PageView |
@@ -71,7 +75,8 @@ is static (Vite + React 18 + react-router), deployed on Vercel, with no backend.
   `--dur-press`, selection is `inc-row--on` (never a coloured bar), labels sentence
   case, mono only for code/buttons/machine strings. Use the existing `inc-*` classes
   before writing new CSS; no raw hex in `wiki.css`.
-- **Content is data.** Add a sensor = add `wiki/<page>.md` (+ `npm run models` if it has
+- **Content is data.** Add an update = add `whats-new/<date>-<slug>.md` (+ its picture in
+  `public/whats-new/`). Add a sensor = add `wiki/<page>.md` (+ `npm run models` if it has
   a GLB). Add a lesson = add `content/<module>/<nn-page>.md` (+ `npm run ingest` if it
   has a deck: `source:` is the .pptx download, `pdf:` the same deck as PDF, read on
   the page without downloading). Module curriculum text is cut from `curriculum/learning-curriculum.md` —

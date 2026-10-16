@@ -19,34 +19,38 @@ export function youtubeEmbedUrl(videoId: string): string {
   return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0&modestbranding=1&autoplay=1`;
 }
 
+/** A YouTube video as its poster frame, until it is pressed. */
+export function Video({ id, poster, title }: { id: string; poster: string | null; title: string }) {
+  const [playing, setPlaying] = useState(false);
+  if (playing) {
+    return (
+      <div className="wk-media">
+        <iframe
+          className="wk-media-frame"
+          src={youtubeEmbedUrl(id)}
+          title={`${title} · video`}
+          allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+  return (
+    <button type="button" className="wk-media wk-media--poster" onClick={() => setPlaying(true)} aria-label={`Play ${title}`}>
+      {poster && <img src={poster} alt="" />}
+      <span className="wk-media-play inc-btn inc-btn--accent" aria-hidden="true">
+        <Play size={14} strokeWidth={1.75} />
+        Play video
+      </span>
+    </button>
+  );
+}
+
 export function Media({ page }: { page: Page }) {
   const [playing, setPlaying] = useState(false);
   const thumb = thumbnailOf(page);
 
-  if (page.video) {
-    if (playing) {
-      return (
-        <div className="wk-media">
-          <iframe
-            className="wk-media-frame"
-            src={youtubeEmbedUrl(page.video)}
-            title={`${page.title} · video`}
-            allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen"
-            allowFullScreen
-          />
-        </div>
-      );
-    }
-    return (
-      <button type="button" className="wk-media wk-media--poster" onClick={() => setPlaying(true)} aria-label={`Play ${page.title}`}>
-        {thumb && <img src={thumb} alt="" />}
-        <span className="wk-media-play inc-btn inc-btn--accent" aria-hidden="true">
-          <Play size={14} strokeWidth={1.75} />
-          Play video
-        </span>
-      </button>
-    );
-  }
+  if (page.video) return <Video id={page.video} poster={thumb} title={page.title} />;
 
   if (!thumb) {
     return (
