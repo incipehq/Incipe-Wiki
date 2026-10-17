@@ -3,8 +3,10 @@
  * Models — the Wiki's 3D viewer assets and their still thumbnails.
  *
  * For every page in wiki/ whose frontmatter names a `model:` it:
- *   1. reads the source GLB from the Incipe Workspace's board3d assets
- *      (`modules/<model>.glb`, or `<model>.glb` for the board itself),
+ *   1. reads the source GLB from models/<model>.glb in this repo when there is
+ *      one (the board: the new INCIPE Board, exported from the product-render
+ *      Blender file with baked PCB textures), else from the Incipe Workspace's
+ *      board3d assets (`modules/<model>.glb`, or `<model>.glb` for the board),
  *   2. meshopt-compresses it to public/models/<page>.glb (the CAD exports are
  *      geometry-only and up to 13 MB; compressed they are a fifth of that),
  *   3. renders it headless in Google Chrome, with the same scene the site uses
@@ -63,7 +65,10 @@ const io = new NodeIO()
   .registerDependencies({ 'meshopt.encoder': MeshoptEncoder, 'meshopt.decoder': MeshoptDecoder });
 
 for (const page of pages) {
-  const source = page.model === 'incipe01' ? join(from, 'incipe01.glb') : join(from, 'modules', `${page.model}.glb`);
+  const local = join(root, 'models', `${page.model}.glb`);
+  const source = existsSync(local)
+    ? local
+    : page.model === 'incipe01' ? join(from, 'incipe01.glb') : join(from, 'modules', `${page.model}.glb`);
   if (!existsSync(source)) {
     console.error(`✗ ${page.slug}: no model at ${source}`);
     process.exitCode = 1;
